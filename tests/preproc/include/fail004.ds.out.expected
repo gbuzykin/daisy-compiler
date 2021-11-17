@@ -1,0 +1,4 @@
+./preproc/include/fail004.ds:2:17: error: expected file name
+ 2 |    #   include  1
+   |                 ^
+./preproc/include/fail004.ds: info: warnings 0, errors 1

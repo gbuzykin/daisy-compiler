@@ -1,0 +1,76 @@
+./preproc/include/pass001.ds:1:1: debug: token
+ 1 | const a = 1;
+   | ^~~~~
+./preproc/include/pass001.ds:1:7: debug: id: a
+ 1 | const a = 1;
+   |       ^
+./preproc/include/pass001.ds:1:9: debug: token
+ 1 | const a = 1;
+   |         ^
+./preproc/include/pass001.ds:1:11: debug: integer number: 1
+ 1 | const a = 1;
+   |           ^
+./preproc/include/pass001.ds:1:12: debug: token
+ 1 | const a = 1;
+   |            ^
+In file included from ./preproc/include/pass001.ds:3
+./preproc/include/pass001.dsh:1:1: debug: token
+ 1 | const b = 2;
+   | ^~~~~
+In file included from ./preproc/include/pass001.ds:3
+./preproc/include/pass001.dsh:1:7: debug: id: b
+ 1 | const b = 2;
+   |       ^
+In file included from ./preproc/include/pass001.ds:3
+./preproc/include/pass001.dsh:1:9: debug: token
+ 1 | const b = 2;
+   |         ^
+In file included from ./preproc/include/pass001.ds:3
+./preproc/include/pass001.dsh:1:11: debug: integer number: 2
+ 1 | const b = 2;
+   |           ^
+In file included from ./preproc/include/pass001.ds:3
+./preproc/include/pass001.dsh:1:12: debug: token
+ 1 | const b = 2;
+   |            ^
+In file included from ./preproc/include/pass001.ds:3
+In file included from ./preproc/include/pass001.dsh:5
+./preproc/include/pass001-1.dsh:2:4: debug: token
+ 2 |    const c = 3 ;
+   |    ^~~~~
+In file included from ./preproc/include/pass001.ds:3
+In file included from ./preproc/include/pass001.dsh:5
+./preproc/include/pass001-1.dsh:2:10: debug: id: c
+ 2 |    const c = 3 ;
+   |          ^
+In file included from ./preproc/include/pass001.ds:3
+In file included from ./preproc/include/pass001.dsh:5
+./preproc/include/pass001-1.dsh:2:12: debug: token
+ 2 |    const c = 3 ;
+   |            ^
+In file included from ./preproc/include/pass001.ds:3
+In file included from ./preproc/include/pass001.dsh:5
+./preproc/include/pass001-1.dsh:2:14: debug: integer number: 3
+ 2 |    const c = 3 ;
+   |              ^
+In file included from ./preproc/include/pass001.ds:3
+In file included from ./preproc/include/pass001.dsh:5
+./preproc/include/pass001-1.dsh:2:16: debug: token
+ 2 |    const c = 3 ;
+   |                ^
+./preproc/include/pass001.ds:5:1: debug: token
+ 5 | const d = 4;
+   | ^~~~~
+./preproc/include/pass001.ds:5:7: debug: id: d
+ 5 | const d = 4;
+   |       ^
+./preproc/include/pass001.ds:5:9: debug: token
+ 5 | const d = 4;
+   |         ^
+./preproc/include/pass001.ds:5:11: debug: integer number: 4
+ 5 | const d = 4;
+   |           ^
+./preproc/include/pass001.ds:5:12: debug: token
+ 5 | const d = 4;
+   |            ^
+./preproc/include/pass001.ds: info: warnings 0, errors 0

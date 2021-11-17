@@ -59,8 +59,8 @@ add_executable(run_tests
 # link with these libraries
 if(MSVC)
 else()
-  target_link_libraries(daisy-compiler stdc++ m)
-  target_link_libraries(run_tests stdc++)
+  target_link_libraries(daisy-compiler stdc++ m stdc++fs)
+  target_link_libraries(run_tests stdc++ stdc++fs)
 endif()
 
 # this lets me include files relative to the root src dir with a <> pair

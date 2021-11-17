@@ -135,7 +135,7 @@ void LoggerExtendedUnwind::printMessage(std::string_view msg) {
 
     // Print include history for first
     auto it = loc_stack.rbegin();
-    while (it != loc_stack.rend() - 1 && (*(it + 1))->loc_ctx->expansion.type == TextExpansion::Type::kInclude) {
+    while (it != loc_stack.rend() - 1) {
         assert((*it)->loc_ctx->file);
         uxs::fprintln(uxs::stdbuf::log, "In file included from {}:{}", (*it)->loc_ctx->file->file_name, (*it)->first.ln);
         ++it;
@@ -143,22 +143,4 @@ void LoggerExtendedUnwind::printMessage(std::string_view msg) {
 
     // Print main message
     printMessageImpl(getType(), **it, msg);
-
-    // Print macro expansion sequence
-    while (++it != loc_stack.rend()) {
-        const auto* loc_ctx = (*it)->loc_ctx;
-        if (!loc_ctx->file) { break; }
-        const auto& exp_loc = loc_ctx->expansion.loc;
-        assert(exp_loc.loc_ctx->file);
-        if (loc_ctx->expansion.type == TextExpansion::Type::kMacro) {
-            // Extract macro id from input file line
-            std::string_view exp_line = exp_loc.loc_ctx->file->text_lines[exp_loc.first.ln - 1];
-            assert(exp_loc.first.col <= exp_line.size());
-            auto it_first = exp_line.begin() + exp_loc.first.col - 1;
-            auto it_last = std::find_if(it_first, exp_line.end(),
-                                        [](char ch) { return !uxs::is_alnum(ch) && ch != '_'; });
-            std::string macro_def_id(it_first, it_last);
-            printMessageImpl(MsgType::kNote, **it, "expanded from macro `" + macro_def_id + "`");
-        }
-    }
 }

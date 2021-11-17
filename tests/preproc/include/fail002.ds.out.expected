@@ -1,0 +1,4 @@
+./preproc/include/fail002.ds:2:17: error: could not open input file `no-such-file.dsh`
+ 2 |    #   include  "no-such-file.dsh"
+   |                 ^~~~~~~~~~~~~~~~~~
+./preproc/include/fail002.ds: info: warnings 0, errors 1
