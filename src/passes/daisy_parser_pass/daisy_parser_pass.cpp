@@ -5,6 +5,8 @@
 #include "uxs/io/filebuf.h"
 #include "uxs/stringalg.h"
 
+#include <filesystem>
+
 namespace lex_detail {
 #include "lex_analyzer.inl"
 }
@@ -18,6 +20,7 @@ using namespace daisy;
 DAISY_ADD_PASS(DaisyParserPass);
 
 /*static*/ const ReduceActionHandler* ReduceActionHandler::first_avail = nullptr;
+/*static*/ const PreprocDirectiveParser* PreprocDirectiveParser::first_avail = nullptr;
 
 void DaisyParserPass::configure() {
     keywords_.insert({
@@ -27,6 +30,10 @@ void DaisyParserPass::configure() {
     reduce_action_handlers_.fill(nullptr);
     for (const auto* handler = ReduceActionHandler::first_avail; handler; handler = handler->next_avail) {
         reduce_action_handlers_[handler->act_id] = handler->func;
+    }
+
+    for (const auto* parser = PreprocDirectiveParser::first_avail; parser; parser = parser->next_avail) {
+        preproc_directive_parsers_[parser->directive_id] = parser;
     }
 }
 
@@ -53,7 +60,7 @@ PassResult DaisyParserPass::run(CompilationContext& ctx) {
     }
 
     // Create main source file input context
-    pushInputContext(src_file->getText(), makeNewLocContext(src_file, TextExpansion::Type::kNone, {}));
+    pushInputContext(std::make_unique<InputContext>(src_file->getText(), &newLocationContext(src_file, {})));
     lex_state_stack_.push_back(lex_detail::sc_initial);
 
     // Parse input file
@@ -79,7 +86,9 @@ PassResult DaisyParserPass::run(CompilationContext& ctx) {
                 error_status_ = kAcceptToRestore;
             }
             if (rlen == 0) { symbol_stack.emplace_back().loc = la_tkn_.loc, ++rlen; }  // Empty production workaround
-            if (reduce_action_handlers_[act]) { reduce_action_handlers_[act](this, &*(symbol_stack.end() - rlen)); }
+            if (act > parser_detail::predef_act_reduce && reduce_action_handlers_[act]) {
+                reduce_action_handlers_[act](this, &*(symbol_stack.end() - rlen));
+            }
             if (rlen > 1) {
                 (symbol_stack.end() - rlen)->loc += (symbol_stack.end() - 1)->loc;  // Default reduction location
                 symbol_stack.erase(symbol_stack.end() - rlen + 1, symbol_stack.end());
@@ -121,7 +130,7 @@ PassResult DaisyParserPass::run(CompilationContext& ctx) {
 
 int DaisyParserPass::lex(SymbolInfo& tkn) {
     std::string txt;
-    auto* in_ctx = getInputContext();
+    auto* in_ctx = &getInputContext();
 
     auto reset_token_loc = [&tkn](const auto& in_ctx) {
         tkn.loc.loc_ctx = in_ctx.loc_ctx;
@@ -157,9 +166,12 @@ int DaisyParserPass::lex(SymbolInfo& tkn) {
                     return parser_detail::tt_string_literal;
                 }
                 tkn.loc.last = tkn.loc.first = in_ctx->text.pos;
+                if (!!(in_ctx->flags & InputContext::Flags::kStopAtEndOfInput)) {
+                    return parser_detail::tt_end_of_input;
+                }
                 // Input context stack is empty - end of compilation unit
                 if (popInputContext()) { return parser_detail::tt_end_of_file; }
-                reset_token_loc(*(in_ctx = getInputContext()));
+                reset_token_loc(*(in_ctx = &getInputContext()));
                 // Proceed to the next token
                 first = lexeme = in_ctx->text.first;
             }
@@ -280,7 +292,11 @@ int DaisyParserPass::lex(SymbolInfo& tkn) {
             case lex_detail::pat_scope_resolution: return parser_detail::tt_scope_resolution;
             case lex_detail::pat_esc_char: return static_cast<unsigned char>(lexeme[1]);
             case lex_detail::pat_concatenate: return parser_detail::tt_concatenate;
-            case lex_detail::pat_sharp:
+            case lex_detail::pat_sharp: {
+                if (!!(in_ctx->flags & InputContext::Flags::kPreprocDirective)) { return '#'; }
+                parsePreprocessorDirective();
+                reset_token_loc(*(in_ctx = &getInputContext()));
+            } break;
             case lex_detail::pat_other_char: return static_cast<unsigned char>(lexeme[0]);
             default: return parser_detail::tt_end_of_file;
         }
@@ -288,39 +304,84 @@ int DaisyParserPass::lex(SymbolInfo& tkn) {
     return parser_detail::tt_end_of_file;
 }
 
-const InputFileInfo* DaisyParserPass::loadInputFile(const std::string& file_name) {
-    for (const auto& file : ctx_->input_files) {
-        if (file.file_name == file_name) { return &file; }
-    }
+const InputFileInfo* DaisyParserPass::loadInputFile(std::string_view file_path) {
+    std::filesystem::path path(file_path);
+    if (path.is_relative()) { path = (std::filesystem::current_path() / path).lexically_normal(); }
 
-    uxs::filebuf ifile(file_name.c_str(), "r");
+    std::string normal_path = path.generic_string();
+    auto it = ctx_->input_files.find(normal_path);
+    if (it != ctx_->input_files.end()) { return &it->second; }
+
+    if (!std::filesystem::exists(path)) { return nullptr; }
+
+    uxs::filebuf ifile(normal_path.c_str(), "r");
     if (!ifile) { return nullptr; }
 
+    auto& file_info = ctx_->input_files
+                          .emplace(std::piecewise_construct, std::forward_as_tuple(std::move(normal_path)),
+                                   std::forward_as_tuple(ctx_, std::string(file_path)))
+                          .first->second;
+
     size_t file_sz = static_cast<size_t>(ifile.seek(0, uxs::seekdir::kEnd));
-    auto text = std::make_unique<char[]>(file_sz);
+    file_info.text = std::make_unique<char[]>(file_sz);
     ifile.seek(0);
-    size_t n_read = ifile.read(uxs::as_span(text.get(), file_sz));
+    size_t n_read = ifile.read(uxs::as_span(file_info.text.get(), file_sz));
 
     auto get_next_line = [](const char* text, const char* boundary) {
         return std::string_view(text, std::find_if(text, boundary, [](char ch) { return !ch || ch == '\n'; }) - text);
     };
 
-    std::vector<std::string_view> text_lines;
-    const char* boundary = text.get() + n_read;
-    const char* last = text.get() + text_lines.emplace_back(get_next_line(text.get(), boundary)).size();
-    while (last != boundary && *last) { last += text_lines.emplace_back(get_next_line(++last, boundary)).size(); }
+    const char* boundary = file_info.text.get() + n_read;
+    const char* last = file_info.text.get() +
+                       file_info.text_lines.emplace_back(get_next_line(file_info.text.get(), boundary)).size();
+    while (last != boundary && *last) {
+        last += file_info.text_lines.emplace_back(get_next_line(++last, boundary)).size();
+    }
 
-    auto& input_file = ctx_->input_files.emplace_front(ctx_, file_name, last - text.get());
-    input_file.text_lines = std::move(text_lines);
-    input_file.text = std::move(text);
-    return &input_file;
+    file_info.text_size = last - file_info.text.get();
+    return &file_info;
+}
+
+void DaisyParserPass::ensureEndOfInput(SymbolInfo& tkn) {
+    if (lex(tkn) != parser_detail::tt_end_of_input) {
+        logger::warning(tkn.loc).format("extra tokens at end of preprocessor directive");
+    }
+}
+
+void DaisyParserPass::parsePreprocessorDirective() {
+    auto& in_ctx = getInputContext();
+
+    // Save input context state
+    TextRange text = in_ctx.text;
+    InputContext::Flags flags = in_ctx.flags;
+
+    // Limit input by one line
+    skipTillNewLine(text);
+    in_ctx.text.last = text.first;
+    in_ctx.flags = InputContext::Flags::kPreprocDirective | InputContext::Flags::kStopAtEndOfInput;
+
+    SymbolInfo tkn;
+    int tt = lex(tkn);  // Parse directive name
+    if (tt == parser_detail::tt_id) {
+        auto it = preproc_directive_parsers_.find(std::get<std::string_view>(tkn.val));
+        if (it != preproc_directive_parsers_.end()) {
+            it->second->func(this, tkn);
+        } else {
+            logger::error(tkn.loc).format("unknown preprocessor directive");
+        }
+    } else {
+        logger::error(tkn.loc).format("expected preprocessor directive name");
+    }
+
+    if (text.first != text.last) { ++text.first, text.pos.nextLn(); }
+    in_ctx.text = text, in_ctx.flags = flags;
 }
 
 void daisy::logSyntaxError(int tt, const SymbolLoc& loc) {
     std::string_view msg;
     switch (tt) {
         case parser_detail::tt_end_of_file: msg = "unexpected end of file"; break;
-        case parser_detail::tt_end_of_input: msg = "unexpected end of line"; break;
+        case parser_detail::tt_end_of_input: msg = "expected token in expression"; break;
         default: msg = "unexpected token"; break;
     }
     logger::error(loc).format(msg);

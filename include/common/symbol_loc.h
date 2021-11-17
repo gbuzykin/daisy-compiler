@@ -33,14 +33,11 @@ struct SymbolLoc {
 };
 
 struct TextExpansion {
-    enum class Type { kNone = 0, kInclude, kMacro } type = Type::kNone;
     SymbolLoc loc;
 };
 
 struct LocationContext {
-    explicit LocationContext(const InputFileInfo* fi) : file(fi) {}
-    LocationContext(const InputFileInfo* fi, TextExpansion::Type type, const SymbolLoc& exp_loc)
-        : file(fi), expansion{type, exp_loc} {}
+    LocationContext(const InputFileInfo* fl, const TextExpansion& exp) : file(fl), expansion(exp) {}
     const InputFileInfo* file;
     TextExpansion expansion;
 };
