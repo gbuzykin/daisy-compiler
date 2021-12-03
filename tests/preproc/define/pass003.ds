@@ -1,0 +1,3 @@
+#define CONCAT(a, b) (a b)
+
+const s = CONCAT  ("a, b", "c, d");

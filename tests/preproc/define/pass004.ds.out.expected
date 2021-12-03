@@ -1,0 +1,154 @@
+./preproc/define/pass004.ds:3:1: debug: token
+ 3 | const a = VARIADIC  ((1 + 2),
+   | ^~~~~
+./preproc/define/pass004.ds:3:7: debug: id: a
+ 3 | const a = VARIADIC  ((1 + 2),
+   |       ^
+./preproc/define/pass004.ds:3:9: debug: token
+ 3 | const a = VARIADIC  ((1 + 2),
+   |         ^
+./preproc/define/pass004.ds:3:11: debug: token
+ 3 | const a = VARIADIC  ((1 + 2),
+   |           ^~~~~~~~~~~~~~~~~~~
+   |                       3, // 
+   |                       ~~~~~
+   |                       4
+   |                       ~
+   |                     );
+   |                     ~
+./preproc/define/pass004.ds:1:29: note: expanded from macro `VARIADIC`
+ 1 | #define VARIADIC(a, b, ...) ((a) + (b) + (__va_args__))
+   |                             ^
+./preproc/define/pass004.ds:3:11: debug: token
+ 3 | const a = VARIADIC  ((1 + 2),
+   |           ^~~~~~~~~~~~~~~~~~~
+   |                       3, // 
+   |                       ~~~~~
+   |                       4
+   |                       ~
+   |                     );
+   |                     ~
+./preproc/define/pass004.ds:1:30: note: expanded from macro `VARIADIC`
+ 1 | #define VARIADIC(a, b, ...) ((a) + (b) + (__va_args__))
+   |                              ^
+./preproc/define/pass004.ds:3:22: debug: token
+ 3 | const a = VARIADIC  ((1 + 2),
+   |                      ^
+./preproc/define/pass004.ds:3:23: debug: integer number: 1
+ 3 | const a = VARIADIC  ((1 + 2),
+   |                       ^
+./preproc/define/pass004.ds:3:25: debug: token
+ 3 | const a = VARIADIC  ((1 + 2),
+   |                         ^
+./preproc/define/pass004.ds:3:27: debug: integer number: 2
+ 3 | const a = VARIADIC  ((1 + 2),
+   |                           ^
+./preproc/define/pass004.ds:3:28: debug: token
+ 3 | const a = VARIADIC  ((1 + 2),
+   |                            ^
+./preproc/define/pass004.ds:3:11: debug: token
+ 3 | const a = VARIADIC  ((1 + 2),
+   |           ^~~~~~~~~~~~~~~~~~~
+   |                       3, // 
+   |                       ~~~~~
+   |                       4
+   |                       ~
+   |                     );
+   |                     ~
+./preproc/define/pass004.ds:1:32: note: expanded from macro `VARIADIC`
+ 1 | #define VARIADIC(a, b, ...) ((a) + (b) + (__va_args__))
+   |                                ^
+./preproc/define/pass004.ds:3:11: debug: token
+ 3 | const a = VARIADIC  ((1 + 2),
+   |           ^~~~~~~~~~~~~~~~~~~
+   |                       3, // 
+   |                       ~~~~~
+   |                       4
+   |                       ~
+   |                     );
+   |                     ~
+./preproc/define/pass004.ds:1:34: note: expanded from macro `VARIADIC`
+ 1 | #define VARIADIC(a, b, ...) ((a) + (b) + (__va_args__))
+   |                                  ^
+./preproc/define/pass004.ds:3:11: debug: token
+ 3 | const a = VARIADIC  ((1 + 2),
+   |           ^~~~~~~~~~~~~~~~~~~
+   |                       3, // 
+   |                       ~~~~~
+   |                       4
+   |                       ~
+   |                     );
+   |                     ~
+./preproc/define/pass004.ds:1:36: note: expanded from macro `VARIADIC`
+ 1 | #define VARIADIC(a, b, ...) ((a) + (b) + (__va_args__))
+   |                                    ^
+./preproc/define/pass004.ds:4:23: debug: integer number: 3
+ 4 |                       3, // 
+   |                       ^
+./preproc/define/pass004.ds:3:11: debug: token
+ 3 | const a = VARIADIC  ((1 + 2),
+   |           ^~~~~~~~~~~~~~~~~~~
+   |                       3, // 
+   |                       ~~~~~
+   |                       4
+   |                       ~
+   |                     );
+   |                     ~
+./preproc/define/pass004.ds:1:38: note: expanded from macro `VARIADIC`
+ 1 | #define VARIADIC(a, b, ...) ((a) + (b) + (__va_args__))
+   |                                      ^
+./preproc/define/pass004.ds:3:11: debug: token
+ 3 | const a = VARIADIC  ((1 + 2),
+   |           ^~~~~~~~~~~~~~~~~~~
+   |                       3, // 
+   |                       ~~~~~
+   |                       4
+   |                       ~
+   |                     );
+   |                     ~
+./preproc/define/pass004.ds:1:40: note: expanded from macro `VARIADIC`
+ 1 | #define VARIADIC(a, b, ...) ((a) + (b) + (__va_args__))
+   |                                        ^
+./preproc/define/pass004.ds:3:11: debug: token
+ 3 | const a = VARIADIC  ((1 + 2),
+   |           ^~~~~~~~~~~~~~~~~~~
+   |                       3, // 
+   |                       ~~~~~
+   |                       4
+   |                       ~
+   |                     );
+   |                     ~
+./preproc/define/pass004.ds:1:42: note: expanded from macro `VARIADIC`
+ 1 | #define VARIADIC(a, b, ...) ((a) + (b) + (__va_args__))
+   |                                          ^
+./preproc/define/pass004.ds:5:23: debug: integer number: 4
+ 5 |                       4
+   |                       ^
+./preproc/define/pass004.ds:3:11: debug: token
+ 3 | const a = VARIADIC  ((1 + 2),
+   |           ^~~~~~~~~~~~~~~~~~~
+   |                       3, // 
+   |                       ~~~~~
+   |                       4
+   |                       ~
+   |                     );
+   |                     ~
+./preproc/define/pass004.ds:1:54: note: expanded from macro `VARIADIC`
+ 1 | #define VARIADIC(a, b, ...) ((a) + (b) + (__va_args__))
+   |                                                      ^
+./preproc/define/pass004.ds:3:11: debug: token
+ 3 | const a = VARIADIC  ((1 + 2),
+   |           ^~~~~~~~~~~~~~~~~~~
+   |                       3, // 
+   |                       ~~~~~
+   |                       4
+   |                       ~
+   |                     );
+   |                     ~
+./preproc/define/pass004.ds:1:55: note: expanded from macro `VARIADIC`
+ 1 | #define VARIADIC(a, b, ...) ((a) + (b) + (__va_args__))
+   |                                                       ^
+./preproc/define/pass004.ds:6:22: debug: token
+ 6 |                     );
+   |                      ^
+./preproc/define/pass004.ds: info: warnings 0, errors 0

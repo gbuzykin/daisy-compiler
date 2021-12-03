@@ -1,0 +1,3 @@
+#define MACRO# include "1.ds"
+
+const a = MACRO ;

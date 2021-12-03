@@ -265,6 +265,22 @@ int DaisyParserPass::lex(SymbolInfo& tkn) {
             case lex_detail::pat_id: {
                 auto id = std::string_view(lexeme, llen);
                 if (auto it = keywords_.find(id); it != keywords_.end()) { return it->second; }
+                if (const auto* macro_exp = in_ctx->macro_expansion) {
+                    assert(macro_exp->macro_def);
+                    const auto& macro_def = *macro_exp->macro_def;
+                    if (auto it = macro_def.formal_args.find(id); it != macro_def.formal_args.end()) {
+                        expandMacroArgument(macro_exp->actual_args[it->second.first]);
+                        reset_token_loc(*(in_ctx = &getInputContext()));
+                        break;
+                    }
+                }
+                if (!(in_ctx->flags & InputContext::Flags::kDisableMacroExpansion)) {
+                    if (auto it = ctx_->macro_defs.find(id); it != ctx_->macro_defs.end()) {
+                        expandMacro(tkn.loc, it->second);
+                        reset_token_loc(*(in_ctx = &getInputContext()));
+                        break;
+                    }
+                }
                 tkn.val = id;
                 return parser_detail::tt_id;
             } break;
@@ -293,7 +309,9 @@ int DaisyParserPass::lex(SymbolInfo& tkn) {
             case lex_detail::pat_esc_char: return static_cast<unsigned char>(lexeme[1]);
             case lex_detail::pat_concatenate: return parser_detail::tt_concatenate;
             case lex_detail::pat_sharp: {
-                if (!!(in_ctx->flags & InputContext::Flags::kPreprocDirective)) { return '#'; }
+                if (!!(in_ctx->flags & InputContext::Flags::kPreprocDirective) || in_ctx->loc_ctx->expansion.macro_def) {
+                    return '#';
+                }
                 parsePreprocessorDirective();
                 reset_token_loc(*(in_ctx = &getInputContext()));
             } break;
@@ -358,7 +376,8 @@ void DaisyParserPass::parsePreprocessorDirective() {
     // Limit input by one line
     skipTillNewLine(text);
     in_ctx.text.last = text.first;
-    in_ctx.flags = InputContext::Flags::kPreprocDirective | InputContext::Flags::kStopAtEndOfInput;
+    in_ctx.flags = InputContext::Flags::kPreprocDirective | InputContext::Flags::kStopAtEndOfInput |
+                   InputContext::Flags::kDisableMacroExpansion;
 
     SymbolInfo tkn;
     int tt = lex(tkn);  // Parse directive name

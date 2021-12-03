@@ -1,0 +1,10 @@
+#define SUM(a, b) ((a) + (b))
+#define SUM2(a, b, c) \
+        SUM(SUM (a, c), SUM   (b, c))
+
+const a = SUM // A
+          (1, 2 // B
+          );
+const b = SUM2  (1/*one*/ ,  2/*two*/ ,\
+                  3 + a\
+                 );

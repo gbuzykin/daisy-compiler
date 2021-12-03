@@ -1,0 +1,19 @@
+./preproc/define/fail002.ds:3:1: debug: token
+ 3 | const a = MACRO ;
+   | ^~~~~
+./preproc/define/fail002.ds:3:7: debug: id: a
+ 3 | const a = MACRO ;
+   |       ^
+./preproc/define/fail002.ds:3:9: debug: token
+ 3 | const a = MACRO ;
+   |         ^
+./preproc/define/fail002.ds:3:11: error: unexpected token
+ 3 | const a = MACRO ;
+   |           ^~~~~
+./preproc/define/fail002.ds:1:14: note: expanded from macro `MACRO`
+ 1 | #define MACRO# include "1.ds"
+   |              ^
+./preproc/define/fail002.ds:3:17: debug: token
+ 3 | const a = MACRO ;
+   |                 ^
+./preproc/define/fail002.ds: info: warnings 0, errors 1

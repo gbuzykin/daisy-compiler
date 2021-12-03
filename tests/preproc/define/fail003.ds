@@ -1,0 +1,7 @@
+#define MACRO(  
+
+#define MACRO( ,
+
+#define MACRO(x y
+
+#define MACRO(__va_args__)

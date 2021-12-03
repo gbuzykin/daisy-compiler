@@ -26,11 +26,28 @@ struct InputFileInfo {
 };
 UXS_IMPLEMENT_BITWISE_OPS_FOR_ENUM(InputFileInfo::Flags, unsigned);
 
+struct MacroDefinition {
+    enum class Type : unsigned { kUserDefined = 0, kBuiltIn };
+    Type type = Type::kUserDefined;
+    std::string_view id;
+    bool is_variadic = false;
+    SymbolLoc loc;
+    TextRange text;
+    std::unordered_map<std::string_view, std::pair<unsigned, SymbolLoc>> formal_args;
+};
+constexpr MacroDefinition::Type operator+(MacroDefinition::Type type, unsigned n) {
+    return static_cast<MacroDefinition::Type>(static_cast<unsigned>(type) + n);
+}
+constexpr unsigned operator-(MacroDefinition::Type lhs, MacroDefinition::Type rhs) {
+    return static_cast<unsigned>(lhs) - static_cast<unsigned>(rhs);
+}
+
 struct CompilationContext {
     explicit CompilationContext(std::string fname) : file_name(std::move(fname)) {}
     std::string file_name;
     std::unordered_map<std::string, InputFileInfo> input_files;
     std::vector<std::string_view> include_paths;
+    std::unordered_map<std::string_view, MacroDefinition> macro_defs;
     std::forward_list<LocationContext> loc_ctx_list;
     mutable unsigned warning_count = 0;
     mutable unsigned error_count = 0;

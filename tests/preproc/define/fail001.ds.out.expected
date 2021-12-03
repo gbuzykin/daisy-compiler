@@ -1,0 +1,52 @@
+./preproc/define/fail001.ds:1:1: debug: token
+ 1 | const a = # ;
+   | ^~~~~
+./preproc/define/fail001.ds:1:7: debug: id: a
+ 1 | const a = # ;
+   |       ^
+./preproc/define/fail001.ds:1:9: debug: token
+ 1 | const a = # ;
+   |         ^
+./preproc/define/fail001.ds:1:13: error: expected preprocessor directive name
+ 1 | const a = # ;
+   |             ^
+./preproc/define/fail001.ds:2:1: error: unexpected token
+ 2 | ;
+   | ^
+./preproc/define/fail001.ds:2:1: debug: token
+ 2 | ;
+   | ^
+./preproc/define/fail001.ds:3:1: debug: token
+ 3 | const b = # unknown
+   | ^~~~~
+./preproc/define/fail001.ds:3:7: debug: id: b
+ 3 | const b = # unknown
+   |       ^
+./preproc/define/fail001.ds:3:9: debug: token
+ 3 | const b = # unknown
+   |         ^
+./preproc/define/fail001.ds:3:13: error: unknown preprocessor directive
+ 3 | const b = # unknown
+   |             ^~~~~~~
+./preproc/define/fail001.ds:4:1: error: unexpected token
+ 4 | ;
+   | ^
+./preproc/define/fail001.ds:4:1: debug: token
+ 4 | ;
+   | ^
+./preproc/define/fail001.ds:5:1: debug: token
+ 5 | const c = ##
+   | ^~~~~
+./preproc/define/fail001.ds:5:7: debug: id: c
+ 5 | const c = ##
+   |       ^
+./preproc/define/fail001.ds:5:9: debug: token
+ 5 | const c = ##
+   |         ^
+./preproc/define/fail001.ds:5:11: error: unexpected token
+ 5 | const c = ##
+   |           ^~
+./preproc/define/fail001.ds:6:1: debug: token
+ 6 | ;
+   | ^
+./preproc/define/fail001.ds: info: warnings 0, errors 5
