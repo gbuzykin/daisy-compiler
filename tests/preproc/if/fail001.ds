@@ -1,0 +1,5 @@
+#define SUM(a, b) ((a) + (b))
+#if SUM(3, 6) > SUM(2u, 5u)
+#if SUM(3, 6) > SUM(3, 6) / -SUM(0, 0)
+#endif
+#endif

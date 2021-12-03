@@ -155,3 +155,38 @@ void daisy::findMacroArgumentSeparator(TextRange& text) {
 stop:
     text.first = p, text.pos.col += static_cast<unsigned>(p - p0);
 }
+
+void daisy::skipTillPreprocDirective(TextRange& text) {
+    const char *p = text.first, *p0 = p;
+    while (p != text.last) {
+        switch (*p++) {
+            case '#': {  // Stop after single '#' character
+                if (p != text.last && *p != '#') { goto stop; }
+                ++p;
+            } break;
+            case '\\': {  // Skip any character after '\\', count newlines
+                if (p != text.last && *p++ == '\n') { text.pos.nextLn(), p0 = p; }
+            } break;
+            case '/': {  // Skip comments
+                if (p != text.last && (*p == '/' || *p == '*')) {
+                    text.first = p + 1, text.pos.col += static_cast<unsigned>(p - p0) + 1;
+                    if (*p == '/') {
+                        skipTillNewLine(text);
+                    } else {
+                        skipCommentBlock(text);
+                    }
+                    p = p0 = text.first;
+                }
+            } break;
+            case '\"': {  // Skip strings
+                text.first = p, text.pos.col += static_cast<unsigned>(p - p0);
+                skipString(text);
+                p = p0 = text.first;
+            } break;
+            case '\n': text.pos.nextLn(), p0 = p; break;  // Skip newlines
+            default: break;                               // Skip all other characters
+        }
+    }
+stop:
+    text.first = p, text.pos.col += static_cast<unsigned>(p - p0);
+}

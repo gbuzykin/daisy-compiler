@@ -1,0 +1,63 @@
+#if true
+#info "case #1"
+#elif true
+#info "case #2"
+#elif true
+#info "case #3"
+#endif
+
+#if true
+#info "case #4"
+#elif true
+#info "case #5"
+#elif false
+#info "case #6"
+#endif
+
+#if true
+#info "case #7"
+#elif false
+#info "case #8"
+#elif true
+#info "case #9"
+#endif
+
+#if true
+#info "case #10"
+#elif false
+#info "case #11"
+#elif false
+#info "case #12"
+#endif
+
+#if false
+#info "case #13"
+#elif true
+#info "case #14"
+#elif true
+#info "case #15"
+#endif
+
+#if false
+#info "case #16"
+#elif true
+#info "case #17"
+#elif false
+#info "case #18"
+#endif
+
+#if false
+#info "case #19"
+#elif false
+#info "case #20"
+#elif true
+#info "case #21"
+#endif
+
+#if false
+#info "case #22"
+#elif false
+#info "case #23"
+#elif false
+#info "case #24"
+#endif

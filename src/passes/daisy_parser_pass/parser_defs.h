@@ -41,9 +41,37 @@ enum {
 enum {
     predef_act_shift = 0,
     predef_act_reduce = 1,
+    act_preproc_op_u_minus,
+    act_preproc_op_u_plus,
+    act_preproc_op_binary_not,
+    act_preproc_op_add,
+    act_preproc_op_sub,
+    act_preproc_op_mul,
+    act_preproc_op_div,
+    act_preproc_op_mod,
+    act_preproc_op_shl,
+    act_preproc_op_shr,
+    act_preproc_op_binary_and,
+    act_preproc_op_binary_or,
+    act_preproc_op_binary_xor,
+    act_preproc_op_eq,
+    act_preproc_op_ne,
+    act_preproc_op_lt,
+    act_preproc_op_le,
+    act_preproc_op_ge,
+    act_preproc_op_gt,
+    act_preproc_op_logical_not,
+    act_preproc_op_logical_and,
+    act_preproc_op_logical_or,
+    act_preproc_op_conditional,
+    act_preproc_brackets,
+    act_preproc_id_ref,
+    act_preproc_operator_begin,
+    act_preproc_operator_end,
     total_action_count
 };
 
 enum {
-    sc_initial = 0
+    sc_initial = 0,
+    sc_preproc_condition
 };

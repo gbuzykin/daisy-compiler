@@ -1,0 +1,7 @@
+./preproc/if/fail001.ds:2:15: warning: signed/unsigned mismatch
+ 2 | #if SUM(3, 6) > SUM(2u, 5u)
+   |               ^
+./preproc/if/fail001.ds:3:29: error: integer division by zero
+ 3 | #if SUM(3, 6) > SUM(3, 6) / -SUM(0, 0)
+   |                             ^~~~~~~~~~
+./preproc/if/fail001.ds: info: warnings 1, errors 1

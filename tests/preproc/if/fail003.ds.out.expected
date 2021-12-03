@@ -1,0 +1,4 @@
+./preproc/if/fail003.ds:1:9: error: unexpected token
+ 1 | #if 1 > >
+   |         ^
+./preproc/if/fail003.ds: info: warnings 0, errors 1

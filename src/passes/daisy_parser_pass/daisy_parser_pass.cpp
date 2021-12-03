@@ -40,6 +40,7 @@ void DaisyParserPass::configure() {
 void DaisyParserPass::cleanup() {
     input_ctx_stack_.clear();
     lex_state_stack_.clear();
+    if_section_stack_.clear();
 }
 
 PassResult DaisyParserPass::run(CompilationContext& ctx) {
@@ -69,7 +70,7 @@ PassResult DaisyParserPass::run(CompilationContext& ctx) {
     while (true) {
         int* prev_parser_state_stack_top = parser_state_stack.curr();
         parser_state_stack.reserve_at_curr(1);
-        int act = parser_detail::parse(tt, parser_state_stack.first(), parser_state_stack.p_curr(), 0);
+        int act = parse(tt, parser_state_stack.first(), parser_state_stack.p_curr(), 0);
         if (act != parser_detail::predef_act_shift) {
             unsigned rlen = static_cast<unsigned>(1 + prev_parser_state_stack_top - parser_state_stack.curr());
             if (act < 0) {  // Syntax error
@@ -168,6 +169,10 @@ int DaisyParserPass::lex(SymbolInfo& tkn) {
                 tkn.loc.last = tkn.loc.first = in_ctx->text.pos;
                 if (!!(in_ctx->flags & InputContext::Flags::kStopAtEndOfInput)) {
                     return parser_detail::tt_end_of_input;
+                }
+                while (in_ctx->last_if_section_state != getIfSection()) {  // Remove unclosed if sections
+                    logger::warning(if_section_stack_.front().loc).format("`#if` without `#endif`");
+                    popIfSection();
                 }
                 // Input context stack is empty - end of compilation unit
                 if (popInputContext()) { return parser_detail::tt_end_of_file; }
@@ -322,6 +327,10 @@ int DaisyParserPass::lex(SymbolInfo& tkn) {
     return parser_detail::tt_end_of_file;
 }
 
+/*static*/ int DaisyParserPass::parse(int tt, int* sptr0, int** p_sptr, int rise_error) {
+    return parser_detail::parse(tt, sptr0, p_sptr, rise_error);
+}
+
 const InputFileInfo* DaisyParserPass::loadInputFile(std::string_view file_path) {
     std::filesystem::path path(file_path);
     if (path.is_relative()) { path = (std::filesystem::current_path() / path).lexically_normal(); }
@@ -368,32 +377,43 @@ void DaisyParserPass::ensureEndOfInput(SymbolInfo& tkn) {
 
 void DaisyParserPass::parsePreprocessorDirective() {
     auto& in_ctx = getInputContext();
+    bool is_text_disabled = false;
 
-    // Save input context state
-    TextRange text = in_ctx.text;
-    InputContext::Flags flags = in_ctx.flags;
+    do {
+        // Save input context state
+        TextRange text = in_ctx.text;
+        InputContext::Flags flags = in_ctx.flags;
 
-    // Limit input by one line
-    skipTillNewLine(text);
-    in_ctx.text.last = text.first;
-    in_ctx.flags = InputContext::Flags::kPreprocDirective | InputContext::Flags::kStopAtEndOfInput |
-                   InputContext::Flags::kDisableMacroExpansion;
+        // Limit input by one line
+        skipTillNewLine(text);
+        in_ctx.text.last = text.first;
+        in_ctx.flags = InputContext::Flags::kPreprocDirective | InputContext::Flags::kStopAtEndOfInput |
+                       InputContext::Flags::kDisableMacroExpansion;
 
-    SymbolInfo tkn;
-    int tt = lex(tkn);  // Parse directive name
-    if (tt == parser_detail::tt_id) {
-        auto it = preproc_directive_parsers_.find(std::get<std::string_view>(tkn.val));
-        if (it != preproc_directive_parsers_.end()) {
-            it->second->func(this, tkn);
-        } else {
-            logger::error(tkn.loc).format("unknown preprocessor directive");
+        SymbolInfo tkn;
+        int tt = lex(tkn);  // Parse directive name
+        if (tt == parser_detail::tt_id) {
+            auto it = preproc_directive_parsers_.find(std::get<std::string_view>(tkn.val));
+            if (it != preproc_directive_parsers_.end()) {
+                if (!is_text_disabled || it->second->parse_disabled_text) { it->second->func(this, tkn); }
+            } else if (!is_text_disabled) {
+                logger::error(tkn.loc).format("unknown preprocessor directive");
+            }
+        } else if (!is_text_disabled) {
+            logger::error(tkn.loc).format("expected preprocessor directive name");
         }
-    } else {
-        logger::error(tkn.loc).format("expected preprocessor directive name");
-    }
 
-    if (text.first != text.last) { ++text.first, text.pos.nextLn(); }
-    in_ctx.text = text, in_ctx.flags = flags;
+        if (text.first != text.last) { ++text.first, text.pos.nextLn(); }
+        in_ctx.text = text, in_ctx.flags = flags;
+
+        const auto* if_section = getIfSection();
+        if (!if_section || if_section->section_disable_counter == 0) { break; }
+
+        // Eat up all text till the position after single `#` symbol
+        // Note: strings and comments are skipped
+        skipTillPreprocDirective(in_ctx.text);
+        is_text_disabled = true;
+    } while (in_ctx.text.first != in_ctx.text.last);
 }
 
 void daisy::logSyntaxError(int tt, const SymbolLoc& loc) {

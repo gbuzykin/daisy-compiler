@@ -1,3 +1,5 @@
+%start preproc_condition
+
 # Tokens
 %token end_of_file
 %token end_of_input
@@ -51,11 +53,71 @@
 %right '!' '~' $unary
 
 # Actions
+%action preproc_op_u_minus
+%action preproc_op_u_plus
+%action preproc_op_binary_not
+%action preproc_op_add
+%action preproc_op_sub
+%action preproc_op_mul
+%action preproc_op_div
+%action preproc_op_mod
+%action preproc_op_shl
+%action preproc_op_shr
+%action preproc_op_binary_and
+%action preproc_op_binary_or
+%action preproc_op_binary_xor
+%action preproc_op_eq
+%action preproc_op_ne
+%action preproc_op_lt
+%action preproc_op_le
+%action preproc_op_ge
+%action preproc_op_gt
+%action preproc_op_logical_not
+%action preproc_op_logical_and
+%action preproc_op_logical_or
+%action preproc_op_conditional
+%action preproc_brackets
+%action preproc_id_ref
+%action preproc_operator_begin
+%action preproc_operator_end
 
 %%
 
+# Preprocessor condition expression
+preproc_condition<preproc_condition> : preproc_expr [end_of_input] ;
+
+preproc_expr : '-' preproc_expr %prec $unary {preproc_op_u_minus}
+  | '+' preproc_expr %prec $unary {preproc_op_u_plus}
+  | '~' preproc_expr %prec $unary {preproc_op_binary_not}
+  | preproc_expr '+' preproc_expr {preproc_op_add}
+  | preproc_expr '-' preproc_expr {preproc_op_sub}
+  | preproc_expr '*' preproc_expr {preproc_op_mul}
+  | preproc_expr '/' preproc_expr {preproc_op_div}
+  | preproc_expr '%' preproc_expr {preproc_op_mod}
+  | preproc_expr [shl] preproc_expr {preproc_op_shl}
+  | preproc_expr [shr] preproc_expr {preproc_op_shr}
+  | preproc_expr '&' preproc_expr {preproc_op_binary_and}
+  | preproc_expr '|' preproc_expr {preproc_op_binary_or}
+  | preproc_expr '^' preproc_expr {preproc_op_binary_xor}
+  | preproc_expr [eq] preproc_expr {preproc_op_eq}
+  | preproc_expr [ne] preproc_expr {preproc_op_ne}
+  | preproc_expr '<' preproc_expr {preproc_op_lt}
+  | preproc_expr [le] preproc_expr {preproc_op_le}
+  | preproc_expr '>' preproc_expr {preproc_op_gt}
+  | preproc_expr [ge] preproc_expr {preproc_op_ge}
+  | '!' preproc_expr %prec $unary {preproc_op_logical_not}
+  | preproc_expr [and] preproc_expr {preproc_op_logical_and}
+  | preproc_expr [or] preproc_expr {preproc_op_logical_or}
+  | preproc_expr '?' preproc_expr ':' preproc_expr {preproc_op_conditional}
+  | '(' preproc_expr ')' {preproc_brackets}
+  | [id] {preproc_id_ref}
+  | [id] {preproc_operator_begin} '(' [id] ')' {preproc_operator_end}
+  | [bool_literal]
+  | [int_literal]
+  ;
+
 # Translation unit
-translation_unit : unit_contents [end_of_file] ;
+translation_unit<initial> : unit_contents [end_of_file] ;
 unit_contents : unit_contents unit_item
   | #empty
   ;

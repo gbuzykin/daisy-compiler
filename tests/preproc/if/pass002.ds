@@ -1,0 +1,11 @@
+#if true
+#info "case #1"
+#else
+#info "case #2"
+#endif
+
+#if false
+#info "case #3"
+#else
+#info "case #4"
+#endif

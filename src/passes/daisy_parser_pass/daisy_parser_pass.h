@@ -32,6 +32,13 @@ struct SymbolInfo {
 
 struct MacroExpansion;
 
+struct IfSectionState {
+    SymbolLoc loc;
+    bool is_matched = false;
+    bool has_else_section = false;
+    unsigned section_disable_counter = 0;
+};
+
 struct InputContext {
     enum class Flags : unsigned {
         kNone = 0,
@@ -45,6 +52,7 @@ struct InputContext {
     const LocationContext* loc_ctx;
     Flags flags = InputContext::Flags::kNone;
     MacroExpansion* macro_expansion = nullptr;
+    const IfSectionState* last_if_section_state = nullptr;
 };
 UXS_IMPLEMENT_BITWISE_OPS_FOR_ENUM(InputContext::Flags, unsigned);
 
@@ -74,13 +82,15 @@ struct ReduceActionHandler {
 
 struct PreprocDirectiveParser {
     using FuncType = void (*)(DaisyParserPass*, SymbolInfo&);
-    PreprocDirectiveParser(std::string_view id, FuncType fn) : next_avail(first_avail), directive_id(id), func(fn) {
+    PreprocDirectiveParser(std::string_view id, FuncType fn, bool pdt = false)
+        : next_avail(first_avail), directive_id(id), func(fn), parse_disabled_text(pdt) {
         first_avail = this;
     }
     static const PreprocDirectiveParser* first_avail;
     const PreprocDirectiveParser* next_avail;
     std::string_view directive_id;
     FuncType func;
+    bool parse_disabled_text;
 };
 
 class DaisyParserPass : public Pass {
@@ -92,10 +102,16 @@ class DaisyParserPass : public Pass {
 
     CompilationContext& getCompilationContext() const { return *ctx_; }
     int lex(SymbolInfo& tkn);
+    static int parse(int tt, int* sptr0, int** p_sptr, int rise_error);
     const InputFileInfo* loadInputFile(std::string_view file_path);
+
+    IfSectionState* getIfSection() { return !if_section_stack_.empty() ? &if_section_stack_.front() : nullptr; }
+    IfSectionState& pushIfSection(const SymbolLoc& loc) { return if_section_stack_.emplace_front(IfSectionState{loc}); }
+    void popIfSection() { if_section_stack_.pop_front(); }
 
     InputContext& getInputContext() { return *input_ctx_stack_.front(); }
     InputContext& pushInputContext(std::unique_ptr<InputContext> in_ctx) {
+        in_ctx->last_if_section_state = getIfSection();
         return *input_ctx_stack_.emplace_front(std::move(in_ctx));
     }
     bool popInputContext() {
@@ -124,6 +140,7 @@ class DaisyParserPass : public Pass {
     SymbolInfo la_tkn_;
     std::forward_list<std::unique_ptr<InputContext>> input_ctx_stack_;
     uxs::basic_inline_dynbuffer<int, 1> lex_state_stack_;
+    std::forward_list<IfSectionState> if_section_stack_;
 
     std::unordered_map<std::string_view, int> keywords_;
     std::array<ReduceActionHandler::FuncType, parser_detail::total_action_count> reduce_action_handlers_;

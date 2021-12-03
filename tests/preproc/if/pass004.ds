@@ -1,0 +1,31 @@
+#if true
+#info "case #1"
+#elif true
+#info "case #2"
+#else
+#info "case #3"
+#endif
+
+#if true
+#info "case #4"
+#elif false
+#info "case #5"
+#else
+#info "case #6"
+#endif
+
+#if false
+#info "case #7"
+#elif true
+#info "case #8"
+#else
+#info "case #9"
+#endif
+
+#if false
+#info "case #10"
+#elif false
+#info "case #11"
+#else
+#info "case #12"
+#endif
