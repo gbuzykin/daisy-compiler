@@ -36,6 +36,20 @@
 # Keywords
 %token const
 
+# Operator precedence
+%right '?' ':'
+%left or
+%left and
+%left '|'
+%left '^'
+%left '&'
+%nonassoc eq ne
+%nonassoc '<' le '>' ge
+%left shl shr
+%left '+' '-'
+%left '*' '/' '%'
+%right '!' '~' $unary
+
 # Actions
 
 %%
@@ -47,10 +61,36 @@ unit_contents : unit_contents unit_item
   ;
 
 unit_item : [const] [id] '=' expr ';'
+  | $error ';'
   | ';'
   ;
 
-expr : [bool_literal]
+expr : '-' expr %prec $unary
+  | '+' expr %prec $unary
+  | '~' expr %prec $unary
+  | expr '+' expr
+  | expr '-' expr
+  | expr '*' expr
+  | expr '/' expr
+  | expr '%' expr
+  | expr [shl] expr
+  | expr [shr] expr
+  | expr '&' expr
+  | expr '|' expr
+  | expr '^' expr
+  | expr [eq] expr
+  | expr [ne] expr
+  | expr '<' expr
+  | expr [le] expr
+  | expr '>' expr
+  | expr [ge] expr
+  | '!' expr %prec $unary
+  | expr [and] expr
+  | expr [or] expr
+  | expr '?' expr ':' expr
+  | '(' expr ')'
+  | [id]
+  | [bool_literal]
   | [int_literal]
   | [real_literal]
   | string

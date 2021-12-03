@@ -1,0 +1,6 @@
+#define VARIADIC(a, b, ...) ((a) + (b) + (__va_args__))
+
+const a = VARIADIC  ((1 + 2),
+                      3, // 
+                      4
+                    );

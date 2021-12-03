@@ -1,0 +1,9 @@
+#define SUM(a, b) ((a) + (b))
+#define SUM2(a, b,...) ((a) + (b) + (__va_args__))
+
+const a = SUM;
+const a2 = SUM2;
+const b = SUM(1);
+const b2 = SUM2(1);
+const c = SUM(1, 2, 3);
+const c2 = SUM2(1, 2, 3);

@@ -7,6 +7,7 @@ namespace daisy {
 
 struct InputFileInfo;
 struct LocationContext;
+struct MacroDefinition;
 
 struct TextPos {
     void nextLn() { ++ln, col = 1; }
@@ -34,6 +35,7 @@ struct SymbolLoc {
 
 struct TextExpansion {
     SymbolLoc loc;
+    const MacroDefinition* macro_def = nullptr;
 };
 
 struct LocationContext {

@@ -30,18 +30,36 @@ struct SymbolInfo {
     SymbolLoc loc;
 };
 
+struct MacroExpansion;
+
 struct InputContext {
     enum class Flags : unsigned {
         kNone = 0,
         kStopAtEndOfInput = 1,
         kPreprocDirective = 2,
+        kDisableMacroExpansion = 4,
     };
     InputContext(TextRange txt, const LocationContext* ctx) : text(txt), loc_ctx(ctx) {}
+    virtual ~InputContext() = default;
     TextRange text;
     const LocationContext* loc_ctx;
     Flags flags = InputContext::Flags::kNone;
+    MacroExpansion* macro_expansion = nullptr;
 };
 UXS_IMPLEMENT_BITWISE_OPS_FOR_ENUM(InputContext::Flags, unsigned);
+
+struct MacroExpansion {
+    const MacroDefinition* macro_def;
+    const InputContext* source_in_ctx;
+    SymbolLoc loc;
+    std::vector<TextRange> actual_args;
+};
+
+struct MacroExpansionContext : public InputContext {
+    MacroExpansionContext(TextRange txt, const LocationContext* ctx, MacroExpansion macro_exp)
+        : InputContext(txt, ctx), macro_expansion_info(std::move(macro_exp)) {}
+    MacroExpansion macro_expansion_info;
+};
 
 class DaisyParserPass;
 
@@ -89,6 +107,7 @@ class DaisyParserPass : public Pass {
         return ctx_->loc_ctx_list.emplace_front(file, expansion);
     }
 
+    bool checkMacroExpansionForRecursion(std::string_view macro_id);
     void ensureEndOfInput(SymbolInfo& tkn);
 
  private:
@@ -111,6 +130,8 @@ class DaisyParserPass : public Pass {
     std::unordered_map<std::string_view, const PreprocDirectiveParser*> preproc_directive_parsers_;
 
     void parsePreprocessorDirective();
+    void expandMacro(const SymbolLoc& loc, const MacroDefinition& macro_def);
+    void expandMacroArgument(const TextRange& arg);
 };
 
 void logSyntaxError(int tt, const SymbolLoc& loc);

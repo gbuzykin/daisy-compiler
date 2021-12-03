@@ -1,0 +1,5 @@
+#define MACRO 1
+#undef MACRO
+#define MACRO 0
+
+const a = MACRO;

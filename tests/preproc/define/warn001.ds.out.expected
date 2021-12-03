@@ -1,0 +1,4 @@
+./preproc/define/warn001.ds:1:8: warning: macro `MACRO` is not defined
+ 1 | #undef MACRO
+   |        ^~~~~
+./preproc/define/warn001.ds: info: warnings 1, errors 0

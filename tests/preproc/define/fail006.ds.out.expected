@@ -1,0 +1,187 @@
+./preproc/define/fail006.ds:4:1: debug: token
+ 4 | const a = SUM;
+   | ^~~~~
+./preproc/define/fail006.ds:4:7: debug: id: a
+ 4 | const a = SUM;
+   |       ^
+./preproc/define/fail006.ds:4:9: debug: token
+ 4 | const a = SUM;
+   |         ^
+./preproc/define/fail006.ds:4:11: error: macro `SUM` requires arguments
+ 4 | const a = SUM;
+   |           ^~~
+./preproc/define/fail006.ds:1:9: note: macro `SUM` defined here
+ 1 | #define SUM(a, b) ((a) + (b))
+   |         ^~~
+./preproc/define/fail006.ds:4:14: error: unexpected token
+ 4 | const a = SUM;
+   |              ^
+./preproc/define/fail006.ds:4:14: debug: token
+ 4 | const a = SUM;
+   |              ^
+./preproc/define/fail006.ds:5:1: debug: token
+ 5 | const a2 = SUM2;
+   | ^~~~~
+./preproc/define/fail006.ds:5:7: debug: id: a2
+ 5 | const a2 = SUM2;
+   |       ^~
+./preproc/define/fail006.ds:5:10: debug: token
+ 5 | const a2 = SUM2;
+   |          ^
+./preproc/define/fail006.ds:5:12: error: macro `SUM2` requires arguments
+ 5 | const a2 = SUM2;
+   |            ^~~~
+./preproc/define/fail006.ds:2:9: note: macro `SUM2` defined here
+ 2 | #define SUM2(a, b,...) ((a) + (b) + (__va_args__))
+   |         ^~~~
+./preproc/define/fail006.ds:5:16: error: unexpected token
+ 5 | const a2 = SUM2;
+   |                ^
+./preproc/define/fail006.ds:5:16: debug: token
+ 5 | const a2 = SUM2;
+   |                ^
+./preproc/define/fail006.ds:6:1: debug: token
+ 6 | const b = SUM(1);
+   | ^~~~~
+./preproc/define/fail006.ds:6:7: debug: id: b
+ 6 | const b = SUM(1);
+   |       ^
+./preproc/define/fail006.ds:6:9: debug: token
+ 6 | const b = SUM(1);
+   |         ^
+./preproc/define/fail006.ds:6:11: error: macro `SUM` requires 2 arguments, but 1 provided
+ 6 | const b = SUM(1);
+   |           ^~~
+./preproc/define/fail006.ds:1:9: note: macro `SUM` defined here
+ 1 | #define SUM(a, b) ((a) + (b))
+   |         ^~~
+./preproc/define/fail006.ds:6:17: error: unexpected token
+ 6 | const b = SUM(1);
+   |                 ^
+./preproc/define/fail006.ds:6:17: debug: token
+ 6 | const b = SUM(1);
+   |                 ^
+./preproc/define/fail006.ds:7:1: debug: token
+ 7 | const b2 = SUM2(1);
+   | ^~~~~
+./preproc/define/fail006.ds:7:7: debug: id: b2
+ 7 | const b2 = SUM2(1);
+   |       ^~
+./preproc/define/fail006.ds:7:10: debug: token
+ 7 | const b2 = SUM2(1);
+   |          ^
+./preproc/define/fail006.ds:7:12: error: variadic macro `SUM2` requires at least 2 arguments, but 1 provided
+ 7 | const b2 = SUM2(1);
+   |            ^~~~
+./preproc/define/fail006.ds:2:9: note: macro `SUM2` defined here
+ 2 | #define SUM2(a, b,...) ((a) + (b) + (__va_args__))
+   |         ^~~~
+./preproc/define/fail006.ds:7:19: error: unexpected token
+ 7 | const b2 = SUM2(1);
+   |                   ^
+./preproc/define/fail006.ds:7:19: debug: token
+ 7 | const b2 = SUM2(1);
+   |                   ^
+./preproc/define/fail006.ds:8:1: debug: token
+ 8 | const c = SUM(1, 2, 3);
+   | ^~~~~
+./preproc/define/fail006.ds:8:7: debug: id: c
+ 8 | const c = SUM(1, 2, 3);
+   |       ^
+./preproc/define/fail006.ds:8:9: debug: token
+ 8 | const c = SUM(1, 2, 3);
+   |         ^
+./preproc/define/fail006.ds:8:11: error: macro `SUM` requires 2 arguments, but 3 provided
+ 8 | const c = SUM(1, 2, 3);
+   |           ^~~
+./preproc/define/fail006.ds:1:9: note: macro `SUM` defined here
+ 1 | #define SUM(a, b) ((a) + (b))
+   |         ^~~
+./preproc/define/fail006.ds:8:23: error: unexpected token
+ 8 | const c = SUM(1, 2, 3);
+   |                       ^
+./preproc/define/fail006.ds:8:23: debug: token
+ 8 | const c = SUM(1, 2, 3);
+   |                       ^
+./preproc/define/fail006.ds:9:1: debug: token
+ 9 | const c2 = SUM2(1, 2, 3);
+   | ^~~~~
+./preproc/define/fail006.ds:9:7: debug: id: c2
+ 9 | const c2 = SUM2(1, 2, 3);
+   |       ^~
+./preproc/define/fail006.ds:9:10: debug: token
+ 9 | const c2 = SUM2(1, 2, 3);
+   |          ^
+./preproc/define/fail006.ds:9:12: debug: token
+ 9 | const c2 = SUM2(1, 2, 3);
+   |            ^~~~~~~~~~~~~
+./preproc/define/fail006.ds:2:24: note: expanded from macro `SUM2`
+ 2 | #define SUM2(a, b,...) ((a) + (b) + (__va_args__))
+   |                        ^
+./preproc/define/fail006.ds:9:12: debug: token
+ 9 | const c2 = SUM2(1, 2, 3);
+   |            ^~~~~~~~~~~~~
+./preproc/define/fail006.ds:2:25: note: expanded from macro `SUM2`
+ 2 | #define SUM2(a, b,...) ((a) + (b) + (__va_args__))
+   |                         ^
+./preproc/define/fail006.ds:9:17: debug: integer number: 1
+ 9 | const c2 = SUM2(1, 2, 3);
+   |                 ^
+./preproc/define/fail006.ds:9:12: debug: token
+ 9 | const c2 = SUM2(1, 2, 3);
+   |            ^~~~~~~~~~~~~
+./preproc/define/fail006.ds:2:27: note: expanded from macro `SUM2`
+ 2 | #define SUM2(a, b,...) ((a) + (b) + (__va_args__))
+   |                           ^
+./preproc/define/fail006.ds:9:12: debug: token
+ 9 | const c2 = SUM2(1, 2, 3);
+   |            ^~~~~~~~~~~~~
+./preproc/define/fail006.ds:2:29: note: expanded from macro `SUM2`
+ 2 | #define SUM2(a, b,...) ((a) + (b) + (__va_args__))
+   |                             ^
+./preproc/define/fail006.ds:9:12: debug: token
+ 9 | const c2 = SUM2(1, 2, 3);
+   |            ^~~~~~~~~~~~~
+./preproc/define/fail006.ds:2:31: note: expanded from macro `SUM2`
+ 2 | #define SUM2(a, b,...) ((a) + (b) + (__va_args__))
+   |                               ^
+./preproc/define/fail006.ds:9:20: debug: integer number: 2
+ 9 | const c2 = SUM2(1, 2, 3);
+   |                    ^
+./preproc/define/fail006.ds:9:12: debug: token
+ 9 | const c2 = SUM2(1, 2, 3);
+   |            ^~~~~~~~~~~~~
+./preproc/define/fail006.ds:2:33: note: expanded from macro `SUM2`
+ 2 | #define SUM2(a, b,...) ((a) + (b) + (__va_args__))
+   |                                 ^
+./preproc/define/fail006.ds:9:12: debug: token
+ 9 | const c2 = SUM2(1, 2, 3);
+   |            ^~~~~~~~~~~~~
+./preproc/define/fail006.ds:2:35: note: expanded from macro `SUM2`
+ 2 | #define SUM2(a, b,...) ((a) + (b) + (__va_args__))
+   |                                   ^
+./preproc/define/fail006.ds:9:12: debug: token
+ 9 | const c2 = SUM2(1, 2, 3);
+   |            ^~~~~~~~~~~~~
+./preproc/define/fail006.ds:2:37: note: expanded from macro `SUM2`
+ 2 | #define SUM2(a, b,...) ((a) + (b) + (__va_args__))
+   |                                     ^
+./preproc/define/fail006.ds:9:23: debug: integer number: 3
+ 9 | const c2 = SUM2(1, 2, 3);
+   |                       ^
+./preproc/define/fail006.ds:9:12: debug: token
+ 9 | const c2 = SUM2(1, 2, 3);
+   |            ^~~~~~~~~~~~~
+./preproc/define/fail006.ds:2:49: note: expanded from macro `SUM2`
+ 2 | #define SUM2(a, b,...) ((a) + (b) + (__va_args__))
+   |                                                 ^
+./preproc/define/fail006.ds:9:12: debug: token
+ 9 | const c2 = SUM2(1, 2, 3);
+   |            ^~~~~~~~~~~~~
+./preproc/define/fail006.ds:2:50: note: expanded from macro `SUM2`
+ 2 | #define SUM2(a, b,...) ((a) + (b) + (__va_args__))
+   |                                                  ^
+./preproc/define/fail006.ds:9:25: debug: token
+ 9 | const c2 = SUM2(1, 2, 3);
+   |                         ^
+./preproc/define/fail006.ds: info: warnings 0, errors 10

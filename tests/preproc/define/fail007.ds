@@ -1,0 +1,6 @@
+#define SUM(a, b) SUM(a, b)
+#define SUM1(a, b) SUM2(a, b)
+#define SUM2(a, b) SUM1(a, b)
+
+const a = SUM(1, 2);
+const b = SUM2(1, 2);

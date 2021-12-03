@@ -1,0 +1,13 @@
+./preproc/define/fail003.ds:1:17: error: expected macro argument identifier or `...`
+ 1 | #define MACRO(  
+   |                 ^
+./preproc/define/fail003.ds:3:16: error: expected macro argument identifier or `...`
+ 3 | #define MACRO( ,
+   |                ^
+./preproc/define/fail003.ds:5:17: error: expected `)` or `,`
+ 5 | #define MACRO(x y
+   |                 ^
+./preproc/define/fail003.ds:7:15: error: identifier `__va_args__` is reserved for variable argument
+ 7 | #define MACRO(__va_args__)
+   |               ^~~~~~~~~~~
+./preproc/define/fail003.ds: info: warnings 0, errors 4

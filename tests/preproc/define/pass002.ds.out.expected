@@ -1,0 +1,398 @@
+./preproc/define/pass002.ds:5:1: debug: token
+ 5 | const a = SUM // A
+   | ^~~~~
+./preproc/define/pass002.ds:5:7: debug: id: a
+ 5 | const a = SUM // A
+   |       ^
+./preproc/define/pass002.ds:5:9: debug: token
+ 5 | const a = SUM // A
+   |         ^
+./preproc/define/pass002.ds:5:11: debug: token
+ 5 | const a = SUM // A
+   |           ^~~~~~~~
+   |           (1, 2 // B
+   |           ~~~~~~~~~~
+   |           );
+   |           ~
+./preproc/define/pass002.ds:1:19: note: expanded from macro `SUM`
+ 1 | #define SUM(a, b) ((a) + (b))
+   |                   ^
+./preproc/define/pass002.ds:5:11: debug: token
+ 5 | const a = SUM // A
+   |           ^~~~~~~~
+   |           (1, 2 // B
+   |           ~~~~~~~~~~
+   |           );
+   |           ~
+./preproc/define/pass002.ds:1:20: note: expanded from macro `SUM`
+ 1 | #define SUM(a, b) ((a) + (b))
+   |                    ^
+./preproc/define/pass002.ds:6:12: debug: integer number: 1
+ 6 |           (1, 2 // B
+   |            ^
+./preproc/define/pass002.ds:5:11: debug: token
+ 5 | const a = SUM // A
+   |           ^~~~~~~~
+   |           (1, 2 // B
+   |           ~~~~~~~~~~
+   |           );
+   |           ~
+./preproc/define/pass002.ds:1:22: note: expanded from macro `SUM`
+ 1 | #define SUM(a, b) ((a) + (b))
+   |                      ^
+./preproc/define/pass002.ds:5:11: debug: token
+ 5 | const a = SUM // A
+   |           ^~~~~~~~
+   |           (1, 2 // B
+   |           ~~~~~~~~~~
+   |           );
+   |           ~
+./preproc/define/pass002.ds:1:24: note: expanded from macro `SUM`
+ 1 | #define SUM(a, b) ((a) + (b))
+   |                        ^
+./preproc/define/pass002.ds:5:11: debug: token
+ 5 | const a = SUM // A
+   |           ^~~~~~~~
+   |           (1, 2 // B
+   |           ~~~~~~~~~~
+   |           );
+   |           ~
+./preproc/define/pass002.ds:1:26: note: expanded from macro `SUM`
+ 1 | #define SUM(a, b) ((a) + (b))
+   |                          ^
+./preproc/define/pass002.ds:6:15: debug: integer number: 2
+ 6 |           (1, 2 // B
+   |               ^
+./preproc/define/pass002.ds:5:11: debug: token
+ 5 | const a = SUM // A
+   |           ^~~~~~~~
+   |           (1, 2 // B
+   |           ~~~~~~~~~~
+   |           );
+   |           ~
+./preproc/define/pass002.ds:1:28: note: expanded from macro `SUM`
+ 1 | #define SUM(a, b) ((a) + (b))
+   |                            ^
+./preproc/define/pass002.ds:5:11: debug: token
+ 5 | const a = SUM // A
+   |           ^~~~~~~~
+   |           (1, 2 // B
+   |           ~~~~~~~~~~
+   |           );
+   |           ~
+./preproc/define/pass002.ds:1:29: note: expanded from macro `SUM`
+ 1 | #define SUM(a, b) ((a) + (b))
+   |                             ^
+./preproc/define/pass002.ds:7:12: debug: token
+ 7 |           );
+   |            ^
+./preproc/define/pass002.ds:8:1: debug: token
+ 8 | const b = SUM2  (1/*one*/ ,  2/*two*/ ,\
+   | ^~~~~
+./preproc/define/pass002.ds:8:7: debug: id: b
+ 8 | const b = SUM2  (1/*one*/ ,  2/*two*/ ,\
+   |       ^
+./preproc/define/pass002.ds:8:9: debug: token
+ 8 | const b = SUM2  (1/*one*/ ,  2/*two*/ ,\
+   |         ^
+./preproc/define/pass002.ds:8:11: debug: token
+ 8 | const b = SUM2  (1/*one*/ ,  2/*two*/ ,\
+   |           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   |                   3 + a\
+   |                   ~~~~~~
+   |                  );
+   |                  ~
+./preproc/define/pass002.ds:3:9: note: expanded from macro `SUM2`
+ 3 |         SUM(SUM (a, c), SUM   (b, c))
+   |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+./preproc/define/pass002.ds:1:19: note: expanded from macro `SUM`
+ 1 | #define SUM(a, b) ((a) + (b))
+   |                   ^
+./preproc/define/pass002.ds:8:11: debug: token
+ 8 | const b = SUM2  (1/*one*/ ,  2/*two*/ ,\
+   |           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   |                   3 + a\
+   |                   ~~~~~~
+   |                  );
+   |                  ~
+./preproc/define/pass002.ds:3:9: note: expanded from macro `SUM2`
+ 3 |         SUM(SUM (a, c), SUM   (b, c))
+   |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+./preproc/define/pass002.ds:1:20: note: expanded from macro `SUM`
+ 1 | #define SUM(a, b) ((a) + (b))
+   |                    ^
+./preproc/define/pass002.ds:8:11: debug: token
+ 8 | const b = SUM2  (1/*one*/ ,  2/*two*/ ,\
+   |           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   |                   3 + a\
+   |                   ~~~~~~
+   |                  );
+   |                  ~
+./preproc/define/pass002.ds:3:13: note: expanded from macro `SUM2`
+ 3 |         SUM(SUM (a, c), SUM   (b, c))
+   |             ^~~~~~~~~~
+./preproc/define/pass002.ds:1:19: note: expanded from macro `SUM`
+ 1 | #define SUM(a, b) ((a) + (b))
+   |                   ^
+./preproc/define/pass002.ds:8:11: debug: token
+ 8 | const b = SUM2  (1/*one*/ ,  2/*two*/ ,\
+   |           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   |                   3 + a\
+   |                   ~~~~~~
+   |                  );
+   |                  ~
+./preproc/define/pass002.ds:3:13: note: expanded from macro `SUM2`
+ 3 |         SUM(SUM (a, c), SUM   (b, c))
+   |             ^~~~~~~~~~
+./preproc/define/pass002.ds:1:20: note: expanded from macro `SUM`
+ 1 | #define SUM(a, b) ((a) + (b))
+   |                    ^
+./preproc/define/pass002.ds:8:18: debug: integer number: 1
+ 8 | const b = SUM2  (1/*one*/ ,  2/*two*/ ,\
+   |                  ^
+./preproc/define/pass002.ds:8:11: debug: token
+ 8 | const b = SUM2  (1/*one*/ ,  2/*two*/ ,\
+   |           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   |                   3 + a\
+   |                   ~~~~~~
+   |                  );
+   |                  ~
+./preproc/define/pass002.ds:3:13: note: expanded from macro `SUM2`
+ 3 |         SUM(SUM (a, c), SUM   (b, c))
+   |             ^~~~~~~~~~
+./preproc/define/pass002.ds:1:22: note: expanded from macro `SUM`
+ 1 | #define SUM(a, b) ((a) + (b))
+   |                      ^
+./preproc/define/pass002.ds:8:11: debug: token
+ 8 | const b = SUM2  (1/*one*/ ,  2/*two*/ ,\
+   |           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   |                   3 + a\
+   |                   ~~~~~~
+   |                  );
+   |                  ~
+./preproc/define/pass002.ds:3:13: note: expanded from macro `SUM2`
+ 3 |         SUM(SUM (a, c), SUM   (b, c))
+   |             ^~~~~~~~~~
+./preproc/define/pass002.ds:1:24: note: expanded from macro `SUM`
+ 1 | #define SUM(a, b) ((a) + (b))
+   |                        ^
+./preproc/define/pass002.ds:8:11: debug: token
+ 8 | const b = SUM2  (1/*one*/ ,  2/*two*/ ,\
+   |           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   |                   3 + a\
+   |                   ~~~~~~
+   |                  );
+   |                  ~
+./preproc/define/pass002.ds:3:13: note: expanded from macro `SUM2`
+ 3 |         SUM(SUM (a, c), SUM   (b, c))
+   |             ^~~~~~~~~~
+./preproc/define/pass002.ds:1:26: note: expanded from macro `SUM`
+ 1 | #define SUM(a, b) ((a) + (b))
+   |                          ^
+./preproc/define/pass002.ds:9:19: debug: integer number: 3
+ 9 |                   3 + a\
+   |                   ^
+./preproc/define/pass002.ds:9:21: debug: token
+ 9 |                   3 + a\
+   |                     ^
+./preproc/define/pass002.ds:9:23: debug: id: a
+ 9 |                   3 + a\
+   |                       ^
+./preproc/define/pass002.ds:8:11: debug: token
+ 8 | const b = SUM2  (1/*one*/ ,  2/*two*/ ,\
+   |           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   |                   3 + a\
+   |                   ~~~~~~
+   |                  );
+   |                  ~
+./preproc/define/pass002.ds:3:13: note: expanded from macro `SUM2`
+ 3 |         SUM(SUM (a, c), SUM   (b, c))
+   |             ^~~~~~~~~~
+./preproc/define/pass002.ds:1:28: note: expanded from macro `SUM`
+ 1 | #define SUM(a, b) ((a) + (b))
+   |                            ^
+./preproc/define/pass002.ds:8:11: debug: token
+ 8 | const b = SUM2  (1/*one*/ ,  2/*two*/ ,\
+   |           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   |                   3 + a\
+   |                   ~~~~~~
+   |                  );
+   |                  ~
+./preproc/define/pass002.ds:3:13: note: expanded from macro `SUM2`
+ 3 |         SUM(SUM (a, c), SUM   (b, c))
+   |             ^~~~~~~~~~
+./preproc/define/pass002.ds:1:29: note: expanded from macro `SUM`
+ 1 | #define SUM(a, b) ((a) + (b))
+   |                             ^
+./preproc/define/pass002.ds:8:11: debug: token
+ 8 | const b = SUM2  (1/*one*/ ,  2/*two*/ ,\
+   |           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   |                   3 + a\
+   |                   ~~~~~~
+   |                  );
+   |                  ~
+./preproc/define/pass002.ds:3:9: note: expanded from macro `SUM2`
+ 3 |         SUM(SUM (a, c), SUM   (b, c))
+   |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+./preproc/define/pass002.ds:1:22: note: expanded from macro `SUM`
+ 1 | #define SUM(a, b) ((a) + (b))
+   |                      ^
+./preproc/define/pass002.ds:8:11: debug: token
+ 8 | const b = SUM2  (1/*one*/ ,  2/*two*/ ,\
+   |           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   |                   3 + a\
+   |                   ~~~~~~
+   |                  );
+   |                  ~
+./preproc/define/pass002.ds:3:9: note: expanded from macro `SUM2`
+ 3 |         SUM(SUM (a, c), SUM   (b, c))
+   |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+./preproc/define/pass002.ds:1:24: note: expanded from macro `SUM`
+ 1 | #define SUM(a, b) ((a) + (b))
+   |                        ^
+./preproc/define/pass002.ds:8:11: debug: token
+ 8 | const b = SUM2  (1/*one*/ ,  2/*two*/ ,\
+   |           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   |                   3 + a\
+   |                   ~~~~~~
+   |                  );
+   |                  ~
+./preproc/define/pass002.ds:3:9: note: expanded from macro `SUM2`
+ 3 |         SUM(SUM (a, c), SUM   (b, c))
+   |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+./preproc/define/pass002.ds:1:26: note: expanded from macro `SUM`
+ 1 | #define SUM(a, b) ((a) + (b))
+   |                          ^
+./preproc/define/pass002.ds:8:11: debug: token
+ 8 | const b = SUM2  (1/*one*/ ,  2/*two*/ ,\
+   |           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   |                   3 + a\
+   |                   ~~~~~~
+   |                  );
+   |                  ~
+./preproc/define/pass002.ds:3:25: note: expanded from macro `SUM2`
+ 3 |         SUM(SUM (a, c), SUM   (b, c))
+   |                         ^~~~~~~~~~~~
+./preproc/define/pass002.ds:1:19: note: expanded from macro `SUM`
+ 1 | #define SUM(a, b) ((a) + (b))
+   |                   ^
+./preproc/define/pass002.ds:8:11: debug: token
+ 8 | const b = SUM2  (1/*one*/ ,  2/*two*/ ,\
+   |           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   |                   3 + a\
+   |                   ~~~~~~
+   |                  );
+   |                  ~
+./preproc/define/pass002.ds:3:25: note: expanded from macro `SUM2`
+ 3 |         SUM(SUM (a, c), SUM   (b, c))
+   |                         ^~~~~~~~~~~~
+./preproc/define/pass002.ds:1:20: note: expanded from macro `SUM`
+ 1 | #define SUM(a, b) ((a) + (b))
+   |                    ^
+./preproc/define/pass002.ds:8:30: debug: integer number: 2
+ 8 | const b = SUM2  (1/*one*/ ,  2/*two*/ ,\
+   |                              ^
+./preproc/define/pass002.ds:8:11: debug: token
+ 8 | const b = SUM2  (1/*one*/ ,  2/*two*/ ,\
+   |           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   |                   3 + a\
+   |                   ~~~~~~
+   |                  );
+   |                  ~
+./preproc/define/pass002.ds:3:25: note: expanded from macro `SUM2`
+ 3 |         SUM(SUM (a, c), SUM   (b, c))
+   |                         ^~~~~~~~~~~~
+./preproc/define/pass002.ds:1:22: note: expanded from macro `SUM`
+ 1 | #define SUM(a, b) ((a) + (b))
+   |                      ^
+./preproc/define/pass002.ds:8:11: debug: token
+ 8 | const b = SUM2  (1/*one*/ ,  2/*two*/ ,\
+   |           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   |                   3 + a\
+   |                   ~~~~~~
+   |                  );
+   |                  ~
+./preproc/define/pass002.ds:3:25: note: expanded from macro `SUM2`
+ 3 |         SUM(SUM (a, c), SUM   (b, c))
+   |                         ^~~~~~~~~~~~
+./preproc/define/pass002.ds:1:24: note: expanded from macro `SUM`
+ 1 | #define SUM(a, b) ((a) + (b))
+   |                        ^
+./preproc/define/pass002.ds:8:11: debug: token
+ 8 | const b = SUM2  (1/*one*/ ,  2/*two*/ ,\
+   |           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   |                   3 + a\
+   |                   ~~~~~~
+   |                  );
+   |                  ~
+./preproc/define/pass002.ds:3:25: note: expanded from macro `SUM2`
+ 3 |         SUM(SUM (a, c), SUM   (b, c))
+   |                         ^~~~~~~~~~~~
+./preproc/define/pass002.ds:1:26: note: expanded from macro `SUM`
+ 1 | #define SUM(a, b) ((a) + (b))
+   |                          ^
+./preproc/define/pass002.ds:9:19: debug: integer number: 3
+ 9 |                   3 + a\
+   |                   ^
+./preproc/define/pass002.ds:9:21: debug: token
+ 9 |                   3 + a\
+   |                     ^
+./preproc/define/pass002.ds:9:23: debug: id: a
+ 9 |                   3 + a\
+   |                       ^
+./preproc/define/pass002.ds:8:11: debug: token
+ 8 | const b = SUM2  (1/*one*/ ,  2/*two*/ ,\
+   |           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   |                   3 + a\
+   |                   ~~~~~~
+   |                  );
+   |                  ~
+./preproc/define/pass002.ds:3:25: note: expanded from macro `SUM2`
+ 3 |         SUM(SUM (a, c), SUM   (b, c))
+   |                         ^~~~~~~~~~~~
+./preproc/define/pass002.ds:1:28: note: expanded from macro `SUM`
+ 1 | #define SUM(a, b) ((a) + (b))
+   |                            ^
+./preproc/define/pass002.ds:8:11: debug: token
+ 8 | const b = SUM2  (1/*one*/ ,  2/*two*/ ,\
+   |           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   |                   3 + a\
+   |                   ~~~~~~
+   |                  );
+   |                  ~
+./preproc/define/pass002.ds:3:25: note: expanded from macro `SUM2`
+ 3 |         SUM(SUM (a, c), SUM   (b, c))
+   |                         ^~~~~~~~~~~~
+./preproc/define/pass002.ds:1:29: note: expanded from macro `SUM`
+ 1 | #define SUM(a, b) ((a) + (b))
+   |                             ^
+./preproc/define/pass002.ds:8:11: debug: token
+ 8 | const b = SUM2  (1/*one*/ ,  2/*two*/ ,\
+   |           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   |                   3 + a\
+   |                   ~~~~~~
+   |                  );
+   |                  ~
+./preproc/define/pass002.ds:3:9: note: expanded from macro `SUM2`
+ 3 |         SUM(SUM (a, c), SUM   (b, c))
+   |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+./preproc/define/pass002.ds:1:28: note: expanded from macro `SUM`
+ 1 | #define SUM(a, b) ((a) + (b))
+   |                            ^
+./preproc/define/pass002.ds:8:11: debug: token
+ 8 | const b = SUM2  (1/*one*/ ,  2/*two*/ ,\
+   |           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   |                   3 + a\
+   |                   ~~~~~~
+   |                  );
+   |                  ~
+./preproc/define/pass002.ds:3:9: note: expanded from macro `SUM2`
+ 3 |         SUM(SUM (a, c), SUM   (b, c))
+   |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+./preproc/define/pass002.ds:1:29: note: expanded from macro `SUM`
+ 1 | #define SUM(a, b) ((a) + (b))
+   |                             ^
+./preproc/define/pass002.ds:10:19: debug: token
+ 10 |                  );
+    |                   ^
+./preproc/define/pass002.ds: info: warnings 0, errors 0

@@ -1,0 +1,19 @@
+./preproc/define/pass005.ds:5:1: debug: token
+ 5 | const a = MACRO;
+   | ^~~~~
+./preproc/define/pass005.ds:5:7: debug: id: a
+ 5 | const a = MACRO;
+   |       ^
+./preproc/define/pass005.ds:5:9: debug: token
+ 5 | const a = MACRO;
+   |         ^
+./preproc/define/pass005.ds:5:11: debug: integer number: 0
+ 5 | const a = MACRO;
+   |           ^~~~~
+./preproc/define/pass005.ds:3:15: note: expanded from macro `MACRO`
+ 3 | #define MACRO 0
+   |               ^
+./preproc/define/pass005.ds:5:16: debug: token
+ 5 | const a = MACRO;
+   |                ^
+./preproc/define/pass005.ds: info: warnings 0, errors 0

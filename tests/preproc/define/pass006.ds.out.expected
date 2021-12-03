@@ -1,0 +1,91 @@
+./preproc/define/pass006.ds:3:1: debug: token
+ 3 | const a = SUM( #include "pass006-1.dsh",
+   | ^~~~~
+./preproc/define/pass006.ds:3:7: debug: id: a
+ 3 | const a = SUM( #include "pass006-1.dsh",
+   |       ^
+./preproc/define/pass006.ds:3:9: debug: token
+ 3 | const a = SUM( #include "pass006-1.dsh",
+   |         ^
+./preproc/define/pass006.ds:3:11: debug: token
+ 3 | const a = SUM( #include "pass006-1.dsh",
+   |           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   | #include "pass006-2.dsh"
+   | ~~~~~~~~~~~~~~~~~~~~~~~~
+   |              );
+   |              ~
+./preproc/define/pass006.ds:1:19: note: expanded from macro `SUM`
+ 1 | #define SUM(a, b) ((a) + (b))
+   |                   ^
+./preproc/define/pass006.ds:3:11: debug: token
+ 3 | const a = SUM( #include "pass006-1.dsh",
+   |           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   | #include "pass006-2.dsh"
+   | ~~~~~~~~~~~~~~~~~~~~~~~~
+   |              );
+   |              ~
+./preproc/define/pass006.ds:1:20: note: expanded from macro `SUM`
+ 1 | #define SUM(a, b) ((a) + (b))
+   |                    ^
+In file included from ./preproc/define/pass006.ds:3
+./preproc/define/pass006-1.dsh:1:1: debug: integer number: 1
+ 1 | 1
+   | ^
+./preproc/define/pass006.ds:3:11: debug: token
+ 3 | const a = SUM( #include "pass006-1.dsh",
+   |           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   | #include "pass006-2.dsh"
+   | ~~~~~~~~~~~~~~~~~~~~~~~~
+   |              );
+   |              ~
+./preproc/define/pass006.ds:1:22: note: expanded from macro `SUM`
+ 1 | #define SUM(a, b) ((a) + (b))
+   |                      ^
+./preproc/define/pass006.ds:3:11: debug: token
+ 3 | const a = SUM( #include "pass006-1.dsh",
+   |           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   | #include "pass006-2.dsh"
+   | ~~~~~~~~~~~~~~~~~~~~~~~~
+   |              );
+   |              ~
+./preproc/define/pass006.ds:1:24: note: expanded from macro `SUM`
+ 1 | #define SUM(a, b) ((a) + (b))
+   |                        ^
+./preproc/define/pass006.ds:3:11: debug: token
+ 3 | const a = SUM( #include "pass006-1.dsh",
+   |           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   | #include "pass006-2.dsh"
+   | ~~~~~~~~~~~~~~~~~~~~~~~~
+   |              );
+   |              ~
+./preproc/define/pass006.ds:1:26: note: expanded from macro `SUM`
+ 1 | #define SUM(a, b) ((a) + (b))
+   |                          ^
+In file included from ./preproc/define/pass006.ds:4
+./preproc/define/pass006-2.dsh:1:1: debug: integer number: 2
+ 1 | 2
+   | ^
+./preproc/define/pass006.ds:3:11: debug: token
+ 3 | const a = SUM( #include "pass006-1.dsh",
+   |           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   | #include "pass006-2.dsh"
+   | ~~~~~~~~~~~~~~~~~~~~~~~~
+   |              );
+   |              ~
+./preproc/define/pass006.ds:1:28: note: expanded from macro `SUM`
+ 1 | #define SUM(a, b) ((a) + (b))
+   |                            ^
+./preproc/define/pass006.ds:3:11: debug: token
+ 3 | const a = SUM( #include "pass006-1.dsh",
+   |           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   | #include "pass006-2.dsh"
+   | ~~~~~~~~~~~~~~~~~~~~~~~~
+   |              );
+   |              ~
+./preproc/define/pass006.ds:1:29: note: expanded from macro `SUM`
+ 1 | #define SUM(a, b) ((a) + (b))
+   |                             ^
+./preproc/define/pass006.ds:5:15: debug: token
+ 5 |              );
+   |               ^
+./preproc/define/pass006.ds: info: warnings 0, errors 0

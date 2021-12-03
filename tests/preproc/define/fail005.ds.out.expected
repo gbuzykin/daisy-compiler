@@ -1,0 +1,4 @@
+./preproc/define/fail005.ds:2:7: error: expected macro name
+ 2 | #undef
+   |       ^
+./preproc/define/fail005.ds: info: warnings 0, errors 1

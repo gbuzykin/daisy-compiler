@@ -1,0 +1,46 @@
+./preproc/define/fail007.ds:5:1: debug: token
+ 5 | const a = SUM(1, 2);
+   | ^~~~~
+./preproc/define/fail007.ds:5:7: debug: id: a
+ 5 | const a = SUM(1, 2);
+   |       ^
+./preproc/define/fail007.ds:5:9: debug: token
+ 5 | const a = SUM(1, 2);
+   |         ^
+./preproc/define/fail007.ds:5:11: error: recursive macro `SUM` expansion
+ 5 | const a = SUM(1, 2);
+   |           ^~~~~~~~~
+./preproc/define/fail007.ds:1:19: note: expanded from macro `SUM`
+ 1 | #define SUM(a, b) SUM(a, b)
+   |                   ^~~
+./preproc/define/fail007.ds:5:20: error: unexpected token
+ 5 | const a = SUM(1, 2);
+   |                    ^
+./preproc/define/fail007.ds:5:20: debug: token
+ 5 | const a = SUM(1, 2);
+   |                    ^
+./preproc/define/fail007.ds:6:1: debug: token
+ 6 | const b = SUM2(1, 2);
+   | ^~~~~
+./preproc/define/fail007.ds:6:7: debug: id: b
+ 6 | const b = SUM2(1, 2);
+   |       ^
+./preproc/define/fail007.ds:6:9: debug: token
+ 6 | const b = SUM2(1, 2);
+   |         ^
+./preproc/define/fail007.ds:6:11: error: recursive macro `SUM2` expansion
+ 6 | const b = SUM2(1, 2);
+   |           ^~~~~~~~~~
+./preproc/define/fail007.ds:3:20: note: expanded from macro `SUM2`
+ 3 | #define SUM2(a, b) SUM1(a, b)
+   |                    ^~~~~~~~~~
+./preproc/define/fail007.ds:2:20: note: expanded from macro `SUM1`
+ 2 | #define SUM1(a, b) SUM2(a, b)
+   |                    ^~~~
+./preproc/define/fail007.ds:6:21: error: unexpected token
+ 6 | const b = SUM2(1, 2);
+   |                     ^
+./preproc/define/fail007.ds:6:21: debug: token
+ 6 | const b = SUM2(1, 2);
+   |                     ^
+./preproc/define/fail007.ds: info: warnings 0, errors 4

@@ -1,0 +1,19 @@
+./preproc/define/fail004.ds:3:1: debug: token
+ 3 | const a = SUM
+   | ^~~~~
+./preproc/define/fail004.ds:3:7: debug: id: a
+ 3 | const a = SUM
+   |       ^
+./preproc/define/fail004.ds:3:9: debug: token
+ 3 | const a = SUM
+   |         ^
+./preproc/define/fail004.ds:3:11: error: macro `SUM` requires arguments
+ 3 | const a = SUM
+   |           ^~~
+./preproc/define/fail004.ds:1:9: note: macro `SUM` defined here
+ 1 | #define SUM(a, b) ((a) + (b))
+   |         ^~~
+./preproc/define/fail004.ds:3:14: error: unexpected end of file
+ 3 | const a = SUM
+   |              ^
+./preproc/define/fail004.ds: info: warnings 0, errors 2
