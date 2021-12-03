@@ -1,0 +1,7 @@
+#if true // true
+#info "case #1"
+#endif
+
+#if false /*false*/
+#info "case #2"
+#endif

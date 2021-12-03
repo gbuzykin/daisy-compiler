@@ -1,0 +1,8 @@
+In file included from ./preproc/if/warn001.ds:3
+./preproc/if/warn001.dsh:1:2: warning: `#if` without `#endif`
+ 1 | #if false
+   |  ^~
+./preproc/if/warn001.ds:1:2: warning: `#if` without `#endif`
+ 1 | #if false
+   |  ^~
+./preproc/if/warn001.ds: info: warnings 2, errors 0

@@ -1,0 +1,4 @@
+./preproc/if/pass006.ds:3:2: info: "case #1"
+ 3 | #info "case #1"
+   |  ^~~~
+./preproc/if/pass006.ds: info: warnings 0, errors 0

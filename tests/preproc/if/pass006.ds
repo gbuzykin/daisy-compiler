@@ -1,0 +1,8 @@
+#define ENABLE
+#if defined(ENABLE)
+#info "case #1"
+#endif
+
+#if defined(_NABLE)
+#info "case #2"
+#endif

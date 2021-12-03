@@ -1,0 +1,4 @@
+./preproc/if/fail002.ds:1:8: error: expected token in expression
+ 1 | #if 1 >
+   |        ^
+./preproc/if/fail002.ds: info: warnings 0, errors 1

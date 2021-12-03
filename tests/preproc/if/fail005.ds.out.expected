@@ -1,0 +1,10 @@
+./preproc/if/fail005.ds:3:2: error: multiple `#else` section
+ 3 | #else
+   |  ^~~~
+./preproc/if/fail005.ds:7:6: error: expected token in expression
+ 7 | #elif
+   |      ^
+./preproc/if/fail005.ds:12:2: error: `#elif` after `#else`
+ 12 | #elif false
+    |  ^~~~
+./preproc/if/fail005.ds: info: warnings 0, errors 3

@@ -1,0 +1,7 @@
+./preproc/if/fail004.ds:1:2: error: `#endif` without `#if`
+ 1 | #endif
+   |  ^~~~~
+./preproc/if/fail004.ds:2:2: error: `#elif` without `#if`
+ 2 | #elif
+   |  ^~~~
+./preproc/if/fail004.ds: info: warnings 0, errors 2
