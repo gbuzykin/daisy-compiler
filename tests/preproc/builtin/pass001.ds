@@ -1,0 +1,6 @@
+#define SUM(a, b) ((a) + (b))
+
+const a = __line__;
+const b = SUM(
+  __line__, 0
+);

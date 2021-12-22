@@ -3,6 +3,7 @@
 #include "ctx/ctx.h"
 #include "logger.h"
 #include "uxs/algorithm.h"
+#include "uxs/stringalg.h"
 
 using namespace daisy;
 
@@ -93,6 +94,97 @@ void parseUndefDirective(DaisyParserPass* pass, SymbolInfo& tkn) {
     pass->ensureEndOfInput(tkn);
 }
 
+const SymbolLoc* findMacroExpansionOrigin(const SymbolLoc* loc) {
+    while (loc->loc_ctx && loc->loc_ctx->expansion.macro_def) { loc = &loc->loc_ctx->expansion.loc; }
+    return loc;
+}
+
+bool builtinMacroLine(DaisyParserPass* pass, const MacroExpansion& macro_exp) {
+    const auto* loc = findMacroExpansionOrigin(&macro_exp.loc);
+    pass->pushStringInputContext(uxs::to_string(loc->first.ln), macro_exp);
+    return true;
+}
+
+bool builtinMacroFile(DaisyParserPass* pass, const MacroExpansion& macro_exp) {
+    const auto* loc = findMacroExpansionOrigin(&macro_exp.loc);
+    pass->pushStringInputContext(uxs::make_quoted_text(loc->loc_ctx->file ? loc->loc_ctx->file->file_name : ""),
+                                 macro_exp);
+    return true;
+}
+
+bool builtinMacroVaOpt(DaisyParserPass* pass, const MacroExpansion& macro_exp) {
+    const auto& in_ctx = pass->getInputContext();
+    if (const auto* parent_exp = in_ctx.macro_expansion) {
+        assert(parent_exp->macro_def);
+        if (parent_exp->macro_def->is_variadic) {
+            const auto& va_arg = parent_exp->actual_args.back();
+            if (va_arg.first != va_arg.last) {
+                // Parent's variable argument is not trivial - expand VaOpt's argument
+                pass->pushInputContext(std::make_unique<InputContext>(macro_exp.actual_args.back(), in_ctx.loc_ctx))
+                    .macro_expansion = in_ctx.macro_expansion;
+            }
+            return true;
+        }
+    }
+    return false;
+}
+
+std::string stringizeMacro(DaisyParserPass* pass, const MacroExpansion& macro_exp) {
+    const auto* loc_ctx = pass->getInputContext().loc_ctx;
+    assert(loc_ctx);
+
+    auto& in_ctx = pass->pushInputContext(std::make_unique<InputContext>(macro_exp.actual_args.back(), loc_ctx));
+    in_ctx.flags |= InputContext::Flags::kStopAtEndOfInput;
+    in_ctx.macro_expansion = in_ctx.macro_expansion;
+
+    SymbolInfo tkn;
+    bool remove_ws = false;
+    std::string text;
+    text.reserve(256);
+    while (true) {
+        bool leading_ws = false;
+        int tt = pass->lex(tkn, &leading_ws);
+        if (tt == parser_detail::tt_concatenate) {
+            remove_ws = true;
+        } else if (tt != parser_detail::tt_end_of_input) {
+            if (!remove_ws && leading_ws) { text.push_back(' '); }
+            remove_ws = false;
+            if (tt == parser_detail::tt_string_literal) {
+                uxs::make_quoted_text(static_cast<std::string_view>(std::get<std::string>(tkn.val)),
+                                      std::back_inserter(text));
+            } else {
+                const auto& curr_ctx = pass->getInputContext();
+                assert(tkn.loc.first.ln == tkn.loc.last.ln && tkn.loc.first.col <= tkn.loc.last.col);
+                unsigned tkn_length = tkn.loc.last.col - tkn.loc.first.col + 1;
+                std::copy(curr_ctx.text.first - tkn_length, curr_ctx.text.first, std::back_inserter(text));
+            }
+        } else {
+            break;
+        }
+    }
+
+    pass->popInputContext();
+    return text;
+}
+
+bool builtinMacroStringize(DaisyParserPass* pass, const MacroExpansion& macro_exp) {
+    pass->pushStringInputContext('\"' + stringizeMacro(pass, macro_exp) + '\"', macro_exp);
+    return true;
+}
+
+bool builtinMacroPaste(DaisyParserPass* pass, const MacroExpansion& macro_exp) {
+    pass->pushStringInputContext(stringizeMacro(pass, macro_exp), macro_exp);
+    return true;
+}
+
+using BuiltInMacroImpl = bool (*)(DaisyParserPass*, const MacroExpansion& macro_exp);
+const std::vector<std::tuple<std::string_view, bool, BuiltInMacroImpl>> g_builtin_macro_impl = {
+    // <id, is_variadic, impl_func>
+    {"__line__", false, builtinMacroLine},   {"__file__", false, builtinMacroFile},
+    {"__va_opt__", true, builtinMacroVaOpt}, {"__str__", true, builtinMacroStringize},
+    {"__paste__", true, builtinMacroPaste},
+};
+
 }  // namespace
 
 DAISY_ADD_PREPROC_DIRECTIVE_PARSER("define", parseDefineDirective);
@@ -109,6 +201,13 @@ bool DaisyParserPass::checkMacroExpansionForRecursion(std::string_view macro_id)
         }
     }
     return false;
+}
+
+void DaisyParserPass::defineBuiltinMacros() {
+    for (unsigned n = 0; n < g_builtin_macro_impl.size(); ++n) {
+        const auto& [id, is_variadic, impl_func] = g_builtin_macro_impl[n];
+        ctx_->macro_defs[id] = MacroDefinition{MacroDefinition::Type::kBuiltIn + n, id, is_variadic};
+    }
 }
 
 void DaisyParserPass::expandMacro(const SymbolLoc& loc, const MacroDefinition& macro_def) {
@@ -174,6 +273,13 @@ void DaisyParserPass::expandMacro(const SymbolLoc& loc, const MacroDefinition& m
             macro_details();
             return;
         }
+    }
+
+    if (macro_def.type >= MacroDefinition::Type::kBuiltIn) {
+        auto impl_func = std::get<BuiltInMacroImpl>(
+            g_builtin_macro_impl[macro_def.type - MacroDefinition::Type::kBuiltIn]);
+        if (!impl_func(this, macro_exp)) { logger::error(loc).format("macro `{}` cannot be used in this context", id); }
+        return;
     }
 
     if (checkMacroExpansionForRecursion(id)) {
