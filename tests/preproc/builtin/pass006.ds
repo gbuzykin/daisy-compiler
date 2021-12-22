@@ -1,0 +1,4 @@
+#define SUM(a, b, ...) ((a) + (b) __va_opt__(+) __va_args__)
+
+const a = SUM  (1, 2);
+const b = SUM  (1, 2, 3 + 4);

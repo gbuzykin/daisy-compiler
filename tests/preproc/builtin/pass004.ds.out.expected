@@ -1,0 +1,19 @@
+./preproc/builtin/pass004.ds:2:1: debug: token
+ 2 | const ID(x) = 3;
+   | ^~~~~
+./preproc/builtin/pass004.ds:2:7: debug: id: identifier_x
+ 2 | const ID(x) = 3;
+   |       ^~~~~
+./preproc/builtin/pass004.ds:1:15: note: expanded from macro `ID`
+ 1 | #define ID(x) __paste__(identifier_##x)
+   |               ^~~~~~~~~~~~~~~~~~~~~~~~~
+./preproc/builtin/pass004.ds:2:13: debug: token
+ 2 | const ID(x) = 3;
+   |             ^
+./preproc/builtin/pass004.ds:2:15: debug: integer number: 3
+ 2 | const ID(x) = 3;
+   |               ^
+./preproc/builtin/pass004.ds:2:16: debug: token
+ 2 | const ID(x) = 3;
+   |                ^
+./preproc/builtin/pass004.ds: info: warnings 0, errors 0

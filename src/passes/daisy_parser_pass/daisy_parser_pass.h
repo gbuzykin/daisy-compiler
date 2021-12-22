@@ -69,6 +69,13 @@ struct MacroExpansionContext : public InputContext {
     MacroExpansion macro_expansion_info;
 };
 
+struct StringInputContext : public InputContext {
+    StringInputContext(std::string s, const LocationContext* ctx) : InputContext({}, ctx), str(std::move(s)) {
+        text.first = str.data(), text.last = str.data() + str.size();
+    }
+    std::string str;
+};
+
 class DaisyParserPass;
 
 struct ReduceActionHandler {
@@ -101,7 +108,7 @@ class DaisyParserPass : public Pass {
     void cleanup() override;
 
     CompilationContext& getCompilationContext() const { return *ctx_; }
-    int lex(SymbolInfo& tkn);
+    int lex(SymbolInfo& tkn, bool* leading_ws = nullptr);
     static int parse(int tt, int* sptr0, int** p_sptr, int rise_error);
     const InputFileInfo* loadInputFile(std::string_view file_path);
 
@@ -121,6 +128,11 @@ class DaisyParserPass : public Pass {
 
     const LocationContext& newLocationContext(const InputFileInfo* file, const TextExpansion& expansion) {
         return ctx_->loc_ctx_list.emplace_front(file, expansion);
+    }
+
+    InputContext& pushStringInputContext(std::string str, const MacroExpansion& macro_exp) {
+        return pushInputContext(std::make_unique<StringInputContext>(
+            std::move(str), &newLocationContext(nullptr, TextExpansion{macro_exp.loc, macro_exp.macro_def})));
     }
 
     bool checkMacroExpansionForRecursion(std::string_view macro_id);
@@ -147,6 +159,7 @@ class DaisyParserPass : public Pass {
     std::unordered_map<std::string_view, const PreprocDirectiveParser*> preproc_directive_parsers_;
 
     void parsePreprocessorDirective();
+    void defineBuiltinMacros();
     void expandMacro(const SymbolLoc& loc, const MacroDefinition& macro_def);
     void expandMacroArgument(const TextRange& arg);
 };

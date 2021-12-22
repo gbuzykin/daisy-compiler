@@ -1,0 +1,104 @@
+./preproc/builtin/pass001.ds:3:1: debug: token
+ 3 | const a = __line__;
+   | ^~~~~
+./preproc/builtin/pass001.ds:3:7: debug: id: a
+ 3 | const a = __line__;
+   |       ^
+./preproc/builtin/pass001.ds:3:9: debug: token
+ 3 | const a = __line__;
+   |         ^
+./preproc/builtin/pass001.ds:3:11: debug: integer number: 3
+ 3 | const a = __line__;
+   |           ^~~~~~~~
+./preproc/builtin/pass001.ds:3:19: debug: token
+ 3 | const a = __line__;
+   |                   ^
+./preproc/builtin/pass001.ds:4:1: debug: token
+ 4 | const b = SUM(
+   | ^~~~~
+./preproc/builtin/pass001.ds:4:7: debug: id: b
+ 4 | const b = SUM(
+   |       ^
+./preproc/builtin/pass001.ds:4:9: debug: token
+ 4 | const b = SUM(
+   |         ^
+./preproc/builtin/pass001.ds:4:11: debug: token
+ 4 | const b = SUM(
+   |           ^~~~
+   |   __line__, 0
+   |   ~~~~~~~~~~~
+   | );
+   | ~
+./preproc/builtin/pass001.ds:1:19: note: expanded from macro `SUM`
+ 1 | #define SUM(a, b) ((a) + (b))
+   |                   ^
+./preproc/builtin/pass001.ds:4:11: debug: token
+ 4 | const b = SUM(
+   |           ^~~~
+   |   __line__, 0
+   |   ~~~~~~~~~~~
+   | );
+   | ~
+./preproc/builtin/pass001.ds:1:20: note: expanded from macro `SUM`
+ 1 | #define SUM(a, b) ((a) + (b))
+   |                    ^
+./preproc/builtin/pass001.ds:5:3: debug: integer number: 5
+ 5 |   __line__, 0
+   |   ^~~~~~~~
+./preproc/builtin/pass001.ds:4:11: debug: token
+ 4 | const b = SUM(
+   |           ^~~~
+   |   __line__, 0
+   |   ~~~~~~~~~~~
+   | );
+   | ~
+./preproc/builtin/pass001.ds:1:22: note: expanded from macro `SUM`
+ 1 | #define SUM(a, b) ((a) + (b))
+   |                      ^
+./preproc/builtin/pass001.ds:4:11: debug: token
+ 4 | const b = SUM(
+   |           ^~~~
+   |   __line__, 0
+   |   ~~~~~~~~~~~
+   | );
+   | ~
+./preproc/builtin/pass001.ds:1:24: note: expanded from macro `SUM`
+ 1 | #define SUM(a, b) ((a) + (b))
+   |                        ^
+./preproc/builtin/pass001.ds:4:11: debug: token
+ 4 | const b = SUM(
+   |           ^~~~
+   |   __line__, 0
+   |   ~~~~~~~~~~~
+   | );
+   | ~
+./preproc/builtin/pass001.ds:1:26: note: expanded from macro `SUM`
+ 1 | #define SUM(a, b) ((a) + (b))
+   |                          ^
+./preproc/builtin/pass001.ds:5:13: debug: integer number: 0
+ 5 |   __line__, 0
+   |             ^
+./preproc/builtin/pass001.ds:4:11: debug: token
+ 4 | const b = SUM(
+   |           ^~~~
+   |   __line__, 0
+   |   ~~~~~~~~~~~
+   | );
+   | ~
+./preproc/builtin/pass001.ds:1:28: note: expanded from macro `SUM`
+ 1 | #define SUM(a, b) ((a) + (b))
+   |                            ^
+./preproc/builtin/pass001.ds:4:11: debug: token
+ 4 | const b = SUM(
+   |           ^~~~
+   |   __line__, 0
+   |   ~~~~~~~~~~~
+   | );
+   | ~
+./preproc/builtin/pass001.ds:1:29: note: expanded from macro `SUM`
+ 1 | #define SUM(a, b) ((a) + (b))
+   |                             ^
+./preproc/builtin/pass001.ds:6:2: debug: token
+ 6 | );
+   |  ^
+./preproc/builtin/pass001.ds: info: warnings 0, errors 0

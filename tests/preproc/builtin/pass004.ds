@@ -1,0 +1,2 @@
+#define ID(x) __paste__(identifier_##x)
+const ID(x) = 3;

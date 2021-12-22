@@ -1,0 +1,5 @@
+#define SUM(a, b) ((a) + (b))
+#define SUM2(a, b, c) SUM  (SUM (a, c), SUM   (b, c))
+#define LINE_PLUS_SUM2(a, b, c) ((__line__) + SUM2(a, b, c))
+
+const a = LINE_PLUS_SUM2(1, 2, 3);

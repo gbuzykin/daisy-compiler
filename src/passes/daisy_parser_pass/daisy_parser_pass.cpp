@@ -53,6 +53,8 @@ PassResult DaisyParserPass::run(CompilationContext& ctx) {
     parser_state_stack.reserve_at_curr(1024);
     symbol_stack.reserve(1024);
 
+    defineBuiltinMacros();
+
     // Load source file
     const auto* src_file = loadInputFile(ctx.file_name);
     if (!src_file) {
@@ -129,7 +131,7 @@ PassResult DaisyParserPass::run(CompilationContext& ctx) {
     return ctx.error_count == 0 ? PassResult::kSuccess : PassResult::kError;
 }
 
-int DaisyParserPass::lex(SymbolInfo& tkn) {
+int DaisyParserPass::lex(SymbolInfo& tkn, bool* leading_ws) {
     std::string txt;
     auto* in_ctx = &getInputContext();
 
@@ -295,11 +297,13 @@ int DaisyParserPass::lex(SymbolInfo& tkn) {
                 skipTillNewLine(in_ctx->text);
                 if (in_ctx->text.first != in_ctx->text.last) { ++in_ctx->text.first, in_ctx->text.pos.nextLn(); }
                 tkn.loc.first = in_ctx->text.pos;
+                if (leading_ws) { *leading_ws = true; }
             } break;
             case lex_detail::pat_comment2: {  // Eat up comment `/* ... */`
                 bool is_terminated = skipCommentBlock(in_ctx->text);
                 if (!is_terminated) { logger::warning(tkn.loc).format("unterminated comment block"); }
                 tkn.loc.first = in_ctx->text.pos;
+                if (leading_ws) { *leading_ws = true; }
             } break;
 
             // ------ other
@@ -307,8 +311,12 @@ int DaisyParserPass::lex(SymbolInfo& tkn) {
             case lex_detail::pat_nl: {
                 in_ctx->text.pos.nextLn();
                 tkn.loc.first = in_ctx->text.pos;
+                if (leading_ws) { *leading_ws = true; }
             } break;
-            case lex_detail::pat_whitespace: tkn.loc.first.col = in_ctx->text.pos.col; break;
+            case lex_detail::pat_whitespace: {
+                tkn.loc.first.col = in_ctx->text.pos.col;
+                if (leading_ws) { *leading_ws = true; }
+            } break;
             case lex_detail::pat_ellipsis: return parser_detail::tt_ellipsis;
             case lex_detail::pat_scope_resolution: return parser_detail::tt_scope_resolution;
             case lex_detail::pat_esc_char: return static_cast<unsigned char>(lexeme[1]);
