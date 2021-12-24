@@ -1,0 +1,4 @@
+./preproc/warn_err/fail001.ds:1:2: error: This is an error!
+ 1 | #error \
+   |  ^~~~~
+./preproc/warn_err/fail001.ds: info: warnings 0, errors 1

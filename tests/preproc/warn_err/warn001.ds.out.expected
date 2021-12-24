@@ -1,0 +1,4 @@
+./preproc/warn_err/warn001.ds:2:2: warning: This is a warning!
+ 2 | #warning This is a warning!
+   |  ^~~~~~~
+./preproc/warn_err/warn001.ds: info: warnings 1, errors 0
