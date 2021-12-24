@@ -1,0 +1,4 @@
+./preproc/pragma/pass001.dsh:2:2: info: "pass001.dsh included"
+ 2 | #info "pass001.dsh included"
+   |  ^~~~
+./preproc/pragma/pass001.ds: info: warnings 0, errors 0

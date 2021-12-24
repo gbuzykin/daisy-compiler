@@ -45,6 +45,7 @@ struct InputContext {
         kStopAtEndOfInput = 1,
         kPreprocDirective = 2,
         kDisableMacroExpansion = 4,
+        kSkipFile = 8,
     };
     InputContext(TextRange txt, const LocationContext* ctx) : text(txt), loc_ctx(ctx) {}
     virtual ~InputContext() = default;
