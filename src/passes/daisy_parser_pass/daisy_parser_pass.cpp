@@ -411,7 +411,11 @@ void DaisyParserPass::parsePreprocessorDirective() {
             logger::error(tkn.loc).format("expected preprocessor directive name");
         }
 
-        if (text.first != text.last) { ++text.first, text.pos.nextLn(); }
+        if (!!(in_ctx.flags & InputContext::Flags::kSkipFile)) {
+            text.first = text.last;
+        } else if (text.first != text.last) {
+            ++text.first, text.pos.nextLn();
+        }
         in_ctx.text = text, in_ctx.flags = flags;
 
         const auto* if_section = getIfSection();
