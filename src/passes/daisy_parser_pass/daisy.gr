@@ -37,6 +37,7 @@
 
 # Keywords
 %token const
+%token namespace
 
 # Operator precedence
 %right '?' ':'
@@ -81,6 +82,9 @@
 %action preproc_operator_begin
 %action preproc_operator_end
 
+%action begin_namespace
+%action end_namespace
+
 %%
 
 # Preprocessor condition expression
@@ -122,7 +126,8 @@ unit_contents : unit_contents unit_item
   | #empty
   ;
 
-unit_item : [const] [id] '=' expr ';'
+unit_item : [namespace] [id] {begin_namespace} '{' unit_contents '}' {end_namespace}
+  | [const] [id] '=' expr ';'
   | $error ';'
   | ';'
   ;

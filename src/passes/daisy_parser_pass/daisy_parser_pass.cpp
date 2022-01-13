@@ -25,6 +25,7 @@ DAISY_ADD_PASS(DaisyParserPass);
 void DaisyParserPass::configure() {
     keywords_.insert({
         {"const", parser_detail::tt_const},
+        {"namespace", parser_detail::tt_namespace},
     });
 
     reduce_action_handlers_.fill(nullptr);
@@ -52,6 +53,9 @@ PassResult DaisyParserPass::run(CompilationContext& ctx) {
     lex_state_stack_.reserve_at_curr(256);
     parser_state_stack.reserve_at_curr(1024);
     symbol_stack.reserve(1024);
+
+    ctx_->global_namespace = std::make_unique<ir::Namespace>("");
+    current_namespace_ = ctx_->global_namespace.get();
 
     defineBuiltinMacros();
 

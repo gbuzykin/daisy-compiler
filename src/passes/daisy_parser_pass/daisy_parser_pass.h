@@ -139,6 +139,12 @@ class DaisyParserPass : public Pass {
     bool checkMacroExpansionForRecursion(std::string_view macro_id);
     void ensureEndOfInput(SymbolInfo& tkn);
 
+    ir::Namespace& getCurrentNamespace() const {
+        assert(current_namespace_);
+        return *current_namespace_;
+    }
+    void setCurrentNamespace(ir::Namespace& space) { current_namespace_ = &space; }
+
  private:
     struct TextBuffer {
         explicit TextBuffer(size_t sz) : text(std::make_unique<char[]>(sz)), text_last(text.get() + sz) {}
@@ -154,6 +160,8 @@ class DaisyParserPass : public Pass {
     std::forward_list<std::unique_ptr<InputContext>> input_ctx_stack_;
     uxs::basic_inline_dynbuffer<int, 1> lex_state_stack_;
     std::forward_list<IfSectionState> if_section_stack_;
+
+    ir::Namespace* current_namespace_ = nullptr;
 
     std::unordered_map<std::string_view, int> keywords_;
     std::array<ReduceActionHandler::FuncType, parser_detail::total_action_count> reduce_action_handlers_;
