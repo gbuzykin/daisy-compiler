@@ -54,22 +54,17 @@ class rtti_mixin : public SuperTy {
  public:
     using rtti_mixin_t = rtti_mixin;
     using super_class_t = SuperTy;
+    const type_info_desc* get_rtti_type_info() const override { return &type_info<Ty>::desc; };
     template<typename... Args>
-    explicit rtti_mixin(Args&&... args) : SuperTy(std::forward<Args>(args)...) {
-        this->rtti_type_desc_ = &type_info<Ty>::desc;
-    }
+    explicit rtti_mixin(Args&&... args) : SuperTy(std::forward<Args>(args)...) {}
 };
 
 template<typename Ty>
 class rtti_mixin<Ty, void> {
  public:
     using rtti_mixin_t = rtti_mixin;
-    const type_info_desc* get_rtti_type_info() const { return rtti_type_desc_; };
-
- private:
-    template<typename Ty_, typename SuperTy>
-    friend class rtti_mixin;
-    const type_info_desc* rtti_type_desc_ = nullptr;
+    virtual const type_info_desc* get_rtti_type_info() const { return &type_info<Ty>::desc; };
+    virtual ~rtti_mixin() = default;
 };
 
 template<typename... Kind, typename Ty, typename = std::void_t<typename Ty::rtti_mixin_t>>

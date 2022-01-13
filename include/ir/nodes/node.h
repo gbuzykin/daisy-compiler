@@ -38,7 +38,6 @@ class Node : public util::rtti_mixin<Node> {
 
     Node() = default;
     explicit Node(const SymbolLoc& loc) : loc_(loc) {}
-    virtual ~Node() = default;
 
     explicit Node(std::unique_ptr<Namespace> nmspace, const SymbolLoc& loc = {})
         : loc_(loc), namespace_(std::move(nmspace)) {}
