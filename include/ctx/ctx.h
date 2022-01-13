@@ -1,6 +1,7 @@
 #pragma once
 
 #include "common/symbol_loc.h"
+#include "ir/namespace.h"
 #include "uxs/utility.h"
 
 #include <forward_list>
@@ -45,6 +46,7 @@ constexpr unsigned operator-(MacroDefinition::Type lhs, MacroDefinition::Type rh
 struct CompilationContext {
     explicit CompilationContext(std::string fname) : file_name(std::move(fname)) {}
     std::string file_name;
+    std::unique_ptr<ir::Namespace> global_namespace;
     std::unordered_map<std::string, InputFileInfo> input_files;
     std::vector<std::string_view> include_paths;
     std::unordered_map<std::string_view, MacroDefinition> macro_defs;

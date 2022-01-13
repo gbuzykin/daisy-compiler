@@ -35,6 +35,7 @@ enum {
     tt_shr_assign,
     tt_arrow,
     tt_const,
+    tt_namespace,
     total_token_count
 };
 
@@ -68,6 +69,8 @@ enum {
     act_preproc_id_ref,
     act_preproc_operator_begin,
     act_preproc_operator_end,
+    act_begin_namespace,
+    act_end_namespace,
     total_action_count
 };
 
