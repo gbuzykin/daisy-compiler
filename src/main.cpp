@@ -8,13 +8,142 @@
 
 #include <exception>
 
+//-----------------------------------------
+#include "ir/nodes/bool_const_node.h"
+#include "ir/nodes/float_const_node.h"
+#include "ir/nodes/int_const_node.h"
+#include "ir/nodes/op_node.h"
+#include "ir/nodes/string_const_node.h"
+
+#include <chrono>
+#include <random>
+//-----------------------------------------
+
 #define XSTR(s) STR(s)
 #define STR(s)  #s
 
 using namespace daisy;
 
+int rtti_test() {
+    {
+        std::unique_ptr<ir::Node> obj = std::make_unique<ir::BoolConstNode>(false, SymbolLoc{});
+        if (!util::is_kind_of<ir::Node>(*obj)) { throw std::runtime_error("rtti error"); }
+        if (!util::is_kind_of<ir::EvalNode>(*obj)) { throw std::runtime_error("rtti error"); }
+        if (!util::is_kind_of<ir::BoolConstNode>(*obj)) { throw std::runtime_error("rtti error"); }
+        if (util::is_kind_of<ir::FloatConstNode>(*obj)) { throw std::runtime_error("rtti error"); }
+    }
+
+    {
+        std::unique_ptr<ir::EvalNode> obj = std::make_unique<ir::BoolConstNode>(false, SymbolLoc{});
+        if (!util::is_kind_of<ir::Node>(*obj)) { throw std::runtime_error("rtti error"); }
+        if (!util::is_kind_of<ir::EvalNode>(*obj)) { throw std::runtime_error("rtti error"); }
+        if (!util::is_kind_of<ir::BoolConstNode>(*obj)) { throw std::runtime_error("rtti error"); }
+        if (util::is_kind_of<ir::FloatConstNode>(*obj)) { throw std::runtime_error("rtti error"); }
+    }
+
+    {
+        std::unique_ptr<ir::BoolConstNode> obj = std::make_unique<ir::BoolConstNode>(false, SymbolLoc{});
+        if (!util::is_kind_of<ir::Node>(*obj)) { throw std::runtime_error("rtti error"); }
+        if (!util::is_kind_of<ir::EvalNode>(*obj)) { throw std::runtime_error("rtti error"); }
+        if (!util::is_kind_of<ir::BoolConstNode>(*obj)) { throw std::runtime_error("rtti error"); }
+        if (util::is_kind_of<ir::FloatConstNode>(*obj)) { throw std::runtime_error("rtti error"); }
+    }
+
+    {
+        std::unique_ptr<ir::Node> obj = std::make_unique<ir::EvalNode>(SymbolLoc{});
+        if (!util::is_kind_of<ir::Node>(*obj)) { throw std::runtime_error("rtti error"); }
+        if (!util::is_kind_of<ir::EvalNode>(*obj)) { throw std::runtime_error("rtti error"); }
+        if (util::is_kind_of<ir::BoolConstNode>(*obj)) { throw std::runtime_error("rtti error"); }
+        if (util::is_kind_of<ir::FloatConstNode>(*obj)) { throw std::runtime_error("rtti error"); }
+    }
+
+    {
+        std::unique_ptr<ir::EvalNode> obj = std::make_unique<ir::EvalNode>(SymbolLoc{});
+        if (!util::is_kind_of<ir::Node>(*obj)) { throw std::runtime_error("rtti error"); }
+        if (!util::is_kind_of<ir::EvalNode>(*obj)) { throw std::runtime_error("rtti error"); }
+        if (util::is_kind_of<ir::BoolConstNode>(*obj)) { throw std::runtime_error("rtti error"); }
+        if (util::is_kind_of<ir::FloatConstNode>(*obj)) { throw std::runtime_error("rtti error"); }
+    }
+
+    {
+        std::unique_ptr<ir::Node> obj = std::make_unique<ir::Node>(SymbolLoc{});
+        if (!util::is_kind_of<ir::Node>(*obj)) { throw std::runtime_error("rtti error"); }
+        if (util::is_kind_of<ir::EvalNode>(*obj)) { throw std::runtime_error("rtti error"); }
+        if (util::is_kind_of<ir::BoolConstNode>(*obj)) { throw std::runtime_error("rtti error"); }
+        if (util::is_kind_of<ir::FloatConstNode>(*obj)) { throw std::runtime_error("rtti error"); }
+    }
+
+    std::default_random_engine gen;
+    std::uniform_int_distribution<int> dist(0, 3);
+    std::vector<std::unique_ptr<ir::Node>> v;
+
+    {
+        auto start = std::chrono::high_resolution_clock::now();
+        const unsigned N = 10000000;
+        for (unsigned n = 0; n < N; ++n) {
+            switch (dist(gen)) {
+                case 0: {
+                    v.emplace_back(std::make_unique<ir::BoolConstNode>(false, SymbolLoc{}));
+                } break;
+                case 1: {
+                    v.emplace_back(std::make_unique<ir::FloatConstNode>(ir::FloatConst{3.1415}, SymbolLoc{}));
+                } break;
+                case 2: {
+                    v.emplace_back(std::make_unique<ir::IntConstNode>(ir::IntConst::fromUInt64(ir::IntType::i32, 100),
+                                                                      SymbolLoc{}));
+                } break;
+                case 3: {
+                    v.emplace_back(std::make_unique<ir::StringConstNode>(std::string{"hello"}, SymbolLoc{}));
+                } break;
+            }
+        }
+        std::chrono::duration<double> diff = std::chrono::high_resolution_clock::now() - start;
+        uxs::println("init time: {} s", diff.count());
+    }
+
+    {
+        auto start = std::chrono::high_resolution_clock::now();
+        unsigned cnt[4] = {0, 0, 0, 0};
+        for (const auto& p : v) {
+            if (util::is_kind_of<ir::BoolConstNode>(*p)) {
+                ++cnt[0];
+            } else if (util::is_kind_of<ir::FloatConstNode>(*p)) {
+                ++cnt[1];
+            } else if (util::is_kind_of<ir::IntConstNode>(*p)) {
+                ++cnt[2];
+            } else if (util::is_kind_of<ir::StringConstNode>(*p)) {
+                ++cnt[3];
+            }
+        }
+        std::chrono::duration<double> diff = std::chrono::high_resolution_clock::now() - start;
+        uxs::println("rtti time: {} s ({}, {}, {}, {})", diff.count(), cnt[0], cnt[1], cnt[2], cnt[3]);
+    }
+
+    {
+        auto start = std::chrono::high_resolution_clock::now();
+        unsigned cnt[4] = {0, 0, 0, 0};
+        for (const auto& p : v) {
+            if (dynamic_cast<ir::BoolConstNode*>(p.get())) {
+                ++cnt[0];
+            } else if (dynamic_cast<ir::FloatConstNode*>(p.get())) {
+                ++cnt[1];
+            } else if (dynamic_cast<ir::IntConstNode*>(p.get())) {
+                ++cnt[2];
+            } else if (dynamic_cast<ir::StringConstNode*>(p.get())) {
+                ++cnt[3];
+            }
+        }
+        std::chrono::duration<double> diff = std::chrono::high_resolution_clock::now() - start;
+        uxs::println("std rtti time: {} s ({}, {}, {}, {})", diff.count(), cnt[0], cnt[1], cnt[2], cnt[3]);
+    }
+    return 0;
+}
+
 int main(int argc, char** argv) {
     try {
+        rtti_test();
+        return 0;
+
         bool show_help = false, show_version = false;
         std::vector<std::string> input_file_names;
         std::vector<std::string_view> include_paths;
