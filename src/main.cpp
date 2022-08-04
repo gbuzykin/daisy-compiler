@@ -1,6 +1,12 @@
-﻿#include "uxs/format.h"
+﻿#include "ctx/ctx.h"
+#include "pass_manager.h"
+#include "uxs/format.h"
+
+using namespace daisy;
 
 int main(int argc, char** argv) {
-    uxs::println("Hello, world!\n");
+    auto ctx = std::make_unique<CompilationContext>("");
+    PassManager::getInstance().configure();
+    PassManager::getInstance().run(*ctx);
     return 0;
 }
