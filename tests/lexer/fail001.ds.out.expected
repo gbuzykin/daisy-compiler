@@ -1,0 +1,19 @@
+./lexer/fail001.ds:1:1: debug: token
+ 1 | const u64_max = 0x10000000000000000u64;
+   | ^~~~~
+./lexer/fail001.ds:1:7: debug: id: u64_max
+ 1 | const u64_max = 0x10000000000000000u64;
+   |       ^~~~~~~
+./lexer/fail001.ds:1:15: debug: token
+ 1 | const u64_max = 0x10000000000000000u64;
+   |               ^
+./lexer/fail001.ds:1:17: error: too large integer literal
+ 1 | const u64_max = 0x10000000000000000u64;
+   |                 ^~~~~~~~~~~~~~~~~~~~~~
+./lexer/fail001.ds:1:17: debug: integer number: 0
+ 1 | const u64_max = 0x10000000000000000u64;
+   |                 ^~~~~~~~~~~~~~~~~~~~~~
+./lexer/fail001.ds:1:39: debug: token
+ 1 | const u64_max = 0x10000000000000000u64;
+   |                                       ^
+./lexer/fail001.ds: info: warnings 0, errors 1

@@ -1,0 +1,289 @@
+./lexer/warn002.ds:1:1: debug: token
+ 1 | const i8_max1 = 0x80i8; const i8_max2 = 0xffi8; const u8_max = 0x100u8;
+   | ^~~~~
+./lexer/warn002.ds:1:7: debug: id: i8_max1
+ 1 | const i8_max1 = 0x80i8; const i8_max2 = 0xffi8; const u8_max = 0x100u8;
+   |       ^~~~~~~
+./lexer/warn002.ds:1:15: debug: token
+ 1 | const i8_max1 = 0x80i8; const i8_max2 = 0xffi8; const u8_max = 0x100u8;
+   |               ^
+./lexer/warn002.ds:1:17: warning: integer overflow, the value will be changed from 128 to -128
+ 1 | const i8_max1 = 0x80i8; const i8_max2 = 0xffi8; const u8_max = 0x100u8;
+   |                 ^~~~~~
+./lexer/warn002.ds:1:17: debug: integer number: -128
+ 1 | const i8_max1 = 0x80i8; const i8_max2 = 0xffi8; const u8_max = 0x100u8;
+   |                 ^~~~~~
+./lexer/warn002.ds:1:23: debug: token
+ 1 | const i8_max1 = 0x80i8; const i8_max2 = 0xffi8; const u8_max = 0x100u8;
+   |                       ^
+./lexer/warn002.ds:1:25: debug: token
+ 1 | const i8_max1 = 0x80i8; const i8_max2 = 0xffi8; const u8_max = 0x100u8;
+   |                         ^~~~~
+./lexer/warn002.ds:1:31: debug: id: i8_max2
+ 1 | const i8_max1 = 0x80i8; const i8_max2 = 0xffi8; const u8_max = 0x100u8;
+   |                               ^~~~~~~
+./lexer/warn002.ds:1:39: debug: token
+ 1 | const i8_max1 = 0x80i8; const i8_max2 = 0xffi8; const u8_max = 0x100u8;
+   |                                       ^
+./lexer/warn002.ds:1:41: warning: integer overflow, the value will be changed from 255 to -1
+ 1 | const i8_max1 = 0x80i8; const i8_max2 = 0xffi8; const u8_max = 0x100u8;
+   |                                         ^~~~~~
+./lexer/warn002.ds:1:41: debug: integer number: -1
+ 1 | const i8_max1 = 0x80i8; const i8_max2 = 0xffi8; const u8_max = 0x100u8;
+   |                                         ^~~~~~
+./lexer/warn002.ds:1:47: debug: token
+ 1 | const i8_max1 = 0x80i8; const i8_max2 = 0xffi8; const u8_max = 0x100u8;
+   |                                               ^
+./lexer/warn002.ds:1:49: debug: token
+ 1 | const i8_max1 = 0x80i8; const i8_max2 = 0xffi8; const u8_max = 0x100u8;
+   |                                                 ^~~~~
+./lexer/warn002.ds:1:55: debug: id: u8_max
+ 1 | const i8_max1 = 0x80i8; const i8_max2 = 0xffi8; const u8_max = 0x100u8;
+   |                                                       ^~~~~~
+./lexer/warn002.ds:1:62: debug: token
+ 1 | const i8_max1 = 0x80i8; const i8_max2 = 0xffi8; const u8_max = 0x100u8;
+   |                                                              ^
+./lexer/warn002.ds:1:64: warning: integer overflow, the value will be changed from 256 to 0
+ 1 | const i8_max1 = 0x80i8; const i8_max2 = 0xffi8; const u8_max = 0x100u8;
+   |                                                                ^~~~~~~
+./lexer/warn002.ds:1:64: debug: integer number: 0
+ 1 | const i8_max1 = 0x80i8; const i8_max2 = 0xffi8; const u8_max = 0x100u8;
+   |                                                                ^~~~~~~
+./lexer/warn002.ds:1:71: debug: token
+ 1 | const i8_max1 = 0x80i8; const i8_max2 = 0xffi8; const u8_max = 0x100u8;
+   |                                                                       ^
+./lexer/warn002.ds:2:1: debug: token
+ 2 | const i16_max1 = 0x8000i16; const i16_max2 = 0xffffi16; const u16_max = 0x10000u16;
+   | ^~~~~
+./lexer/warn002.ds:2:7: debug: id: i16_max1
+ 2 | const i16_max1 = 0x8000i16; const i16_max2 = 0xffffi16; const u16_max = 0x10000u16;
+   |       ^~~~~~~~
+./lexer/warn002.ds:2:16: debug: token
+ 2 | const i16_max1 = 0x8000i16; const i16_max2 = 0xffffi16; const u16_max = 0x10000u16;
+   |                ^
+./lexer/warn002.ds:2:18: warning: integer overflow, the value will be changed from 32768 to -32768
+ 2 | const i16_max1 = 0x8000i16; const i16_max2 = 0xffffi16; const u16_max = 0x10000u16;
+   |                  ^~~~~~~~~
+./lexer/warn002.ds:2:18: debug: integer number: -32768
+ 2 | const i16_max1 = 0x8000i16; const i16_max2 = 0xffffi16; const u16_max = 0x10000u16;
+   |                  ^~~~~~~~~
+./lexer/warn002.ds:2:27: debug: token
+ 2 | const i16_max1 = 0x8000i16; const i16_max2 = 0xffffi16; const u16_max = 0x10000u16;
+   |                           ^
+./lexer/warn002.ds:2:29: debug: token
+ 2 | const i16_max1 = 0x8000i16; const i16_max2 = 0xffffi16; const u16_max = 0x10000u16;
+   |                             ^~~~~
+./lexer/warn002.ds:2:35: debug: id: i16_max2
+ 2 | const i16_max1 = 0x8000i16; const i16_max2 = 0xffffi16; const u16_max = 0x10000u16;
+   |                                   ^~~~~~~~
+./lexer/warn002.ds:2:44: debug: token
+ 2 | const i16_max1 = 0x8000i16; const i16_max2 = 0xffffi16; const u16_max = 0x10000u16;
+   |                                            ^
+./lexer/warn002.ds:2:46: warning: integer overflow, the value will be changed from 65535 to -1
+ 2 | const i16_max1 = 0x8000i16; const i16_max2 = 0xffffi16; const u16_max = 0x10000u16;
+   |                                              ^~~~~~~~~
+./lexer/warn002.ds:2:46: debug: integer number: -1
+ 2 | const i16_max1 = 0x8000i16; const i16_max2 = 0xffffi16; const u16_max = 0x10000u16;
+   |                                              ^~~~~~~~~
+./lexer/warn002.ds:2:55: debug: token
+ 2 | const i16_max1 = 0x8000i16; const i16_max2 = 0xffffi16; const u16_max = 0x10000u16;
+   |                                                       ^
+./lexer/warn002.ds:2:57: debug: token
+ 2 | const i16_max1 = 0x8000i16; const i16_max2 = 0xffffi16; const u16_max = 0x10000u16;
+   |                                                         ^~~~~
+./lexer/warn002.ds:2:63: debug: id: u16_max
+ 2 | const i16_max1 = 0x8000i16; const i16_max2 = 0xffffi16; const u16_max = 0x10000u16;
+   |                                                               ^~~~~~~
+./lexer/warn002.ds:2:71: debug: token
+ 2 | const i16_max1 = 0x8000i16; const i16_max2 = 0xffffi16; const u16_max = 0x10000u16;
+   |                                                                       ^
+./lexer/warn002.ds:2:73: warning: integer overflow, the value will be changed from 65536 to 0
+ 2 | const i16_max1 = 0x8000i16; const i16_max2 = 0xffffi16; const u16_max = 0x10000u16;
+   |                                                                         ^~~~~~~~~~
+./lexer/warn002.ds:2:73: debug: integer number: 0
+ 2 | const i16_max1 = 0x8000i16; const i16_max2 = 0xffffi16; const u16_max = 0x10000u16;
+   |                                                                         ^~~~~~~~~~
+./lexer/warn002.ds:2:83: debug: token
+ 2 | const i16_max1 = 0x8000i16; const i16_max2 = 0xffffi16; const u16_max = 0x10000u16;
+   |                                                                                   ^
+./lexer/warn002.ds:3:1: debug: token
+ 3 | const i32_max1 = 0x80000000i32; const i32_max2 = 0xffffffffi32; const u32_max = 0x100000000u32;
+   | ^~~~~
+./lexer/warn002.ds:3:7: debug: id: i32_max1
+ 3 | const i32_max1 = 0x80000000i32; const i32_max2 = 0xffffffffi32; const u32_max = 0x100000000u32;
+   |       ^~~~~~~~
+./lexer/warn002.ds:3:16: debug: token
+ 3 | const i32_max1 = 0x80000000i32; const i32_max2 = 0xffffffffi32; const u32_max = 0x100000000u32;
+   |                ^
+./lexer/warn002.ds:3:18: warning: integer overflow, the value will be changed from 2147483648 to -2147483648
+ 3 | const i32_max1 = 0x80000000i32; const i32_max2 = 0xffffffffi32; const u32_max = 0x100000000u32;
+   |                  ^~~~~~~~~~~~~
+./lexer/warn002.ds:3:18: debug: integer number: -2147483648
+ 3 | const i32_max1 = 0x80000000i32; const i32_max2 = 0xffffffffi32; const u32_max = 0x100000000u32;
+   |                  ^~~~~~~~~~~~~
+./lexer/warn002.ds:3:31: debug: token
+ 3 | const i32_max1 = 0x80000000i32; const i32_max2 = 0xffffffffi32; const u32_max = 0x100000000u32;
+   |                               ^
+./lexer/warn002.ds:3:33: debug: token
+ 3 | const i32_max1 = 0x80000000i32; const i32_max2 = 0xffffffffi32; const u32_max = 0x100000000u32;
+   |                                 ^~~~~
+./lexer/warn002.ds:3:39: debug: id: i32_max2
+ 3 | const i32_max1 = 0x80000000i32; const i32_max2 = 0xffffffffi32; const u32_max = 0x100000000u32;
+   |                                       ^~~~~~~~
+./lexer/warn002.ds:3:48: debug: token
+ 3 | const i32_max1 = 0x80000000i32; const i32_max2 = 0xffffffffi32; const u32_max = 0x100000000u32;
+   |                                                ^
+./lexer/warn002.ds:3:50: warning: integer overflow, the value will be changed from 4294967295 to -1
+ 3 | const i32_max1 = 0x80000000i32; const i32_max2 = 0xffffffffi32; const u32_max = 0x100000000u32;
+   |                                                  ^~~~~~~~~~~~~
+./lexer/warn002.ds:3:50: debug: integer number: -1
+ 3 | const i32_max1 = 0x80000000i32; const i32_max2 = 0xffffffffi32; const u32_max = 0x100000000u32;
+   |                                                  ^~~~~~~~~~~~~
+./lexer/warn002.ds:3:63: debug: token
+ 3 | const i32_max1 = 0x80000000i32; const i32_max2 = 0xffffffffi32; const u32_max = 0x100000000u32;
+   |                                                               ^
+./lexer/warn002.ds:3:65: debug: token
+ 3 | const i32_max1 = 0x80000000i32; const i32_max2 = 0xffffffffi32; const u32_max = 0x100000000u32;
+   |                                                                 ^~~~~
+./lexer/warn002.ds:3:71: debug: id: u32_max
+ 3 | const i32_max1 = 0x80000000i32; const i32_max2 = 0xffffffffi32; const u32_max = 0x100000000u32;
+   |                                                                       ^~~~~~~
+./lexer/warn002.ds:3:79: debug: token
+ 3 | const i32_max1 = 0x80000000i32; const i32_max2 = 0xffffffffi32; const u32_max = 0x100000000u32;
+   |                                                                               ^
+./lexer/warn002.ds:3:81: warning: integer overflow, the value will be changed from 4294967296 to 0
+ 3 | const i32_max1 = 0x80000000i32; const i32_max2 = 0xffffffffi32; const u32_max = 0x100000000u32;
+   |                                                                                 ^~~~~~~~~~~~~~
+./lexer/warn002.ds:3:81: debug: integer number: 0
+ 3 | const i32_max1 = 0x80000000i32; const i32_max2 = 0xffffffffi32; const u32_max = 0x100000000u32;
+   |                                                                                 ^~~~~~~~~~~~~~
+./lexer/warn002.ds:3:95: debug: token
+ 3 | const i32_max1 = 0x80000000i32; const i32_max2 = 0xffffffffi32; const u32_max = 0x100000000u32;
+   |                                                                                               ^
+./lexer/warn002.ds:4:1: debug: token
+ 4 | const i32_max1_1 = 0x80000000; const i32_max2_1 = 0xffffffff; const i32_max1_1 = 0x80000000i; const i32_max2_1 = 0xffffffffi; const u32_max_1 = 0x100000000u;
+   | ^~~~~
+./lexer/warn002.ds:4:7: debug: id: i32_max1_1
+ 4 | const i32_max1_1 = 0x80000000; const i32_max2_1 = 0xffffffff; const i32_max1_1 = 0x80000000i; const i32_max2_1 = 0xffffffffi; const u32_max_1 = 0x100000000u;
+   |       ^~~~~~~~~~
+./lexer/warn002.ds:4:18: debug: token
+ 4 | const i32_max1_1 = 0x80000000; const i32_max2_1 = 0xffffffff; const i32_max1_1 = 0x80000000i; const i32_max2_1 = 0xffffffffi; const u32_max_1 = 0x100000000u;
+   |                  ^
+./lexer/warn002.ds:4:20: warning: integer overflow, the value will be changed from 2147483648 to -2147483648
+ 4 | const i32_max1_1 = 0x80000000; const i32_max2_1 = 0xffffffff; const i32_max1_1 = 0x80000000i; const i32_max2_1 = 0xffffffffi; const u32_max_1 = 0x100000000u;
+   |                    ^~~~~~~~~~
+./lexer/warn002.ds:4:20: debug: integer number: -2147483648
+ 4 | const i32_max1_1 = 0x80000000; const i32_max2_1 = 0xffffffff; const i32_max1_1 = 0x80000000i; const i32_max2_1 = 0xffffffffi; const u32_max_1 = 0x100000000u;
+   |                    ^~~~~~~~~~
+./lexer/warn002.ds:4:30: debug: token
+ 4 | const i32_max1_1 = 0x80000000; const i32_max2_1 = 0xffffffff; const i32_max1_1 = 0x80000000i; const i32_max2_1 = 0xffffffffi; const u32_max_1 = 0x100000000u;
+   |                              ^
+./lexer/warn002.ds:4:32: debug: token
+ 4 | const i32_max1_1 = 0x80000000; const i32_max2_1 = 0xffffffff; const i32_max1_1 = 0x80000000i; const i32_max2_1 = 0xffffffffi; const u32_max_1 = 0x100000000u;
+   |                                ^~~~~
+./lexer/warn002.ds:4:38: debug: id: i32_max2_1
+ 4 | const i32_max1_1 = 0x80000000; const i32_max2_1 = 0xffffffff; const i32_max1_1 = 0x80000000i; const i32_max2_1 = 0xffffffffi; const u32_max_1 = 0x100000000u;
+   |                                      ^~~~~~~~~~
+./lexer/warn002.ds:4:49: debug: token
+ 4 | const i32_max1_1 = 0x80000000; const i32_max2_1 = 0xffffffff; const i32_max1_1 = 0x80000000i; const i32_max2_1 = 0xffffffffi; const u32_max_1 = 0x100000000u;
+   |                                                 ^
+./lexer/warn002.ds:4:51: warning: integer overflow, the value will be changed from 4294967295 to -1
+ 4 | const i32_max1_1 = 0x80000000; const i32_max2_1 = 0xffffffff; const i32_max1_1 = 0x80000000i; const i32_max2_1 = 0xffffffffi; const u32_max_1 = 0x100000000u;
+   |                                                   ^~~~~~~~~~
+./lexer/warn002.ds:4:51: debug: integer number: -1
+ 4 | const i32_max1_1 = 0x80000000; const i32_max2_1 = 0xffffffff; const i32_max1_1 = 0x80000000i; const i32_max2_1 = 0xffffffffi; const u32_max_1 = 0x100000000u;
+   |                                                   ^~~~~~~~~~
+./lexer/warn002.ds:4:61: debug: token
+ 4 | const i32_max1_1 = 0x80000000; const i32_max2_1 = 0xffffffff; const i32_max1_1 = 0x80000000i; const i32_max2_1 = 0xffffffffi; const u32_max_1 = 0x100000000u;
+   |                                                             ^
+./lexer/warn002.ds:4:63: debug: token
+ 4 | const i32_max1_1 = 0x80000000; const i32_max2_1 = 0xffffffff; const i32_max1_1 = 0x80000000i; const i32_max2_1 = 0xffffffffi; const u32_max_1 = 0x100000000u;
+   |                                                               ^~~~~
+./lexer/warn002.ds:4:69: debug: id: i32_max1_1
+ 4 | const i32_max1_1 = 0x80000000; const i32_max2_1 = 0xffffffff; const i32_max1_1 = 0x80000000i; const i32_max2_1 = 0xffffffffi; const u32_max_1 = 0x100000000u;
+   |                                                                     ^~~~~~~~~~
+./lexer/warn002.ds:4:80: debug: token
+ 4 | const i32_max1_1 = 0x80000000; const i32_max2_1 = 0xffffffff; const i32_max1_1 = 0x80000000i; const i32_max2_1 = 0xffffffffi; const u32_max_1 = 0x100000000u;
+   |                                                                                ^
+./lexer/warn002.ds:4:82: warning: integer overflow, the value will be changed from 2147483648 to -2147483648
+ 4 | const i32_max1_1 = 0x80000000; const i32_max2_1 = 0xffffffff; const i32_max1_1 = 0x80000000i; const i32_max2_1 = 0xffffffffi; const u32_max_1 = 0x100000000u;
+   |                                                                                  ^~~~~~~~~~~
+./lexer/warn002.ds:4:82: debug: integer number: -2147483648
+ 4 | const i32_max1_1 = 0x80000000; const i32_max2_1 = 0xffffffff; const i32_max1_1 = 0x80000000i; const i32_max2_1 = 0xffffffffi; const u32_max_1 = 0x100000000u;
+   |                                                                                  ^~~~~~~~~~~
+./lexer/warn002.ds:4:93: debug: token
+ 4 | const i32_max1_1 = 0x80000000; const i32_max2_1 = 0xffffffff; const i32_max1_1 = 0x80000000i; const i32_max2_1 = 0xffffffffi; const u32_max_1 = 0x100000000u;
+   |                                                                                             ^
+./lexer/warn002.ds:4:95: debug: token
+ 4 | const i32_max1_1 = 0x80000000; const i32_max2_1 = 0xffffffff; const i32_max1_1 = 0x80000000i; const i32_max2_1 = 0xffffffffi; const u32_max_1 = 0x100000000u;
+   |                                                                                               ^~~~~
+./lexer/warn002.ds:4:101: debug: id: i32_max2_1
+ 4 | const i32_max1_1 = 0x80000000; const i32_max2_1 = 0xffffffff; const i32_max1_1 = 0x80000000i; const i32_max2_1 = 0xffffffffi; const u32_max_1 = 0x100000000u;
+   |                                                                                                     ^~~~~~~~~~
+./lexer/warn002.ds:4:112: debug: token
+ 4 | const i32_max1_1 = 0x80000000; const i32_max2_1 = 0xffffffff; const i32_max1_1 = 0x80000000i; const i32_max2_1 = 0xffffffffi; const u32_max_1 = 0x100000000u;
+   |                                                                                                                ^
+./lexer/warn002.ds:4:114: warning: integer overflow, the value will be changed from 4294967295 to -1
+ 4 | const i32_max1_1 = 0x80000000; const i32_max2_1 = 0xffffffff; const i32_max1_1 = 0x80000000i; const i32_max2_1 = 0xffffffffi; const u32_max_1 = 0x100000000u;
+   |                                                                                                                  ^~~~~~~~~~~
+./lexer/warn002.ds:4:114: debug: integer number: -1
+ 4 | const i32_max1_1 = 0x80000000; const i32_max2_1 = 0xffffffff; const i32_max1_1 = 0x80000000i; const i32_max2_1 = 0xffffffffi; const u32_max_1 = 0x100000000u;
+   |                                                                                                                  ^~~~~~~~~~~
+./lexer/warn002.ds:4:125: debug: token
+ 4 | const i32_max1_1 = 0x80000000; const i32_max2_1 = 0xffffffff; const i32_max1_1 = 0x80000000i; const i32_max2_1 = 0xffffffffi; const u32_max_1 = 0x100000000u;
+   |                                                                                                                             ^
+./lexer/warn002.ds:4:127: debug: token
+ 4 | const i32_max1_1 = 0x80000000; const i32_max2_1 = 0xffffffff; const i32_max1_1 = 0x80000000i; const i32_max2_1 = 0xffffffffi; const u32_max_1 = 0x100000000u;
+   |                                                                                                                               ^~~~~
+./lexer/warn002.ds:4:133: debug: id: u32_max_1
+ 4 | const i32_max1_1 = 0x80000000; const i32_max2_1 = 0xffffffff; const i32_max1_1 = 0x80000000i; const i32_max2_1 = 0xffffffffi; const u32_max_1 = 0x100000000u;
+   |                                                                                                                                     ^~~~~~~~~
+./lexer/warn002.ds:4:143: debug: token
+ 4 | const i32_max1_1 = 0x80000000; const i32_max2_1 = 0xffffffff; const i32_max1_1 = 0x80000000i; const i32_max2_1 = 0xffffffffi; const u32_max_1 = 0x100000000u;
+   |                                                                                                                                               ^
+./lexer/warn002.ds:4:145: warning: integer overflow, the value will be changed from 4294967296 to 0
+ 4 | const i32_max1_1 = 0x80000000; const i32_max2_1 = 0xffffffff; const i32_max1_1 = 0x80000000i; const i32_max2_1 = 0xffffffffi; const u32_max_1 = 0x100000000u;
+   |                                                                                                                                                 ^~~~~~~~~~~~
+./lexer/warn002.ds:4:145: debug: integer number: 0
+ 4 | const i32_max1_1 = 0x80000000; const i32_max2_1 = 0xffffffff; const i32_max1_1 = 0x80000000i; const i32_max2_1 = 0xffffffffi; const u32_max_1 = 0x100000000u;
+   |                                                                                                                                                 ^~~~~~~~~~~~
+./lexer/warn002.ds:4:157: debug: token
+ 4 | const i32_max1_1 = 0x80000000; const i32_max2_1 = 0xffffffff; const i32_max1_1 = 0x80000000i; const i32_max2_1 = 0xffffffffi; const u32_max_1 = 0x100000000u;
+   |                                                                                                                                                             ^
+./lexer/warn002.ds:5:1: debug: token
+ 5 | const i64_max1 = 0x8000000000000000i64; const i64_max2 = 0xffffffffffffffffi64;
+   | ^~~~~
+./lexer/warn002.ds:5:7: debug: id: i64_max1
+ 5 | const i64_max1 = 0x8000000000000000i64; const i64_max2 = 0xffffffffffffffffi64;
+   |       ^~~~~~~~
+./lexer/warn002.ds:5:16: debug: token
+ 5 | const i64_max1 = 0x8000000000000000i64; const i64_max2 = 0xffffffffffffffffi64;
+   |                ^
+./lexer/warn002.ds:5:18: warning: integer overflow, the value will be changed from 9223372036854775808 to -9223372036854775808
+ 5 | const i64_max1 = 0x8000000000000000i64; const i64_max2 = 0xffffffffffffffffi64;
+   |                  ^~~~~~~~~~~~~~~~~~~~~
+./lexer/warn002.ds:5:18: debug: integer number: -9223372036854775808
+ 5 | const i64_max1 = 0x8000000000000000i64; const i64_max2 = 0xffffffffffffffffi64;
+   |                  ^~~~~~~~~~~~~~~~~~~~~
+./lexer/warn002.ds:5:39: debug: token
+ 5 | const i64_max1 = 0x8000000000000000i64; const i64_max2 = 0xffffffffffffffffi64;
+   |                                       ^
+./lexer/warn002.ds:5:41: debug: token
+ 5 | const i64_max1 = 0x8000000000000000i64; const i64_max2 = 0xffffffffffffffffi64;
+   |                                         ^~~~~
+./lexer/warn002.ds:5:47: debug: id: i64_max2
+ 5 | const i64_max1 = 0x8000000000000000i64; const i64_max2 = 0xffffffffffffffffi64;
+   |                                               ^~~~~~~~
+./lexer/warn002.ds:5:56: debug: token
+ 5 | const i64_max1 = 0x8000000000000000i64; const i64_max2 = 0xffffffffffffffffi64;
+   |                                                        ^
+./lexer/warn002.ds:5:58: warning: integer overflow, the value will be changed from 18446744073709551615 to -1
+ 5 | const i64_max1 = 0x8000000000000000i64; const i64_max2 = 0xffffffffffffffffi64;
+   |                                                          ^~~~~~~~~~~~~~~~~~~~~
+./lexer/warn002.ds:5:58: debug: integer number: -1
+ 5 | const i64_max1 = 0x8000000000000000i64; const i64_max2 = 0xffffffffffffffffi64;
+   |                                                          ^~~~~~~~~~~~~~~~~~~~~
+./lexer/warn002.ds:5:79: debug: token
+ 5 | const i64_max1 = 0x8000000000000000i64; const i64_max2 = 0xffffffffffffffffi64;
+   |                                                                               ^
+./lexer/warn002.ds: info: warnings 16, errors 0

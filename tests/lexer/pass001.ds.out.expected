@@ -1,0 +1,84 @@
+./lexer/pass001.ds:1:1: debug: token
+ 1 | const i = 1223345;
+   | ^~~~~
+./lexer/pass001.ds:1:7: debug: id: i
+ 1 | const i = 1223345;
+   |       ^
+./lexer/pass001.ds:1:9: debug: token
+ 1 | const i = 1223345;
+   |         ^
+./lexer/pass001.ds:1:11: debug: integer number: 1223345
+ 1 | const i = 1223345;
+   |           ^~~~~~~
+./lexer/pass001.ds:1:18: debug: token
+ 1 | const i = 1223345;
+   |                  ^
+./lexer/pass001.ds:3:1: debug: token
+ 3 | const f = 4.5656; /*/ ///*** multiline
+   | ^~~~~
+./lexer/pass001.ds:3:7: debug: id: f
+ 3 | const f = 4.5656; /*/ ///*** multiline
+   |       ^
+./lexer/pass001.ds:3:9: debug: token
+ 3 | const f = 4.5656; /*/ ///*** multiline
+   |         ^
+./lexer/pass001.ds:3:11: debug: real number: 4.5656
+ 3 | const f = 4.5656; /*/ ///*** multiline
+   |           ^~~~~~
+./lexer/pass001.ds:3:17: debug: token
+ 3 | const f = 4.5656; /*/ ///*** multiline
+   |                 ^
+./lexer/pass001.ds:6:1: debug: token
+ 6 | const s = "this is a string"
+   | ^~~~~
+./lexer/pass001.ds:6:7: debug: id: s
+ 6 | const s = "this is a string"
+   |       ^
+./lexer/pass001.ds:6:9: debug: token
+ 6 | const s = "this is a string"
+   |         ^
+./lexer/pass001.ds:6:11: debug: string: "this is a string"
+ 6 | const s = "this is a string"
+   |           ^~~~~~~~~~~~~~~~~~
+./lexer/pass001.ds:7:2: debug: string: "escape sequence test:\a\b\f\r\n\t\vT@"
+ 7 |     "escape sequence test:\a\b\f\r\n\t\v\x54\100"
+   |     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+./lexer/pass001.ds:8:2: debug: string: "this is a wrapped                  string"
+ 8 |     "this is a wrapped         \
+   |     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   |          string";  // singleline comment
+   |          ~~~~~~~
+./lexer/pass001.ds:9:17: debug: token
+ 9 |          string";  // singleline comment
+   |                 ^
+./lexer/pass001.ds:11:1: debug: token
+ 11 | const b1 = true; // singleline wrapped \
+    | ^~~~~
+./lexer/pass001.ds:11:7: debug: id: b1
+ 11 | const b1 = true; // singleline wrapped \
+    |       ^~
+./lexer/pass001.ds:11:10: debug: token
+ 11 | const b1 = true; // singleline wrapped \
+    |          ^
+./lexer/pass001.ds:11:12: debug: token
+ 11 | const b1 = true; // singleline wrapped \
+    |            ^~~~
+./lexer/pass001.ds:11:16: debug: token
+ 11 | const b1 = true; // singleline wrapped \
+    |                ^
+./lexer/pass001.ds:14:1: debug: token
+ 14 | const b2 = false; // e \
+    | ^~~~~
+./lexer/pass001.ds:14:7: debug: id: b2
+ 14 | const b2 = false; // e \
+    |       ^~
+./lexer/pass001.ds:14:10: debug: token
+ 14 | const b2 = false; // e \
+    |          ^
+./lexer/pass001.ds:14:12: debug: token
+ 14 | const b2 = false; // e \
+    |            ^~~~~
+./lexer/pass001.ds:14:17: debug: token
+ 14 | const b2 = false; // e \
+    |                 ^
+./lexer/pass001.ds: info: warnings 0, errors 0

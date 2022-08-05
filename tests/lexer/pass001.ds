@@ -1,0 +1,16 @@
+const i = 1223345;
+
+const f = 4.5656; /*/ ///*** multiline
+                  /*  ///*** comment   ****/
+
+const s = "this is a string"
+	"escape sequence test:\a\b\f\r\n\t\v\x54\100"
+	"this is a wrapped         \
+         string";  // singleline comment
+
+const b1 = true; // singleline wrapped \
+   comment
+
+const b2 = false; // e \
+                     o \
+                     f

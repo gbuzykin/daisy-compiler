@@ -51,11 +51,16 @@ add_executable(daisy-compiler
   ${includes}
   ${sources}
 )
+add_executable(run_tests
+  .clang-format
+  tests/run_tests.cpp
+)
 
 # link with these libraries
 if(MSVC)
 else()
   target_link_libraries(daisy-compiler stdc++ m)
+  target_link_libraries(run_tests stdc++)
 endif()
 
 # this lets me include files relative to the root src dir with a <> pair

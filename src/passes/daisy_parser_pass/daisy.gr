@@ -1,0 +1,63 @@
+# Tokens
+%token end_of_file
+%token end_of_input
+%token bool_literal
+%token int_literal
+%token real_literal
+%token string_literal
+%token id
+%token ellipsis
+%token scope_resolution
+%token concatenate
+
+# Operators
+%token inc
+%token dec
+%token shl
+%token shr
+%token eq
+%token ne
+%token le
+%token ge
+%token and
+%token or
+%token add_assign
+%token sub_assign
+%token mul_assign
+%token div_assign
+%token mod_assign
+%token and_assign
+%token or_assign
+%token xor_assign
+%token shl_assign
+%token shr_assign
+%token arrow
+
+# Keywords
+%token const
+
+# Actions
+
+%%
+
+# Translation unit
+translation_unit : unit_contents [end_of_file] ;
+unit_contents : unit_contents unit_item
+  | #empty
+  ;
+
+unit_item : [const] [id] '=' expr ';'
+  | ';'
+  ;
+
+expr : [bool_literal]
+  | [int_literal]
+  | [real_literal]
+  | string
+  ;
+
+string : [string_literal]
+  | string [string_literal]
+  ;
+
+%%
