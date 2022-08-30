@@ -7,6 +7,7 @@ using namespace daisy;
 int main(int argc, char** argv) {
     try {
         std::vector<std::string> input_file_names;
+        std::vector<std::string_view> include_paths;
         for (int i = 1; i < argc; ++i) {
             std::string_view arg(argv[i]);
             if (arg == "--help") {
@@ -14,6 +15,7 @@ int main(int argc, char** argv) {
                 static std::string_view text[] = {
                     "Usage: daisy-compiler [options] file...",
                     "Options:",
+                    "    -I<path>       Add path to search files to include.",
                     "    -d<N>          Debug verbosity level.",
                     "    --help         Display this information.",
                 };
@@ -24,6 +26,8 @@ int main(int argc, char** argv) {
                 input_file_names.emplace_back(arg);
             } else if (arg[1] == 'd') {
                 logger::g_debug_level = arg.size() > 2 ? arg[2] - '0' : 2;
+            } else if (arg.size() > 1 && arg[1] == 'I') {
+                if (arg.size() > 2) { include_paths.emplace_back(arg.substr(2)); }
             } else {
                 logger::fatal().format("unknown flag `{}`", arg);
                 return -1;
@@ -39,6 +43,7 @@ int main(int argc, char** argv) {
 
         for (const auto& file_name : input_file_names) {
             auto ctx = std::make_unique<CompilationContext>(file_name);
+            ctx->include_paths = include_paths;
             PassResult result = PassManager::getInstance().run(*ctx);
             logger::info(file_name).format("warnings {}, errors {}", ctx->warning_count, ctx->error_count);
             if (result != PassResult::kSuccess) { return -1; }

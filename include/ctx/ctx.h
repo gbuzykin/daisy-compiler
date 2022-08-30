@@ -30,6 +30,7 @@ struct CompilationContext {
     explicit CompilationContext(std::string fname) : file_name(std::move(fname)) {}
     std::string file_name;
     std::unordered_map<std::string, InputFileInfo> input_files;
+    std::vector<std::string_view> include_paths;
     std::forward_list<LocationContext> loc_ctx_list;
     mutable unsigned warning_count = 0;
     mutable unsigned error_count = 0;
