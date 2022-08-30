@@ -1,0 +1,46 @@
+./lexer/pass003.ds:1:1: debug: token
+ 1 | const a = 1223324; const b = 4.5656; const c = "Привет";
+   | ^~~~~
+./lexer/pass003.ds:1:7: debug: id: a
+ 1 | const a = 1223324; const b = 4.5656; const c = "Привет";
+   |       ^
+./lexer/pass003.ds:1:9: debug: token
+ 1 | const a = 1223324; const b = 4.5656; const c = "Привет";
+   |         ^
+./lexer/pass003.ds:1:11: debug: integer number: 1223324
+ 1 | const a = 1223324; const b = 4.5656; const c = "Привет";
+   |           ^~~~~~~
+./lexer/pass003.ds:1:18: debug: token
+ 1 | const a = 1223324; const b = 4.5656; const c = "Привет";
+   |                  ^
+./lexer/pass003.ds:1:20: debug: token
+ 1 | const a = 1223324; const b = 4.5656; const c = "Привет";
+   |                    ^~~~~
+./lexer/pass003.ds:1:26: debug: id: b
+ 1 | const a = 1223324; const b = 4.5656; const c = "Привет";
+   |                          ^
+./lexer/pass003.ds:1:28: debug: token
+ 1 | const a = 1223324; const b = 4.5656; const c = "Привет";
+   |                            ^
+./lexer/pass003.ds:1:30: debug: real number: 4.5656
+ 1 | const a = 1223324; const b = 4.5656; const c = "Привет";
+   |                              ^~~~~~
+./lexer/pass003.ds:1:36: debug: token
+ 1 | const a = 1223324; const b = 4.5656; const c = "Привет";
+   |                                    ^
+./lexer/pass003.ds:1:38: debug: token
+ 1 | const a = 1223324; const b = 4.5656; const c = "Привет";
+   |                                      ^~~~~
+./lexer/pass003.ds:1:44: debug: id: c
+ 1 | const a = 1223324; const b = 4.5656; const c = "Привет";
+   |                                            ^
+./lexer/pass003.ds:1:46: debug: token
+ 1 | const a = 1223324; const b = 4.5656; const c = "Привет";
+   |                                              ^
+./lexer/pass003.ds:1:48: debug: string: "Привет"
+ 1 | const a = 1223324; const b = 4.5656; const c = "Привет";
+   |                                                ^~~~~~~~
+./lexer/pass003.ds:1:62: debug: token
+ 1 | const a = 1223324; const b = 4.5656; const c = "Привет";
+   |                                                        ^
+./lexer/pass003.ds: info: warnings 0, errors 0
