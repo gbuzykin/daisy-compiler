@@ -1,54 +1,83 @@
 #include "ctx/ctx.h"
 #include "logger.h"
 #include "pass_manager.h"
+#include "uxs/cli/parser.h"
+
+#define XSTR(s) STR(s)
+#define STR(s)  #s
 
 using namespace daisy;
 
 int main(int argc, char** argv) {
     try {
+        bool show_help = false, show_version = false;
         std::vector<std::string> input_file_names;
         std::vector<std::string_view> include_paths;
         std::vector<std::pair<std::string_view, std::string_view>> macro_defs;
-        for (int i = 1; i < argc; ++i) {
-            std::string_view arg(argv[i]);
-            if (arg == "--help") {
-                // clang-format off
-                static std::string_view text[] = {
-                    "Usage: daisy-compiler [options] file...",
-                    "Options:",
-                    "    -I<path>       Add path to search files to include.",
-                    "    -D<id>{=...}   Add macro definition.",
-                    "    -d<N>          Debug verbosity level.",
-                    "    --help         Display this information.",
-                };
-                // clang-format on
-                for (const auto& l : text) { uxs::println("{}", l); }
-                return 0;
-            } else if (arg[0] != '-') {
-                input_file_names.emplace_back(arg);
-            } else if (arg[1] == 'd') {
-                logger::g_debug_level = arg.size() > 2 ? arg[2] - '0' : 2;
-            } else if (arg.size() > 1 && arg[1] == 'I') {
-                if (arg.size() > 2) { include_paths.emplace_back(arg.substr(2)); }
-            } else if (arg.size() > 1 && arg[1] == 'D') {
-                auto it = arg.begin() + 2;
-                if (it == arg.end() || (!uxs::is_alpha(*it) && *it != '_')) {
-                    logger::fatal().format("argument to `-D` is invalid");
-                    return -1;
-                }
-                while (it != arg.end() && (uxs::is_alnum(*it) || *it == '_')) { ++it; }
-
-                std::string_view id = arg.substr(2, it - arg.begin() - 2), value;
-                if (it != arg.end() && *it++ == '=') { value = arg.substr(it - arg.begin(), arg.end() - it); }
-                macro_defs.emplace_back(id, value);
+        auto add_definition = [&macro_defs](std::string_view def) {
+            if (!uxs::is_alpha(def[0]) && def[0] != '_') { return false; }
+            std::string_view val;
+            auto pos = def.find('=');
+            if (pos != std::string::npos) {
+                val = def.substr(pos + 1);
+                def = def.substr(0, pos);
             } else {
-                logger::fatal().format("unknown flag `{}`", arg);
-                return -1;
+                val = "1";
             }
-        }
+            if (!uxs::all_of(def.substr(1), [](char ch) { return uxs::is_alnum(ch) || ch == '_'; })) { return false; }
+            macro_defs.emplace_back(std::make_pair(def, val));
+            return true;
+        };
+        auto cli = uxs::cli::command(argv[0])
+                   << uxs::cli::overview("the Daisy compiler") << uxs::cli::values("filename...", input_file_names)
+                   << (uxs::cli::option({"-I"}) &
+                       uxs::cli::basic_value_wrapper<char>("<dir>",
+                                                           [&include_paths](std::string_view path) {
+                                                               include_paths.emplace_back(path);
+                                                               return true;
+                                                           })) %
+                          "Add directory <dir> to the end of the list of include search paths."
+                   << (uxs::cli::option({"-D"}) &
+                       uxs::cli::basic_value_wrapper<char>("<macro>={<value>}", add_definition)) %
+                          "Define <macro> to <value> (or 1 if <value> omitted)."
+                   << (uxs::cli::option({"-d", "--debug-level="}) & uxs::cli::value("<n>", logger::g_debug_level)) %
+                          "Debug verbosity level."
+                   << uxs::cli::option({"-h", "--help"}).set(show_help) % "Display this information."
+                   << uxs::cli::option({"-V", "--version"}).set(show_version) % "Display version.";
 
-        if (input_file_names.empty()) {
-            logger::fatal().format("no input files specified");
+        auto parse_result = cli->parse(argc, argv);
+        if (show_help) {
+            for (auto const* node = parse_result.node; node; node = node->get_parent()) {
+                if (node->get_type() == uxs::cli::node_type::kCommand) {
+                    uxs::stdbuf::out.write(static_cast<const uxs::cli::basic_command<char>&>(*node).make_man_page(true));
+                    break;
+                }
+            }
+            return 0;
+        } else if (show_version) {
+            uxs::stdbuf::out.write(XSTR(VERSION)).endl();
+            return 0;
+        } else if (parse_result.status != uxs::cli::parsing_status::kOk) {
+            switch (parse_result.status) {
+                case uxs::cli::parsing_status::kUnknownOption: {
+                    logger::fatal().format("unknown command line option `{}`", argv[parse_result.arg_count]);
+                } break;
+                case uxs::cli::parsing_status::kInvalidValue: {
+                    if (parse_result.arg_count < argc) {
+                        logger::fatal().format("invalid command line argument `{}`", argv[parse_result.arg_count]);
+                    } else {
+                        logger::fatal().format("expected command line argument after `{}`",
+                                               argv[parse_result.arg_count - 1]);
+                    }
+                } break;
+                case uxs::cli::parsing_status::kUnspecifiedValue: {
+                    if (input_file_names.empty()) {
+                        logger::fatal().format("no input files specified");
+                        return -1;
+                    }
+                } break;
+                default: break;
+            }
             return -1;
         }
 
