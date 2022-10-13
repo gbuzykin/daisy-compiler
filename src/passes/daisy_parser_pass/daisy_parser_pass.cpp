@@ -55,8 +55,8 @@ PassResult DaisyParserPass::run(CompilationContext& ctx) {
     parser_state_stack.reserve_at_curr(1024);
     symbol_stack.reserve(1024);
 
-    ctx_->global_namespace = std::make_unique<ir::Namespace>("");
-    current_namespace_ = ctx_->global_namespace.get();
+    ctx_->ir_root = std::make_unique<ir::Node>(std::make_unique<ir::Namespace>());
+    ir_node_ = ctx_->ir_root.get();
 
     defineBuiltinMacros();
 

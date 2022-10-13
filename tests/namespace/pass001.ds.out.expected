@@ -7,19 +7,34 @@
 ./namespace/pass001.ds:1:15: debug: token
  1 | namespace ns1 {
    |               ^
+./namespace/pass001.ds:2:1: debug: token
+ 2 | namespace ns2 {}
+   | ^~~~~~~~~
+./namespace/pass001.ds:2:11: debug: id: ns2
+ 2 | namespace ns2 {}
+   |           ^~~
+./namespace/pass001.ds:2:15: debug: token
+ 2 | namespace ns2 {}
+   |               ^
+./namespace/pass001.ds:2:16: debug: token
+ 2 | namespace ns2 {}
+   |                ^
 ./namespace/pass001.ds:3:1: debug: token
- 3 | namespace ns2 {
+ 3 | namespace ns2 {}
    | ^~~~~~~~~
 ./namespace/pass001.ds:3:11: debug: id: ns2
- 3 | namespace ns2 {
+ 3 | namespace ns2 {}
    |           ^~~
 ./namespace/pass001.ds:3:15: debug: token
- 3 | namespace ns2 {
+ 3 | namespace ns2 {}
    |               ^
-./namespace/pass001.ds:5:1: debug: token
- 5 | }
-   | ^
-./namespace/pass001.ds:7:1: debug: token
- 7 | }
+./namespace/pass001.ds:3:15: debug: entering existing namespace `ns2`
+ 3 | namespace ns2 {}
+   |               ^
+./namespace/pass001.ds:3:16: debug: token
+ 3 | namespace ns2 {}
+   |                ^
+./namespace/pass001.ds:4:1: debug: token
+ 4 | }
    | ^
 ./namespace/pass001.ds: info: warnings 0, errors 0

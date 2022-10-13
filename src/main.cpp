@@ -1,6 +1,7 @@
 #include "ctx/ctx.h"
 #include "logger.h"
 #include "pass_manager.h"
+#include "uxs/algorithm.h"
 #include "uxs/cli/parser.h"
 
 #define XSTR(s) STR(s)
