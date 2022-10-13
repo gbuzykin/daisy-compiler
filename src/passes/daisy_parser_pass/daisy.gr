@@ -124,7 +124,7 @@ unit_contents : unit_contents unit_item
   | #empty
   ;
 
-unit_item : [namespace] [id] {begin_namespace} '{' unit_contents '}' {end_namespace}
+unit_item : [namespace] [id] '{' {begin_namespace} unit_contents '}' {end_namespace}
   | [const] [id] '=' expr ';'
   | $error ';'
   | ';'

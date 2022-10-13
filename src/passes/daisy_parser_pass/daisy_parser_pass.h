@@ -137,11 +137,19 @@ class DaisyParserPass : public Pass {
     bool checkMacroExpansionForRecursion(std::string_view macro_id);
     void ensureEndOfInput(SymbolInfo& tkn);
 
-    ir::Namespace& getCurrentNamespace() const {
-        assert(current_namespace_);
-        return *current_namespace_;
+    const ir::Node& getIrNode() const {
+        assert(ir_node_);
+        return *ir_node_;
     }
-    void setCurrentNamespace(ir::Namespace& space) { current_namespace_ = &space; }
+    ir::Node& getIrNode() {
+        assert(ir_node_);
+        return *ir_node_;
+    }
+    void setIrNode(ir::Node& node) { ir_node_ = &node; }
+    void popIrNode() {
+        assert(ir_node_);
+        ir_node_ = ir_node_->getParent();
+    }
 
  private:
     struct TextBuffer {
@@ -160,7 +168,7 @@ class DaisyParserPass : public Pass {
     std::forward_list<IfSectionState> if_section_stack_;
     std::forward_list<std::string> input_strings_;
 
-    ir::Namespace* current_namespace_ = nullptr;
+    ir::Node* ir_node_ = nullptr;
 
     std::unordered_map<std::string_view, int> keywords_;
     std::array<ReduceActionHandler::FuncType, parser_detail::total_action_count> reduce_action_handlers_;

@@ -70,6 +70,8 @@ int main(int argc, char** argv) {
         auto compiler_path = old_current_path / compiler_exec;
         std::filesystem::current_path(tests_path);
         if (!getTestList(".", subdir_list, test_lst)) { return -1; }
+
+        size_t total_test_count = test_lst.size(), passed_test_count = 0;
         for (const auto& path : test_lst) {
             std::cout << path << ": " << std::flush;
             const int result = std::system((compiler_path.string() + " -d3 " + path + " 2>" + path + ".out").c_str());
@@ -117,12 +119,14 @@ int main(int argc, char** argv) {
                     std::cout << "UPDATED!" << std::endl;
                 }
                 std::filesystem::remove(path + ".out");
+                ++passed_test_count;
             } catch (const std::exception& ex) {
                 std::cout << ex.what() << std::endl;
                 ret_result = -1;
             }
         }
         std::filesystem::current_path(old_current_path);
+        std::cout << "PASSED: " << passed_test_count << '/' << total_test_count << std::endl;
         return ret_result;
     } catch (const std::exception& ex) { std::cout << ex.what() << std::endl; }
     return -1;

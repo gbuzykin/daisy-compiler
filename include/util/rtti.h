@@ -56,7 +56,7 @@ class rtti_mixin : public SuperTy {
     using super_class_t = SuperTy;
     template<typename... Args>
     explicit rtti_mixin(Args&&... args) : SuperTy(std::forward<Args>(args)...) {
-        this->type_desc_ = &type_info<Ty>::desc;
+        this->rtti_type_desc_ = &type_info<Ty>::desc;
     }
 };
 
@@ -64,55 +64,36 @@ template<typename Ty>
 class rtti_mixin<Ty, void> {
  public:
     using rtti_mixin_t = rtti_mixin;
-    const type_info_desc* get_type_info() const { return type_desc_; };
+    const type_info_desc* get_rtti_type_info() const { return rtti_type_desc_; };
 
  private:
     template<typename Ty_, typename SuperTy>
     friend class rtti_mixin;
-    const type_info_desc* type_desc_ = nullptr;
+    const type_info_desc* rtti_type_desc_ = nullptr;
 };
 
-template<typename TyTo, typename TyFrom>
-[[nodiscard]] bool is_kind_of(TyFrom& ref) {
-    if constexpr (!std::is_convertible_v<std::remove_cv_t<TyFrom>&, TyTo&>) {
-        for (auto* info = ref.get_type_info(); info->type_id != type_info<TyTo>::kId; info = info->super_desc) {
-            if (info->type_id == type_info<TyFrom>::kId) { return false; }
+template<typename... Kind, typename Ty, typename = std::void_t<typename Ty::rtti_mixin_t>>
+[[nodiscard]] bool is_kind_of(Ty& ref) {
+    using TyNoCV = std::remove_cv_t<Ty>;
+    static_assert(sizeof...(Kind) != 0, "unspecified kind");
+    if constexpr ((!std::is_convertible_v<TyNoCV*, Kind*> && ...)) {
+        for (auto* info = ref.get_rtti_type_info(); ((info->type_id != type_info<Kind>::kId) && ...);
+             info = info->super_desc) {
+            if (info->type_id == type_info<TyNoCV>::kId) { return false; }
         }
     }
     return true;
 }
 
-template<typename TyTo, typename... OtherTo, typename TyFrom>
-[[nodiscard]] bool is_any_kind_of(TyFrom& ref) {
-    if (is_kind_of<TyTo>(ref)) { return true; }
-    if constexpr (sizeof...(OtherTo) != 0) {
-        return is_any_kind_of<OtherTo...>(ref);
-    } else {
-        return false;
-    }
-}
-
-template<typename TyTo, typename TyFrom>
-[[nodiscard]] bool is_kind_of(TyFrom* ptr) {
-    assert(ptr);
-    return is_kind_of<TyTo>(*ptr);
-}
-
-template<typename TyTo, typename... OtherTo, typename TyFrom>
-[[nodiscard]] bool is_any_kind_of(TyFrom* ptr) {
-    assert(ptr);
-    return is_any_kind_of<TyTo, OtherTo...>(*ptr);
-}
-
-template<typename TyTo, typename TyFrom>
-[[nodiscard]] TyTo& cast(TyFrom& ref) {
+template<typename TyTo, typename TyFrom, typename = std::enable_if_t<std::is_reference_v<TyTo>>>
+[[nodiscard]] TyTo cast(TyFrom& ref) {
     if (!is_kind_of<std::decay_t<TyTo>>(ref)) { throw std::runtime_error("bad cast"); }
-    return static_cast<TyTo&>(ref);
+    return static_cast<TyTo>(ref);
 }
 
-template<typename TyTo, typename TyFrom>
-[[nodiscard]] TyTo* cast(TyFrom* ptr) {
-    return ptr && is_kind_of<std::decay_t<TyTo>>(*ptr) ? static_cast<TyTo*>(ptr) : nullptr;
+template<typename TyTo, typename TyFrom, typename = std::enable_if_t<std::is_pointer_v<TyTo>>>
+[[nodiscard]] TyTo cast(TyFrom* ptr) {
+    return ptr && is_kind_of<std::decay_t<std::remove_pointer_t<TyTo>>>(*ptr) ? static_cast<TyTo>(ptr) : nullptr;
 }
 
 }  // namespace util
