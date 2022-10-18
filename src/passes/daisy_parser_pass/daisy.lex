@@ -33,8 +33,6 @@ string_nl       <string> \n
 string_ln_wrap  <string> \\\n
 
 # Operators
-inc           "++"
-dec           "--"
 shl           "<<"
 shr           ">>"
 eq            "=="

@@ -13,8 +13,6 @@
 %token concatenate
 
 # Operators
-%token inc
-%token dec
 %token shl
 %token shr
 %token eq
@@ -54,9 +52,50 @@
 %right '!' '~' $unary
 
 # Actions
+
+%action begin_namespace
+%action end_namespace
+
+%action concatenate_string_const
+%action relative_name
+%action absolute_name
+%action concatenate_name_path
+
+%action bool_const_literal
+%action int_const_literal
+%action float_const_literal
+%action string_const_literal
+
+%action expr_op_u_minus
+%action expr_op_u_plus
+%action expr_op_add
+%action expr_op_sub
+%action expr_op_mul
+%action expr_op_div
+%action expr_op_mod
+%action expr_op_shl
+%action expr_op_shr
+%action expr_op_bitwise_not
+%action expr_op_bitwise_and
+%action expr_op_bitwise_or
+%action expr_op_bitwise_xor
+%action expr_op_eq
+%action expr_op_ne
+%action expr_op_lt
+%action expr_op_le
+%action expr_op_ge
+%action expr_op_gt
+%action expr_op_logical_not
+%action expr_op_logical_and
+%action expr_op_logical_or
+%action expr_op_conditional
+%action expr_brackets
+%action expr_name_ref
+
+# --------------------------------------------
+# Preprocessor actions
 %action preproc_op_u_minus
 %action preproc_op_u_plus
-%action preproc_op_binary_not
 %action preproc_op_add
 %action preproc_op_sub
 %action preproc_op_mul
@@ -64,9 +103,10 @@
 %action preproc_op_mod
 %action preproc_op_shl
 %action preproc_op_shr
-%action preproc_op_binary_and
-%action preproc_op_binary_or
-%action preproc_op_binary_xor
+%action preproc_op_bitwise_not
+%action preproc_op_bitwise_and
+%action preproc_op_bitwise_or
+%action preproc_op_bitwise_xor
 %action preproc_op_eq
 %action preproc_op_ne
 %action preproc_op_lt
@@ -81,17 +121,73 @@
 %action preproc_operator_begin
 %action preproc_operator_end
 
-%action begin_namespace
-%action end_namespace
-
 %%
 
+# Translation unit
+translation_unit<initial> : unit_contents [end_of_file] ;
+unit_contents : unit_contents unit_item
+  | #empty
+  ;
+
+unit_item : [namespace] [id] '{' {begin_namespace} unit_contents '}' {end_namespace}
+  | [const] [id] optional_type_name '=' expr ';'
+  | $error ';'
+  | ';'
+  ;
+
+name_specifier : [id] {relative_name}
+  | [scope_resolution] [id] {absolute_name}
+  | name_specifier [scope_resolution] [id] {concatenate_name_path}
+  ;
+
+string_const : [string_literal]
+  | string_const [string_literal] {concatenate_string_const}
+  ;
+
+optional_type_name : ':' name_specifier
+  |
+  ;
+
+const_literal : [bool_literal] {bool_const_literal}
+  | [int_literal] {int_const_literal}
+  | [float_literal] {float_const_literal}
+  | string_const {string_const_literal}
+  ;
+
+expr : '-' expr %prec $unary {expr_op_u_minus}
+  | '+' expr %prec $unary {expr_op_u_plus}
+  | expr '+' expr {expr_op_add}
+  | expr '-' expr {expr_op_sub}
+  | expr '*' expr {expr_op_mul}
+  | expr '/' expr {expr_op_div}
+  | expr '%' expr {expr_op_mod}
+  | expr [shl] expr {expr_op_shl}
+  | expr [shr] expr {expr_op_shr}
+  | '~' expr %prec $unary {expr_op_bitwise_not}
+  | expr '&' expr {expr_op_bitwise_and}
+  | expr '|' expr {expr_op_bitwise_or}
+  | expr '^' expr {expr_op_bitwise_xor}
+  | expr [eq] expr {expr_op_eq}
+  | expr [ne] expr {expr_op_ne}
+  | expr '<' expr {expr_op_lt}
+  | expr [le] expr {expr_op_le}
+  | expr '>' expr {expr_op_ge}
+  | expr [ge] expr {expr_op_gt}
+  | '!' expr %prec $unary {expr_op_logical_not}
+  | expr [and] expr {expr_op_logical_and}
+  | expr [or] expr {expr_op_logical_or}
+  | expr '?' expr ':' expr {expr_op_conditional}
+  | '(' expr ')' {expr_brackets}
+  | name_specifier {expr_name_ref}
+  | const_literal
+  ;
+
+# -------------------------------------------------------------------------------------
 # Preprocessor condition expression
 preproc_condition<preproc_condition> : preproc_expr [end_of_input] ;
 
 preproc_expr : '-' preproc_expr %prec $unary {preproc_op_u_minus}
   | '+' preproc_expr %prec $unary {preproc_op_u_plus}
-  | '~' preproc_expr %prec $unary {preproc_op_binary_not}
   | preproc_expr '+' preproc_expr {preproc_op_add}
   | preproc_expr '-' preproc_expr {preproc_op_sub}
   | preproc_expr '*' preproc_expr {preproc_op_mul}
@@ -99,9 +195,10 @@ preproc_expr : '-' preproc_expr %prec $unary {preproc_op_u_minus}
   | preproc_expr '%' preproc_expr {preproc_op_mod}
   | preproc_expr [shl] preproc_expr {preproc_op_shl}
   | preproc_expr [shr] preproc_expr {preproc_op_shr}
-  | preproc_expr '&' preproc_expr {preproc_op_binary_and}
-  | preproc_expr '|' preproc_expr {preproc_op_binary_or}
-  | preproc_expr '^' preproc_expr {preproc_op_binary_xor}
+  | '~' preproc_expr %prec $unary {preproc_op_bitwise_not}
+  | preproc_expr '&' preproc_expr {preproc_op_bitwise_and}
+  | preproc_expr '|' preproc_expr {preproc_op_bitwise_or}
+  | preproc_expr '^' preproc_expr {preproc_op_bitwise_xor}
   | preproc_expr [eq] preproc_expr {preproc_op_eq}
   | preproc_expr [ne] preproc_expr {preproc_op_ne}
   | preproc_expr '<' preproc_expr {preproc_op_lt}
@@ -116,53 +213,6 @@ preproc_expr : '-' preproc_expr %prec $unary {preproc_op_u_minus}
   | [id] {preproc_operator_begin} '(' [id] ')' {preproc_operator_end}
   | [bool_literal]
   | [int_literal]
-  ;
-
-# Translation unit
-translation_unit<initial> : unit_contents [end_of_file] ;
-unit_contents : unit_contents unit_item
-  | #empty
-  ;
-
-unit_item : [namespace] [id] '{' {begin_namespace} unit_contents '}' {end_namespace}
-  | [const] [id] '=' expr ';'
-  | $error ';'
-  | ';'
-  ;
-
-expr : '-' expr %prec $unary
-  | '+' expr %prec $unary
-  | '~' expr %prec $unary
-  | expr '+' expr
-  | expr '-' expr
-  | expr '*' expr
-  | expr '/' expr
-  | expr '%' expr
-  | expr [shl] expr
-  | expr [shr] expr
-  | expr '&' expr
-  | expr '|' expr
-  | expr '^' expr
-  | expr [eq] expr
-  | expr [ne] expr
-  | expr '<' expr
-  | expr [le] expr
-  | expr '>' expr
-  | expr [ge] expr
-  | '!' expr %prec $unary
-  | expr [and] expr
-  | expr [or] expr
-  | expr '?' expr ':' expr
-  | '(' expr ')'
-  | [id]
-  | [bool_literal]
-  | [int_literal]
-  | [float_literal]
-  | string
-  ;
-
-string : [string_literal]
-  | string [string_literal]
   ;
 
 %%

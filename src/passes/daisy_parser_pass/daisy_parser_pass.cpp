@@ -216,8 +216,6 @@ int DaisyParserPass::lex(SymbolInfo& tkn, bool* leading_ws) {
             } break;
 
             // ------ operators
-            case lex_detail::pat_inc: return parser_detail::tt_inc;
-            case lex_detail::pat_dec: return parser_detail::tt_dec;
             case lex_detail::pat_shl: return parser_detail::tt_shl;
             case lex_detail::pat_shr: return parser_detail::tt_shr;
             case lex_detail::pat_eq: return parser_detail::tt_eq;

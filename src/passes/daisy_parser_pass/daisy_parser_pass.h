@@ -4,6 +4,7 @@
 #include "ctx/ctx.h"
 #include "ir/float_const.h"
 #include "ir/int_const.h"
+#include "ir/type_descriptor.h"
 #include "pass_manager.h"
 #include "uxs/stringcvt.h"
 
@@ -24,7 +25,8 @@ namespace parser_detail {
 
 namespace daisy {
 
-using SymbolVal = std::variant<bool, ir::IntConst, ir::FloatConst, std::string, std::string_view>;
+using SymbolVal = std::variant<bool, ir::IntConst, ir::FloatConst, std::string, std::string_view,
+                               std::unique_ptr<ir::Node>, std::unique_ptr<ir::TypeDescriptor>>;
 
 struct SymbolInfo {
     SymbolVal val;

@@ -52,13 +52,14 @@ bool evalCondition(DaisyParserPass* pass, SymbolInfo& tkn) {
             unsigned rlen = static_cast<unsigned>(1 + prev_parser_state_stack_top - parser_state_stack.curr());
             if (rlen == 0) { symbol_stack.emplace_back().loc = tkn.loc, ++rlen; }  // Empty production workaround
             auto* ss = &*(symbol_stack.end() - rlen);
-            if (act >= parser_detail::act_preproc_op_u_minus && act <= parser_detail::act_preproc_op_binary_not) {
+            if (act == parser_detail::act_preproc_op_u_minus || act == parser_detail::act_preproc_op_u_plus ||
+                act == parser_detail::act_preproc_op_bitwise_not) {
                 if (!check_integer_type(ss[1])) { return true; }
                 const auto& operand = std::get<ir::IntConst>(ss[1].val);
                 switch (act) {
                     case parser_detail::act_preproc_op_u_minus: ss[0].val = -operand; break;
                     case parser_detail::act_preproc_op_u_plus: ss[0].val = operand; break;
-                    case parser_detail::act_preproc_op_binary_not: ss[0].val = ~operand; break;
+                    case parser_detail::act_preproc_op_bitwise_not: ss[0].val = ~operand; break;
                     default: break;
                 }
             } else if (act >= parser_detail::act_preproc_op_add && act <= parser_detail::act_preproc_op_gt) {
@@ -79,9 +80,9 @@ bool evalCondition(DaisyParserPass* pass, SymbolInfo& tkn) {
                     } break;
                     case parser_detail::act_preproc_op_shl: ss[0].val = operand1 << operand2; break;
                     case parser_detail::act_preproc_op_shr: ss[0].val = operand1 >> operand2; break;
-                    case parser_detail::act_preproc_op_binary_and: ss[0].val = operand1 & operand2; break;
-                    case parser_detail::act_preproc_op_binary_or: ss[0].val = operand1 | operand2; break;
-                    case parser_detail::act_preproc_op_binary_xor: ss[0].val = operand1 ^ operand2; break;
+                    case parser_detail::act_preproc_op_bitwise_and: ss[0].val = operand1 & operand2; break;
+                    case parser_detail::act_preproc_op_bitwise_or: ss[0].val = operand1 | operand2; break;
+                    case parser_detail::act_preproc_op_bitwise_xor: ss[0].val = operand1 ^ operand2; break;
                     case parser_detail::act_preproc_op_eq: ss[0].val = operand1 == operand2; break;
                     case parser_detail::act_preproc_op_ne: ss[0].val = operand1 != operand2; break;
                     case parser_detail::act_preproc_op_lt: {
