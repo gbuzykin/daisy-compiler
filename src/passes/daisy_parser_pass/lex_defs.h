@@ -18,8 +18,6 @@ enum {
     pat_string_close,
     pat_string_nl,
     pat_string_ln_wrap,
-    pat_inc,
-    pat_dec,
     pat_shl,
     pat_shr,
     pat_eq,

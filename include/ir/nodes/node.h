@@ -56,9 +56,7 @@ class Node : public util::rtti_mixin<Node> {
 
     pointer getParent() { return parent_; }
     const_pointer getParent() const { return parent_; }
-
     const SymbolLoc& getLoc() const { return loc_; }
-    void setLoc(const SymbolLoc& loc) { loc_ = loc; }
 
     const Namespace& findNamespace() const;
     Namespace& findNamespace() { return const_cast<Namespace&>(std::as_const(*this).findNamespace()); }
