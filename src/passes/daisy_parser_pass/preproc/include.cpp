@@ -15,7 +15,7 @@ void parseIncludeDirective(DaisyParserPass* pass, SymbolInfo& tkn) {
         return;
     }
 
-    const auto file_name = std::move(std::get<std::string>(tkn.val));
+    const auto& file_name = std::get<std::string>(tkn.val);
     const auto& include_paths = pass->getCompilationContext().include_paths;
 
     std::filesystem::path path(tkn.loc.loc_ctx->file->file_name);
@@ -29,7 +29,7 @@ void parseIncludeDirective(DaisyParserPass* pass, SymbolInfo& tkn) {
             SymbolLoc expansion_loc = tkn.loc;
             pass->ensureEndOfInput(tkn);
             pass->pushInputContext(std::make_unique<InputContext>(
-                input_file->getText(), &pass->newLocationContext(input_file, TextExpansion{expansion_loc})));
+                input_file->getText(), &pass->newLocationContext(input_file, expansion_loc)));
             return;
         }
 

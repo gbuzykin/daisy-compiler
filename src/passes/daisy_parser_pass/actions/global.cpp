@@ -6,8 +6,8 @@ using namespace daisy;
 namespace {
 
 void beginNamespace(DaisyParserPass* pass, SymbolInfo* rhs) {
-    auto& name = std::get<std::string>(rhs[-1].val);
-    pass->setCurrentNamespace(pass->getCurrentNamespace().findOrAddObject<ir::Namespace>(std::move(name)));
+    const auto name = std::get<std::string_view>(rhs[-1].val);
+    pass->setCurrentNamespace(pass->getCurrentNamespace().findOrAddObject<ir::Namespace>(std::string(name)));
 }
 
 void endNamespace(DaisyParserPass* pass, SymbolInfo* rhs) {

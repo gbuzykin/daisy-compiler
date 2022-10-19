@@ -23,7 +23,7 @@ namespace parser_detail {
 
 namespace daisy {
 
-using SymbolVal = std::variant<bool, IntegerConst, double, std::string_view, std::string>;
+using SymbolVal = std::variant<bool, IntegerConst, double, std::string, std::string_view>;
 
 struct SymbolInfo {
     SymbolVal val;
@@ -65,16 +65,10 @@ struct MacroExpansion {
 };
 
 struct MacroExpansionContext : public InputContext {
-    MacroExpansionContext(TextRange txt, const LocationContext* ctx, MacroExpansion macro_exp)
-        : InputContext(txt, ctx), macro_expansion_info(std::move(macro_exp)) {}
+    template<typename... Args>
+    MacroExpansionContext(TextRange txt, const LocationContext* ctx, Args&&... macro_exp_args)
+        : InputContext(txt, ctx), macro_expansion_info{std::forward<Args>(macro_exp_args)...} {}
     MacroExpansion macro_expansion_info;
-};
-
-struct StringInputContext : public InputContext {
-    StringInputContext(std::string s, const LocationContext* ctx) : InputContext({}, ctx), str(std::move(s)) {
-        text.first = str.data(), text.last = str.data() + str.size();
-    }
-    std::string str;
 };
 
 class DaisyParserPass;
@@ -127,13 +121,16 @@ class DaisyParserPass : public Pass {
         return input_ctx_stack_.empty();
     }
 
-    const LocationContext& newLocationContext(const InputFileInfo* file, const TextExpansion& expansion) {
-        return ctx_->loc_ctx_list.emplace_front(file, expansion);
+    template<typename... Args>
+    LocationContext& newLocationContext(const InputFileInfo* file, Args&&... expansion_args) {
+        return ctx_->loc_ctx_list.emplace_front(file, std::forward<Args>(expansion_args)...);
     }
 
     InputContext& pushStringInputContext(std::string str, const MacroExpansion& macro_exp) {
-        return pushInputContext(std::make_unique<StringInputContext>(
-            std::move(str), &newLocationContext(nullptr, TextExpansion{macro_exp.loc, macro_exp.macro_def})));
+        auto& text = input_strings_.emplace_front(std::move(str));
+        return pushInputContext(
+            std::make_unique<InputContext>(TextRange{text.data(), text.data() + text.size()},
+                                           &newLocationContext(nullptr, macro_exp.loc, macro_exp.macro_def)));
     }
 
     bool checkMacroExpansionForRecursion(std::string_view macro_id);
@@ -160,6 +157,7 @@ class DaisyParserPass : public Pass {
     std::forward_list<std::unique_ptr<InputContext>> input_ctx_stack_;
     uxs::basic_inline_dynbuffer<int, 1> lex_state_stack_;
     std::forward_list<IfSectionState> if_section_stack_;
+    std::forward_list<std::string> input_strings_;
 
     ir::Namespace* current_namespace_ = nullptr;
 

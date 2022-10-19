@@ -122,9 +122,9 @@ bool evalCondition(DaisyParserPass* pass, SymbolInfo& tkn) {
                     } break;
                     case parser_detail::act_preproc_operator_end: {
                         in_ctx.flags &= ~InputContext::Flags::kDisableMacroExpansion;
-                        const auto& id = std::get<std::string>(rhs[0].val);
+                        const auto id = std::get<std::string_view>(rhs[0].val);
                         if (id == "defined") {
-                            const auto& macro_id = std::get<std::string>(rhs[3].val);
+                            const auto macro_id = std::get<std::string_view>(rhs[3].val);
                             const auto& ctx = pass->getCompilationContext();
                             rhs[0].val = ctx.macro_defs.find(macro_id) != ctx.macro_defs.end();
                         } else {
@@ -139,9 +139,6 @@ bool evalCondition(DaisyParserPass* pass, SymbolInfo& tkn) {
             if (rlen > 1) { (symbol_stack.end() - rlen)->loc += (symbol_stack.end() - 1)->loc; }
             symbol_stack.erase(symbol_stack.end() - rlen + 1, symbol_stack.end());
         } else if (tt != parser_detail::tt_end_of_input) {
-            if (std::holds_alternative<std::string_view>(tkn.val)) {
-                tkn.val = std::string(std::get<std::string_view>(tkn.val));
-            }
             symbol_stack.emplace_back(std::move(tkn));
             tt = pass->lex(tkn);
         } else {

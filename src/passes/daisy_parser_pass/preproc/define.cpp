@@ -213,7 +213,12 @@ void DaisyParserPass::defineBuiltinMacros() {
 void DaisyParserPass::expandMacro(const SymbolLoc& loc, const MacroDefinition& macro_def) {
     auto& in_ctx = getInputContext();
     const std::string_view id = macro_def.id;
-    MacroExpansion macro_exp{&macro_def, &in_ctx, loc};
+
+    auto& loc_ctx = newLocationContext(macro_def.loc.loc_ctx ? macro_def.loc.loc_ctx->file : nullptr, loc, &macro_def);
+    auto macro_exp_ctx = std::make_unique<MacroExpansionContext>(macro_def.text, &loc_ctx, &macro_def, &in_ctx, loc);
+
+    auto& macro_exp = macro_exp_ctx->macro_expansion_info;
+    macro_exp_ctx->macro_expansion = &macro_exp;
 
     auto macro_details = [id, &macro_def]() { logger::note(macro_def.loc).format("macro `{}` defined here", id); };
 
@@ -254,6 +259,7 @@ void DaisyParserPass::expandMacro(const SymbolLoc& loc, const MacroDefinition& m
 
         // Expand loc till closing bracket
         macro_exp.loc.last = text.pos;
+        loc_ctx.expansion.loc.last = text.pos;
 
         // Set text position next to ')'
         ++text.first, ++text.pos.col;
@@ -288,12 +294,6 @@ void DaisyParserPass::expandMacro(const SymbolLoc& loc, const MacroDefinition& m
     }
 
     // Push expansion text input context
-    auto macro_exp_ctx = std::make_unique<MacroExpansionContext>(
-        macro_def.text,
-        &newLocationContext(macro_def.loc.loc_ctx ? macro_def.loc.loc_ctx->file : nullptr,
-                            TextExpansion{macro_exp.loc, &macro_def}),
-        std::move(macro_exp));
-    macro_exp_ctx->macro_expansion = &macro_exp_ctx->macro_expansion_info;
     pushInputContext(std::move(macro_exp_ctx));
 }
 
