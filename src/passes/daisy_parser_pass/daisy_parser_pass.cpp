@@ -42,6 +42,7 @@ void DaisyParserPass::cleanup() {
     input_ctx_stack_.clear();
     lex_state_stack_.clear();
     if_section_stack_.clear();
+    input_strings_.clear();
 }
 
 PassResult DaisyParserPass::run(CompilationContext& ctx) {
@@ -67,7 +68,7 @@ PassResult DaisyParserPass::run(CompilationContext& ctx) {
     }
 
     // Create main source file input context
-    pushInputContext(std::make_unique<InputContext>(src_file->getText(), &newLocationContext(src_file, {})));
+    pushInputContext(std::make_unique<InputContext>(src_file->getText(), &newLocationContext(src_file)));
     lex_state_stack_.push_back(lex_detail::sc_initial);
 
     // Parse input file
@@ -120,9 +121,6 @@ PassResult DaisyParserPass::run(CompilationContext& ctx) {
                 } else {
                     logger::debugUnwind(la_tkn_.loc).format("token");
                 }
-            }
-            if (std::holds_alternative<std::string_view>(la_tkn_.val)) {
-                la_tkn_.val = std::string(std::get<std::string_view>(la_tkn_.val));
             }
             symbol_stack.emplace_back(std::move(la_tkn_));
             tt = lex(la_tkn_);
@@ -326,11 +324,12 @@ int DaisyParserPass::lex(SymbolInfo& tkn, bool* leading_ws) {
             case lex_detail::pat_esc_char: return static_cast<unsigned char>(lexeme[1]);
             case lex_detail::pat_concatenate: return parser_detail::tt_concatenate;
             case lex_detail::pat_sharp: {
-                if (!!(in_ctx->flags & InputContext::Flags::kPreprocDirective) || in_ctx->loc_ctx->expansion.macro_def) {
-                    return '#';
+                if (!(in_ctx->flags & InputContext::Flags::kPreprocDirective) && !in_ctx->loc_ctx->expansion.macro_def) {
+                    parsePreprocessorDirective();
+                    reset_token_loc(*(in_ctx = &getInputContext()));
+                    break;
                 }
-                parsePreprocessorDirective();
-                reset_token_loc(*(in_ctx = &getInputContext()));
+                return '#';
             } break;
             case lex_detail::pat_other_char: return static_cast<unsigned char>(lexeme[0]);
             default: return parser_detail::tt_end_of_file;

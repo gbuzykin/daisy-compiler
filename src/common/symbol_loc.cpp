@@ -1,5 +1,7 @@
 #include "common/symbol_loc.h"
 
+#include <cassert>
+
 using namespace daisy;
 
 SymbolLoc& SymbolLoc::operator+=(const SymbolLoc& l) {

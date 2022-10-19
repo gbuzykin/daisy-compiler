@@ -1,7 +1,6 @@
 #pragma once
 
-#include <cassert>
-#include <memory>
+#include <utility>
 
 namespace daisy {
 
@@ -39,7 +38,9 @@ struct TextExpansion {
 };
 
 struct LocationContext {
-    LocationContext(const InputFileInfo* fl, const TextExpansion& exp) : file(fl), expansion(exp) {}
+    template<typename... Args>
+    LocationContext(const InputFileInfo* fl, Args&&... expansion_args)
+        : file(fl), expansion{std::forward<Args>(expansion_args)...} {}
     const InputFileInfo* file;
     TextExpansion expansion;
 };
