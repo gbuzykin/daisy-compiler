@@ -285,7 +285,7 @@ int DaisyParserPass::lex(SymbolInfo& tkn, bool* leading_ws) {
                 }
                 if (!(in_ctx->flags & InputContext::Flags::kDisableMacroExpansion)) {
                     if (auto it = ctx_->macro_defs.find(id); it != ctx_->macro_defs.end()) {
-                        expandMacro(tkn.loc, it->second);
+                        expandMacro(tkn.loc, *it->second);
                         reset_token_loc(*(in_ctx = &getInputContext()));
                         break;
                     }
@@ -348,17 +348,17 @@ const InputFileInfo* DaisyParserPass::loadInputFile(std::string_view file_path) 
 
     std::string normal_path = path.generic_string();
     auto it = ctx_->input_files.find(normal_path);
-    if (it != ctx_->input_files.end()) { return &it->second; }
+    if (it != ctx_->input_files.end()) { return it->second.get(); }
 
     if (!std::filesystem::exists(path)) { return nullptr; }
 
     uxs::filebuf ifile(normal_path.c_str(), "r");
     if (!ifile) { return nullptr; }
 
-    auto& file_info = ctx_->input_files
-                          .emplace(std::piecewise_construct, std::forward_as_tuple(std::move(normal_path)),
-                                   std::forward_as_tuple(ctx_, std::string(file_path)))
-                          .first->second;
+    auto& file_info = *ctx_->input_files
+                           .emplace(std::move(normal_path),
+                                    std::make_unique<InputFileInfo>(ctx_, std::string(file_path)))
+                           .first->second;
 
     size_t file_sz = static_cast<size_t>(ifile.seek(0, uxs::seekdir::kEnd));
     file_info.text = std::make_unique<char[]>(file_sz);
