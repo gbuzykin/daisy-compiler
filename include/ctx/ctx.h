@@ -29,9 +29,10 @@ UXS_IMPLEMENT_BITWISE_OPS_FOR_ENUM(InputFileInfo::Flags, unsigned);
 
 struct MacroDefinition {
     enum class Type : unsigned { kUserDefined = 0, kBuiltIn };
-    Type type = Type::kUserDefined;
+    MacroDefinition(Type t, std::string_view i, bool v = false) : type(t), id(i), is_variadic(v) {}
+    Type type;
     std::string_view id;
-    bool is_variadic = false;
+    bool is_variadic;
     SymbolLoc loc;
     TextRange text;
     std::unordered_map<std::string_view, std::pair<unsigned, SymbolLoc>> formal_args;
@@ -47,9 +48,9 @@ struct CompilationContext {
     explicit CompilationContext(std::string fname) : file_name(std::move(fname)) {}
     std::string file_name;
     std::unique_ptr<ir::Namespace> global_namespace;
-    std::unordered_map<std::string, InputFileInfo> input_files;
+    std::unordered_map<std::string, std::unique_ptr<InputFileInfo>> input_files;
     std::vector<std::string_view> include_paths;
-    std::unordered_map<std::string_view, MacroDefinition> macro_defs;
+    std::unordered_map<std::string_view, std::unique_ptr<MacroDefinition>> macro_defs;
     std::forward_list<LocationContext> loc_ctx_list;
     mutable unsigned warning_count = 0;
     mutable unsigned error_count = 0;

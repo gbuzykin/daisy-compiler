@@ -24,9 +24,9 @@ struct SymbolLoc {
     SymbolLoc(const LocationContext* ctx, TextPos p) : loc_ctx(ctx), first(p), last(p) {}
     SymbolLoc(const LocationContext* ctx, TextPos f, TextPos l) : loc_ctx(ctx), first(f), last(l) {}
     SymbolLoc& operator+=(const SymbolLoc& l);
-    friend SymbolLoc operator+(const SymbolLoc& loc1, const SymbolLoc& loc2) {
-        SymbolLoc loc = loc1;
-        return loc += loc2;
+    friend SymbolLoc operator+(const SymbolLoc& l1, const SymbolLoc& l2) {
+        SymbolLoc l = l1;
+        return l += l2;
     }
     const LocationContext* loc_ctx = nullptr;
     TextPos first, last;
@@ -39,8 +39,8 @@ struct TextExpansion {
 
 struct LocationContext {
     template<typename... Args>
-    LocationContext(const InputFileInfo* fl, Args&&... expansion_args)
-        : file(fl), expansion{std::forward<Args>(expansion_args)...} {}
+    LocationContext(const InputFileInfo* f, Args&&... expansion_args)
+        : file(f), expansion{std::forward<Args>(expansion_args)...} {}
     const InputFileInfo* file;
     TextExpansion expansion;
 };

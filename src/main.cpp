@@ -87,9 +87,9 @@ int main(int argc, char** argv) {
             auto ctx = std::make_unique<CompilationContext>(file_name);
             ctx->include_paths = include_paths;
             for (const auto& [id, value] : macro_defs) {
-                auto& macro_def = ctx->macro_defs[id];
-                macro_def = MacroDefinition{MacroDefinition::Type::kUserDefined, id};
-                macro_def.text = TextRange{value.data(), value.data() + value.size()};
+                auto macro_def = std::make_unique<MacroDefinition>(MacroDefinition::Type::kUserDefined, id);
+                macro_def->text = TextRange{value.data(), value.data() + value.size()};
+                ctx->macro_defs[id] = std::move(macro_def);
             }
             PassResult result = PassManager::getInstance().run(*ctx);
             logger::info(file_name).format("warnings {}, errors {}", ctx->warning_count, ctx->error_count);

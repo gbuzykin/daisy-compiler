@@ -19,7 +19,8 @@ void parseDefineDirective(DaisyParserPass* pass, SymbolInfo& tkn) {
     }
 
     const auto id = std::get<std::string_view>(tkn.val);
-    MacroDefinition macro_def{MacroDefinition::Type::kUserDefined, id, false, tkn.loc};
+    auto macro_def = std::make_unique<MacroDefinition>(MacroDefinition::Type::kUserDefined, id);
+    macro_def->loc = tkn.loc;
 
     auto& in_ctx = pass->getInputContext();
     if (in_ctx.text.first != in_ctx.text.last && *in_ctx.text.first == '(') {  // Parse argument list
@@ -34,18 +35,18 @@ void parseDefineDirective(DaisyParserPass* pass, SymbolInfo& tkn) {
                     return;
                 }
             } else if (tt == parser_detail::tt_ellipsis) {
-                arg_id = kVaArgsId, macro_def.is_variadic = true;
+                arg_id = kVaArgsId, macro_def->is_variadic = true;
             } else {
                 logger::error(tkn.loc).format("expected macro argument identifier or `...`");
                 return;
             }
-            macro_def.formal_args.emplace(arg_id, std::make_pair(count++, tkn.loc));
+            macro_def->formal_args.emplace(arg_id, std::make_pair(count++, tkn.loc));
             if ((tt = pass->lex(tkn)) == parser_detail::tt_ellipsis) {
-                if (macro_def.is_variadic) {
+                if (macro_def->is_variadic) {
                     logger::error(tkn.loc).format("expected `,`");
                     return;
                 }
-                macro_def.is_variadic = true;
+                macro_def->is_variadic = true;
                 tt = pass->lex(tkn);
             }
             if (tt == ')') {
@@ -53,24 +54,25 @@ void parseDefineDirective(DaisyParserPass* pass, SymbolInfo& tkn) {
             } else if (tt != ',') {
                 logger::error(tkn.loc).format("expected `)` or `,`");
                 return;
-            } else if (macro_def.is_variadic) {
+            } else if (macro_def->is_variadic) {
                 logger::error(tkn.loc).format("expected `)`");
                 return;
             }
         }
     }
 
-    macro_def.text = in_ctx.text;
-    skipWhitespaces(macro_def.text);
-    macro_def.text.last = trimTrailingWhitespaces(macro_def.text.first, macro_def.text.last);
+    macro_def->text = in_ctx.text;
+    skipWhitespaces(macro_def->text);
+    macro_def->text.last = trimTrailingWhitespaces(macro_def->text.first, macro_def->text.last);
 
     auto& ctx = pass->getCompilationContext();
-    if (!ctx.macro_defs.insert_or_assign(id, std::move(macro_def)).second) {
-        if (macro_def.type != MacroDefinition::Type::kUserDefined) {
+    if (auto [it, success] = ctx.macro_defs.try_emplace(id, std::move(macro_def)); !success) {
+        if (it->second->type != MacroDefinition::Type::kUserDefined) {
             logger::warning(tkn.loc).format("builtin macro `{}` redefinition", id);
         } else {
             logger::warning(tkn.loc).format("macro `{}` redefinition", id);
         }
+        it->second = std::move(macro_def);
     }
 }
 
@@ -84,7 +86,7 @@ void parseUndefDirective(DaisyParserPass* pass, SymbolInfo& tkn) {
     const auto id = std::get<std::string_view>(tkn.val);
     auto it = ctx.macro_defs.find(id);
     if (it != ctx.macro_defs.end()) {
-        if (it->second.type != MacroDefinition::Type::kUserDefined) {
+        if (it->second->type != MacroDefinition::Type::kUserDefined) {
             logger::warning(tkn.loc).format("cannot undefine builtin macro `{}`", id);
         }
         ctx.macro_defs.erase(id);
@@ -206,7 +208,7 @@ bool DaisyParserPass::checkMacroExpansionForRecursion(std::string_view macro_id)
 void DaisyParserPass::defineBuiltinMacros() {
     for (unsigned n = 0; n < g_builtin_macro_impl.size(); ++n) {
         const auto& [id, is_variadic, impl_func] = g_builtin_macro_impl[n];
-        ctx_->macro_defs[id] = MacroDefinition{MacroDefinition::Type::kBuiltIn + n, id, is_variadic};
+        ctx_->macro_defs[id] = std::make_unique<MacroDefinition>(MacroDefinition::Type::kBuiltIn + n, id, is_variadic);
     }
 }
 
