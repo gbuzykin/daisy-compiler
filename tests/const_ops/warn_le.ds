@@ -1,0 +1,78 @@
+#if !(2678i32 < 99871i32)
+#error invalid result
+#endif
+#if !(2678u32 < 99871i32)
+#error invalid result
+#endif
+#if !(47i8 < 99871i32)
+#error invalid result
+#endif
+#if !(47u8 < 99871i32)
+#error invalid result
+#endif
+#if !(2678u32 < 99871u32)
+#error invalid result
+#endif
+#if !(47i8 < 99871u32)
+#error invalid result
+#endif
+#if !(47u8 < 99871u32)
+#error invalid result
+#endif
+#if -2678i32 < -99871i32
+#error invalid result
+#endif
+#if 4294964618u32 < -99871i32
+#error invalid result
+#endif
+#if -47i8 < -99871i32
+#error invalid result
+#endif
+#if 209u8 < -99871i32
+#error invalid result
+#endif
+#if 4294964618u32 < 4294867425u32
+#error invalid result
+#endif
+#if -47i8 < 4294867425u32
+#error invalid result
+#endif
+#if !(209u8 < 4294867425u32)
+#error invalid result
+#endif
+#if !(-2678i32 < 99871i32)
+#error invalid result
+#endif
+#if 4294964618u32 < 99871i32
+#error invalid result
+#endif
+#if !(-47i8 < 99871i32)
+#error invalid result
+#endif
+#if !(209u8 < 99871i32)
+#error invalid result
+#endif
+#if 4294964618u32 < 99871u32
+#error invalid result
+#endif
+#if -47i8 < 99871u32
+#error invalid result
+#endif
+#if !(209u8 < 99871u32)
+#error invalid result
+#endif
+#if 2678i32 < -99871i32
+#error invalid result
+#endif
+#if 47i8 < -99871i32
+#error invalid result
+#endif
+#if 47u8 < -99871i32
+#error invalid result
+#endif
+#if !(47i8 < 4294867425u32)
+#error invalid result
+#endif
+#if !(47u8 < 4294867425u32)
+#error invalid result
+#endif

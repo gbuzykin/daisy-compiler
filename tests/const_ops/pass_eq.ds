@@ -1,0 +1,24 @@
+#if 99871u32 != 99871i32
+#error invalid result
+#endif
+#if 47i8 != 47i32
+#error invalid result
+#endif
+#if 47u8 != 47i32
+#error invalid result
+#endif
+#if 47i8 != 47u32
+#error invalid result
+#endif
+#if 47u8 != 47u32
+#error invalid result
+#endif
+#if 4294867425u32 != -99871i32
+#error invalid result
+#endif
+#if -47i8 != -47i32
+#error invalid result
+#endif
+#if -47i8 != 4294967249u32
+#error invalid result
+#endif

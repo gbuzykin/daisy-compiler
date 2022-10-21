@@ -1,0 +1,4 @@
+const i8_max = 0x80i8; const u8_max = 0x100u8;
+const i16_max = 0x8000i16; const u16_max = 0x10000u16;
+const i32_max = 0x80000000i32; const u32_max = 0x100000000u32;
+const i_max = 0x8000000000000000i;

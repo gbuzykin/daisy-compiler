@@ -109,12 +109,12 @@ PassResult DaisyParserPass::run(CompilationContext& ctx) {
                     logger::debugUnwind(la_tkn_.loc)
                         .format("string: {}", uxs::make_quoted_text(std::get<std::string>(la_tkn_.val)));
                 } else if (tt == parser_detail::tt_int_literal) {
-                    if (std::get<IntegerConst>(la_tkn_.val).isSigned()) {
+                    if (std::get<ir::IntConst>(la_tkn_.val).isSigned()) {
                         logger::debugUnwind(la_tkn_.loc)
-                            .format("integer number: {}", std::get<IntegerConst>(la_tkn_.val).getValue<int64_t>());
+                            .format("integer number: {}", std::get<ir::IntConst>(la_tkn_.val).getValue<int64_t>());
                     } else {
                         logger::debugUnwind(la_tkn_.loc)
-                            .format("integer number: {}", std::get<IntegerConst>(la_tkn_.val).getValue<uint64_t>());
+                            .format("integer number: {}", std::get<ir::IntConst>(la_tkn_.val).getValue<uint64_t>());
                     }
                 } else if (tt == parser_detail::tt_real_literal) {
                     logger::debugUnwind(la_tkn_.loc).format("real number: {}", std::get<double>(la_tkn_.val));
@@ -257,12 +257,20 @@ int DaisyParserPass::lex(SymbolInfo& tkn, bool* leading_ws) {
             case lex_detail::pat_false_literal: tkn.val = false; return parser_detail::tt_bool_literal;
 
             // ------ numerical literals
+            case lex_detail::pat_bin_literal: {
+                tkn.val = ir::IntConst::fromString(2, tkn.loc, std::string_view(lexeme + 2, llen - 2));
+                return parser_detail::tt_int_literal;
+            } break;
+            case lex_detail::pat_oct_literal: {
+                tkn.val = ir::IntConst::fromString(8, tkn.loc, std::string_view(lexeme, llen));
+                return parser_detail::tt_int_literal;
+            } break;
             case lex_detail::pat_dec_literal: {
-                tkn.val = IntegerConst::fromString(10, tkn.loc, std::string_view(lexeme, llen));
+                tkn.val = ir::IntConst::fromString(10, tkn.loc, std::string_view(lexeme, llen));
                 return parser_detail::tt_int_literal;
             } break;
             case lex_detail::pat_hex_literal: {
-                tkn.val = IntegerConst::fromString(16, tkn.loc, std::string_view(lexeme + 2, llen - 2));
+                tkn.val = ir::IntConst::fromString(16, tkn.loc, std::string_view(lexeme + 2, llen - 2));
                 return parser_detail::tt_int_literal;
             } break;
             case lex_detail::pat_real_literal: {

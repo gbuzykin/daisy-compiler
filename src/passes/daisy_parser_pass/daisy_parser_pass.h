@@ -2,7 +2,7 @@
 
 #include "common/const_defs.h"
 #include "ctx/ctx.h"
-#include "ir/integer_const.h"
+#include "ir/int_const.h"
 #include "pass_manager.h"
 #include "uxs/stringcvt.h"
 
@@ -23,7 +23,7 @@ namespace parser_detail {
 
 namespace daisy {
 
-using SymbolVal = std::variant<bool, IntegerConst, double, std::string, std::string_view>;
+using SymbolVal = std::variant<bool, ir::IntConst, double, std::string, std::string_view>;
 
 struct SymbolInfo {
     SymbolVal val;

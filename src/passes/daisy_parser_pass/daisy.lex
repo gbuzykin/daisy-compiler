@@ -4,8 +4,10 @@ dig       [0-9]
 odig      [0-7]
 hdig      [0-9a-fA-F]
 letter    [a-zA-Z]
-dec       {dig}+
-hex       0(x|X){hdig}+
+bin       0b(0|1)+(_(0|1)+)*
+oct       0{odig}*(_{odig}+)*
+dec       [1-9]{dig}*(_{dig}+)*
+hex       0x{hdig}+(_{hdig}+)*
 itype     (i|u)(8|16|32|64)?
 real      (({dig}+(\.{dig}*)?)|(\.{dig}+))((e|E)(\+?|\-?){dig}+)?
 id        ({letter}|_)({letter}|{dig}|_)*
@@ -57,6 +59,8 @@ true_literal     "true"
 false_literal    "false"
 
 # Numerical literals
+bin_literal      {bin}{itype}?
+oct_literal      {oct}{itype}?
 dec_literal      {dec}{itype}?
 hex_literal      {hex}{itype}?
 real_literal     {real}

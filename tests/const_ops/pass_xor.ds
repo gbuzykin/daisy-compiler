@@ -1,0 +1,78 @@
+#if (2678i32 ^ 99871i32) != 101481i32
+#error invalid result
+#endif
+#if (2678u32 ^ 99871i32) != 101481u32
+#error invalid result
+#endif
+#if (47i8 ^ 99871i32) != 99888i32
+#error invalid result
+#endif
+#if (47u8 ^ 99871i32) != 99888i32
+#error invalid result
+#endif
+#if (2678u32 ^ 99871u32) != 101481u32
+#error invalid result
+#endif
+#if (47i8 ^ 99871u32) != 99888u32
+#error invalid result
+#endif
+#if (47u8 ^ 99871u32) != 99888u32
+#error invalid result
+#endif
+#if (-2678i32 ^ -99871i32) != 101483i32
+#error invalid result
+#endif
+#if (4294964618u32 ^ -99871i32) != 101483u32
+#error invalid result
+#endif
+#if (-47i8 ^ -99871i32) != 99888i32
+#error invalid result
+#endif
+#if (209u8 ^ -99871i32) != -100048i32
+#error invalid result
+#endif
+#if (4294964618u32 ^ 4294867425u32) != 101483u32
+#error invalid result
+#endif
+#if (-47i8 ^ 4294867425u32) != 99888u32
+#error invalid result
+#endif
+#if (209u8 ^ 4294867425u32) != 4294867248u32
+#error invalid result
+#endif
+#if (-2678i32 ^ 99871i32) != -101483i32
+#error invalid result
+#endif
+#if (4294964618u32 ^ 99871i32) != 4294865813u32
+#error invalid result
+#endif
+#if (-47i8 ^ 99871i32) != -99890i32
+#error invalid result
+#endif
+#if (209u8 ^ 99871i32) != 100046i32
+#error invalid result
+#endif
+#if (4294964618u32 ^ 99871u32) != 4294865813u32
+#error invalid result
+#endif
+#if (-47i8 ^ 99871u32) != 4294867406u32
+#error invalid result
+#endif
+#if (209u8 ^ 99871u32) != 100046u32
+#error invalid result
+#endif
+#if (2678i32 ^ -99871i32) != -101481i32
+#error invalid result
+#endif
+#if (47i8 ^ -99871i32) != -99890i32
+#error invalid result
+#endif
+#if (47u8 ^ -99871i32) != -99890i32
+#error invalid result
+#endif
+#if (47i8 ^ 4294867425u32) != 4294867406u32
+#error invalid result
+#endif
+#if (47u8 ^ 4294867425u32) != 4294867406u32
+#error invalid result
+#endif

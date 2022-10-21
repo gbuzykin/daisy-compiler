@@ -1,0 +1,34 @@
+./const_ops/warn_le.ds:4:15: warning: signed/unsigned mismatch
+ 4 | #if !(2678u32 < 99871i32)
+   |               ^
+./const_ops/warn_le.ds:10:12: warning: signed/unsigned mismatch
+ 10 | #if !(47u8 < 99871i32)
+    |            ^
+./const_ops/warn_le.ds:16:12: warning: signed/unsigned mismatch
+ 16 | #if !(47i8 < 99871u32)
+    |            ^
+./const_ops/warn_le.ds:25:19: warning: signed/unsigned mismatch
+ 25 | #if 4294964618u32 < -99871i32
+    |                   ^
+./const_ops/warn_le.ds:31:11: warning: signed/unsigned mismatch
+ 31 | #if 209u8 < -99871i32
+    |           ^
+./const_ops/warn_le.ds:37:11: warning: signed/unsigned mismatch
+ 37 | #if -47i8 < 4294867425u32
+    |           ^
+./const_ops/warn_le.ds:46:19: warning: signed/unsigned mismatch
+ 46 | #if 4294964618u32 < 99871i32
+    |                   ^
+./const_ops/warn_le.ds:52:13: warning: signed/unsigned mismatch
+ 52 | #if !(209u8 < 99871i32)
+    |             ^
+./const_ops/warn_le.ds:58:11: warning: signed/unsigned mismatch
+ 58 | #if -47i8 < 99871u32
+    |           ^
+./const_ops/warn_le.ds:70:10: warning: signed/unsigned mismatch
+ 70 | #if 47u8 < -99871i32
+    |          ^
+./const_ops/warn_le.ds:73:12: warning: signed/unsigned mismatch
+ 73 | #if !(47i8 < 4294867425u32)
+    |            ^
+./const_ops/warn_le.ds: info: warnings 11, errors 0
