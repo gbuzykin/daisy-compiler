@@ -5,7 +5,7 @@
 %token end_of_input
 %token bool_literal
 %token int_literal
-%token real_literal
+%token float_literal
 %token string_literal
 %token id
 %token ellipsis
@@ -157,7 +157,7 @@ expr : '-' expr %prec $unary
   | [id]
   | [bool_literal]
   | [int_literal]
-  | [real_literal]
+  | [float_literal]
   | string
   ;
 

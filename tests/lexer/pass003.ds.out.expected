@@ -22,7 +22,7 @@
 ./lexer/pass003.ds:1:28: debug: token
  1 | const a = 1223324; const b = 4.5656; const c = "Привет";
    |                            ^
-./lexer/pass003.ds:1:30: debug: real number: 4.5656
+./lexer/pass003.ds:1:30: debug: float number: 4.5656
  1 | const a = 1223324; const b = 4.5656; const c = "Привет";
    |                              ^~~~~~
 ./lexer/pass003.ds:1:36: debug: token

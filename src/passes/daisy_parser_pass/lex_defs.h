@@ -45,7 +45,7 @@ enum {
     pat_oct_literal,
     pat_dec_literal,
     pat_hex_literal,
-    pat_real_literal,
+    pat_float_literal,
     pat_id,
     pat_comment1,
     pat_comment2,
