@@ -18,23 +18,23 @@ bool evalCondition(DaisyParserPass* pass, SymbolInfo& tkn) {
 
     auto cast_to_bool = [](const auto& tkn) {
         if (std::holds_alternative<bool>(tkn.val)) { return std::get<bool>(tkn.val); }
-        return !std::get<IntegerConst>(tkn.val).isZero();
+        return !std::get<ir::IntConst>(tkn.val).isZero();
     };
 
     auto check_integer_type = [](const auto& tkn) {
-        if (std::holds_alternative<IntegerConst>(tkn.val)) { return true; }
+        if (std::holds_alternative<ir::IntConst>(tkn.val)) { return true; }
         logger::error(tkn.loc).format("expected integer expression");
         return false;
     };
 
     auto check_non_zero = [](const auto& tkn) {
-        if (!std::get<IntegerConst>(tkn.val).isZero()) { return true; }
+        if (!std::get<ir::IntConst>(tkn.val).isZero()) { return true; }
         logger::error(tkn.loc).format("integer division by zero");
         return false;
     };
 
     auto check_sign_mismatch = [](const auto* ss) {
-        if (std::get<IntegerConst>(ss[0].val).isSigned() != std::get<IntegerConst>(ss[2].val).isSigned()) {
+        if (std::get<ir::IntConst>(ss[0].val).isSigned() != std::get<ir::IntConst>(ss[2].val).isSigned()) {
             logger::warning(ss[1].loc).format("signed/unsigned mismatch");
         }
     };
@@ -54,7 +54,7 @@ bool evalCondition(DaisyParserPass* pass, SymbolInfo& tkn) {
             auto* ss = &*(symbol_stack.end() - rlen);
             if (act >= parser_detail::act_preproc_op_u_minus && act <= parser_detail::act_preproc_op_binary_not) {
                 if (!check_integer_type(ss[1])) { return true; }
-                const auto& operand = std::get<IntegerConst>(ss[1].val);
+                const auto& operand = std::get<ir::IntConst>(ss[1].val);
                 switch (act) {
                     case parser_detail::act_preproc_op_u_minus: ss[0].val = -operand; break;
                     case parser_detail::act_preproc_op_u_plus: ss[0].val = operand; break;
@@ -63,8 +63,8 @@ bool evalCondition(DaisyParserPass* pass, SymbolInfo& tkn) {
                 }
             } else if (act >= parser_detail::act_preproc_op_add && act <= parser_detail::act_preproc_op_gt) {
                 if (!check_integer_type(ss[0]) || !check_integer_type(ss[2])) { return true; }
-                const auto& operand1 = std::get<IntegerConst>(ss[0].val);
-                const auto& operand2 = std::get<IntegerConst>(ss[2].val);
+                const auto& operand1 = std::get<ir::IntConst>(ss[0].val);
+                const auto& operand2 = std::get<ir::IntConst>(ss[2].val);
                 switch (act) {
                     case parser_detail::act_preproc_op_add: ss[0].val = operand1 + operand2; break;
                     case parser_detail::act_preproc_op_sub: ss[0].val = operand1 - operand2; break;
@@ -113,8 +113,8 @@ bool evalCondition(DaisyParserPass* pass, SymbolInfo& tkn) {
                     } break;
                     case parser_detail::act_preproc_brackets: ss[0].val = std::move(ss[1].val); break;
                     case parser_detail::act_preproc_op_conditional: {
-                        ss[0].val = cast_to_bool(ss[0]) ? std::get<IntegerConst>(ss[2].val) :
-                                                          std::get<IntegerConst>(ss[4].val);
+                        ss[0].val = cast_to_bool(ss[0]) ? std::get<ir::IntConst>(ss[2].val) :
+                                                          std::get<ir::IntConst>(ss[4].val);
                     } break;
                     case parser_detail::act_preproc_operator_begin: {
                         in_ctx.flags |= InputContext::Flags::kDisableMacroExpansion;

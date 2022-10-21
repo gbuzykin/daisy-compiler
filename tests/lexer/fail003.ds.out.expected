@@ -1,0 +1,127 @@
+./lexer/fail003.ds:1:1: debug: token
+ 1 | const i8_max = 0x80i8; const u8_max = 0x100u8;
+   | ^~~~~
+./lexer/fail003.ds:1:7: debug: id: i8_max
+ 1 | const i8_max = 0x80i8; const u8_max = 0x100u8;
+   |       ^~~~~~
+./lexer/fail003.ds:1:14: debug: token
+ 1 | const i8_max = 0x80i8; const u8_max = 0x100u8;
+   |              ^
+./lexer/fail003.ds:1:16: error: integer literal is too large to be represented in `i8` type
+ 1 | const i8_max = 0x80i8; const u8_max = 0x100u8;
+   |                ^~~~~~
+./lexer/fail003.ds:1:16: debug: integer number: 0
+ 1 | const i8_max = 0x80i8; const u8_max = 0x100u8;
+   |                ^~~~~~
+./lexer/fail003.ds:1:22: debug: token
+ 1 | const i8_max = 0x80i8; const u8_max = 0x100u8;
+   |                      ^
+./lexer/fail003.ds:1:24: debug: token
+ 1 | const i8_max = 0x80i8; const u8_max = 0x100u8;
+   |                        ^~~~~
+./lexer/fail003.ds:1:30: debug: id: u8_max
+ 1 | const i8_max = 0x80i8; const u8_max = 0x100u8;
+   |                              ^~~~~~
+./lexer/fail003.ds:1:37: debug: token
+ 1 | const i8_max = 0x80i8; const u8_max = 0x100u8;
+   |                                     ^
+./lexer/fail003.ds:1:39: error: integer literal is too large to be represented in `u8` type
+ 1 | const i8_max = 0x80i8; const u8_max = 0x100u8;
+   |                                       ^~~~~~~
+./lexer/fail003.ds:1:39: debug: integer number: 0
+ 1 | const i8_max = 0x80i8; const u8_max = 0x100u8;
+   |                                       ^~~~~~~
+./lexer/fail003.ds:1:46: debug: token
+ 1 | const i8_max = 0x80i8; const u8_max = 0x100u8;
+   |                                              ^
+./lexer/fail003.ds:2:1: debug: token
+ 2 | const i16_max = 0x8000i16; const u16_max = 0x10000u16;
+   | ^~~~~
+./lexer/fail003.ds:2:7: debug: id: i16_max
+ 2 | const i16_max = 0x8000i16; const u16_max = 0x10000u16;
+   |       ^~~~~~~
+./lexer/fail003.ds:2:15: debug: token
+ 2 | const i16_max = 0x8000i16; const u16_max = 0x10000u16;
+   |               ^
+./lexer/fail003.ds:2:17: error: integer literal is too large to be represented in `i16` type
+ 2 | const i16_max = 0x8000i16; const u16_max = 0x10000u16;
+   |                 ^~~~~~~~~
+./lexer/fail003.ds:2:17: debug: integer number: 0
+ 2 | const i16_max = 0x8000i16; const u16_max = 0x10000u16;
+   |                 ^~~~~~~~~
+./lexer/fail003.ds:2:26: debug: token
+ 2 | const i16_max = 0x8000i16; const u16_max = 0x10000u16;
+   |                          ^
+./lexer/fail003.ds:2:28: debug: token
+ 2 | const i16_max = 0x8000i16; const u16_max = 0x10000u16;
+   |                            ^~~~~
+./lexer/fail003.ds:2:34: debug: id: u16_max
+ 2 | const i16_max = 0x8000i16; const u16_max = 0x10000u16;
+   |                                  ^~~~~~~
+./lexer/fail003.ds:2:42: debug: token
+ 2 | const i16_max = 0x8000i16; const u16_max = 0x10000u16;
+   |                                          ^
+./lexer/fail003.ds:2:44: error: integer literal is too large to be represented in `u16` type
+ 2 | const i16_max = 0x8000i16; const u16_max = 0x10000u16;
+   |                                            ^~~~~~~~~~
+./lexer/fail003.ds:2:44: debug: integer number: 0
+ 2 | const i16_max = 0x8000i16; const u16_max = 0x10000u16;
+   |                                            ^~~~~~~~~~
+./lexer/fail003.ds:2:54: debug: token
+ 2 | const i16_max = 0x8000i16; const u16_max = 0x10000u16;
+   |                                                      ^
+./lexer/fail003.ds:3:1: debug: token
+ 3 | const i32_max = 0x80000000i32; const u32_max = 0x100000000u32;
+   | ^~~~~
+./lexer/fail003.ds:3:7: debug: id: i32_max
+ 3 | const i32_max = 0x80000000i32; const u32_max = 0x100000000u32;
+   |       ^~~~~~~
+./lexer/fail003.ds:3:15: debug: token
+ 3 | const i32_max = 0x80000000i32; const u32_max = 0x100000000u32;
+   |               ^
+./lexer/fail003.ds:3:17: error: integer literal is too large to be represented in `i32` type
+ 3 | const i32_max = 0x80000000i32; const u32_max = 0x100000000u32;
+   |                 ^~~~~~~~~~~~~
+./lexer/fail003.ds:3:17: debug: integer number: 0
+ 3 | const i32_max = 0x80000000i32; const u32_max = 0x100000000u32;
+   |                 ^~~~~~~~~~~~~
+./lexer/fail003.ds:3:30: debug: token
+ 3 | const i32_max = 0x80000000i32; const u32_max = 0x100000000u32;
+   |                              ^
+./lexer/fail003.ds:3:32: debug: token
+ 3 | const i32_max = 0x80000000i32; const u32_max = 0x100000000u32;
+   |                                ^~~~~
+./lexer/fail003.ds:3:38: debug: id: u32_max
+ 3 | const i32_max = 0x80000000i32; const u32_max = 0x100000000u32;
+   |                                      ^~~~~~~
+./lexer/fail003.ds:3:46: debug: token
+ 3 | const i32_max = 0x80000000i32; const u32_max = 0x100000000u32;
+   |                                              ^
+./lexer/fail003.ds:3:48: error: integer literal is too large to be represented in `u32` type
+ 3 | const i32_max = 0x80000000i32; const u32_max = 0x100000000u32;
+   |                                                ^~~~~~~~~~~~~~
+./lexer/fail003.ds:3:48: debug: integer number: 0
+ 3 | const i32_max = 0x80000000i32; const u32_max = 0x100000000u32;
+   |                                                ^~~~~~~~~~~~~~
+./lexer/fail003.ds:3:62: debug: token
+ 3 | const i32_max = 0x80000000i32; const u32_max = 0x100000000u32;
+   |                                                              ^
+./lexer/fail003.ds:4:1: debug: token
+ 4 | const i_max = 0x8000000000000000i;
+   | ^~~~~
+./lexer/fail003.ds:4:7: debug: id: i_max
+ 4 | const i_max = 0x8000000000000000i;
+   |       ^~~~~
+./lexer/fail003.ds:4:13: debug: token
+ 4 | const i_max = 0x8000000000000000i;
+   |             ^
+./lexer/fail003.ds:4:15: error: integer literal is too large to be represented in a signed integer type
+ 4 | const i_max = 0x8000000000000000i;
+   |               ^~~~~~~~~~~~~~~~~~~
+./lexer/fail003.ds:4:15: debug: integer number: 0
+ 4 | const i_max = 0x8000000000000000i;
+   |               ^~~~~~~~~~~~~~~~~~~
+./lexer/fail003.ds:4:34: debug: token
+ 4 | const i_max = 0x8000000000000000i;
+   |                                  ^
+./lexer/fail003.ds: info: warnings 0, errors 7

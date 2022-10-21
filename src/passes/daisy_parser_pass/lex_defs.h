@@ -41,6 +41,8 @@ enum {
     pat_arrow,
     pat_true_literal,
     pat_false_literal,
+    pat_bin_literal,
+    pat_oct_literal,
     pat_dec_literal,
     pat_hex_literal,
     pat_real_literal,

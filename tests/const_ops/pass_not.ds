@@ -1,0 +1,12 @@
+#if ~2678i32 != -2679i32
+#error invalid result
+#endif
+#if ~2678u32 != 4294964617u32
+#error invalid result
+#endif
+#if ~-2678i32 != 2677i32
+#error invalid result
+#endif
+#if ~4294964618u32 != 2677u32
+#error invalid result
+#endif

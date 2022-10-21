@@ -1,0 +1,12 @@
+#if (2678i32 << 5) != 85696i32
+#error invalid result
+#endif
+#if (2678u32 << 5) != 85696u32
+#error invalid result
+#endif
+#if (-2678i32 << 5) != -85696i32
+#error invalid result
+#endif
+#if (4294964618u32 << 5) != 4294881600u32
+#error invalid result
+#endif

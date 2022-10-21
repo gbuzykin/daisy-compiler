@@ -1,5 +1,6 @@
 const i8_max = 0x7fi8; const u8_max = 0xffu8;
 const i16_max = 0x7fffi16; const u16_max = 0xffffu16;
 const i32_max = 0x7fffffffi32; const u32_max = 0xffffffffu32;
-const i32_max_1 = 0x7fffffff; const i32_max_2 = 0x7fffffffi; const u32_max_1 = 0xffffffffu;
 const i64_max = 0x7fffffffffffffffi64; const u64_max = 0xffffffffffffffffu64;
+const i_max = 0x7fffffffffffffffi; const u2_max = 0xffffffffffffffffu;
+const auto_max = 0xffffffffffffffff;
