@@ -7,7 +7,7 @@ enum {
     tt_end_of_input,
     tt_bool_literal,
     tt_int_literal,
-    tt_real_literal,
+    tt_float_literal,
     tt_string_literal,
     tt_id,
     tt_ellipsis,

@@ -9,7 +9,8 @@ oct       0{odig}*(_{odig}+)*
 dec       [1-9]{dig}*(_{dig}+)*
 hex       0x{hdig}+(_{hdig}+)*
 itype     (i|u)(8|16|32|64)?
-real      (({dig}+(\.{dig}*)?)|(\.{dig}+))((e|E)(\+?|\-?){dig}+)?
+ftype     f(32|64)?
+float     (({dig}+(\.{dig}*)?)|(\.{dig}+))((e|E)(\+?|\-?){dig}+)?
 id        ({letter}|_)({letter}|{dig}|_)*
 ws        [ \r\t]
 
@@ -63,7 +64,7 @@ bin_literal      {bin}{itype}?
 oct_literal      {oct}{itype}?
 dec_literal      {dec}{itype}?
 hex_literal      {hex}{itype}?
-real_literal     {real}
+float_literal    {float}{ftype}?|{dec}{ftype}
 
 # Identifier
 id               {id}

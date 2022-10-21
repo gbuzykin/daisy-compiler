@@ -116,8 +116,9 @@ PassResult DaisyParserPass::run(CompilationContext& ctx) {
                         logger::debugUnwind(la_tkn_.loc)
                             .format("integer number: {}", std::get<ir::IntConst>(la_tkn_.val).getValue<uint64_t>());
                     }
-                } else if (tt == parser_detail::tt_real_literal) {
-                    logger::debugUnwind(la_tkn_.loc).format("real number: {}", std::get<double>(la_tkn_.val));
+                } else if (tt == parser_detail::tt_float_literal) {
+                    logger::debugUnwind(la_tkn_.loc)
+                        .format("float number: {}", std::get<ir::FloatConst>(la_tkn_.val).getValue<double>());
                 } else {
                     logger::debugUnwind(la_tkn_.loc).format("token");
                 }
@@ -273,9 +274,9 @@ int DaisyParserPass::lex(SymbolInfo& tkn, bool* leading_ws) {
                 tkn.val = ir::IntConst::fromString(16, tkn.loc, std::string_view(lexeme + 2, llen - 2));
                 return parser_detail::tt_int_literal;
             } break;
-            case lex_detail::pat_real_literal: {
-                tkn.val = uxs::from_string<double>(std::string_view(lexeme, llen));
-                return parser_detail::tt_real_literal;
+            case lex_detail::pat_float_literal: {
+                tkn.val = ir::FloatConst::fromString(tkn.loc, std::string_view(lexeme, llen));
+                return parser_detail::tt_float_literal;
             } break;
 
             // ------ identifiers

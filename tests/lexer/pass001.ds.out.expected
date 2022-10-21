@@ -22,7 +22,7 @@
 ./lexer/pass001.ds:3:9: debug: token
  3 | const f = 4.5656; /*/ ///*** multiline
    |         ^
-./lexer/pass001.ds:3:11: debug: real number: 4.5656
+./lexer/pass001.ds:3:11: debug: float number: 4.5656
  3 | const f = 4.5656; /*/ ///*** multiline
    |           ^~~~~~
 ./lexer/pass001.ds:3:17: debug: token
