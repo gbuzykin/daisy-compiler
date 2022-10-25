@@ -74,7 +74,7 @@ struct MacroExpansionContext : public InputContext {
 class DaisyParserPass;
 
 struct ReduceActionHandler {
-    using FuncType = void (*)(DaisyParserPass*, SymbolInfo*);
+    using FuncType = void (*)(DaisyParserPass*, SymbolInfo*, SymbolLoc& loc);
     ReduceActionHandler(int id, FuncType fn) : next_avail(first_avail), act_id(id), func(fn) { first_avail = this; }
     static const ReduceActionHandler* first_avail;
     const ReduceActionHandler* next_avail;

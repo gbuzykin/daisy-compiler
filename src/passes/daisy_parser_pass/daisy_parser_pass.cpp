@@ -94,13 +94,13 @@ PassResult DaisyParserPass::run(CompilationContext& ctx) {
                 error_status_ = kAcceptToRestore;
             }
             if (rlen == 0) { symbol_stack.emplace_back().loc = la_tkn_.loc, ++rlen; }  // Empty production workaround
+            SymbolLoc loc = (symbol_stack.end() - rlen)->loc;
+            if (rlen > 1) { loc += (symbol_stack.end() - 1)->loc; }  // Default reduction location
             if (act > parser_detail::predef_act_reduce && reduce_action_handlers_[act]) {
-                reduce_action_handlers_[act](this, &*(symbol_stack.end() - rlen));
+                reduce_action_handlers_[act](this, &*(symbol_stack.end() - rlen), loc);
             }
-            if (rlen > 1) {
-                (symbol_stack.end() - rlen)->loc += (symbol_stack.end() - 1)->loc;  // Default reduction location
-                symbol_stack.erase(symbol_stack.end() - rlen + 1, symbol_stack.end());
-            }
+            (symbol_stack.end() - rlen)->loc = loc;
+            symbol_stack.erase(symbol_stack.end() - rlen + 1, symbol_stack.end());
         } else if (tt != parser_detail::tt_end_of_file) {
             if (logger::g_debug_level >= 3) {
                 if (tt == parser_detail::tt_id) {

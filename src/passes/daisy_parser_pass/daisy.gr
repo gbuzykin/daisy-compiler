@@ -78,7 +78,6 @@
 %action preproc_op_logical_or
 %action preproc_op_conditional
 %action preproc_brackets
-%action preproc_id_ref
 %action preproc_operator_begin
 %action preproc_operator_end
 
@@ -114,7 +113,6 @@ preproc_expr : '-' preproc_expr %prec $unary {preproc_op_u_minus}
   | preproc_expr [or] preproc_expr {preproc_op_logical_or}
   | preproc_expr '?' preproc_expr ':' preproc_expr {preproc_op_conditional}
   | '(' preproc_expr ')' {preproc_brackets}
-  | [id] {preproc_id_ref}
   | [id] {preproc_operator_begin} '(' [id] ')' {preproc_operator_end}
   | [bool_literal]
   | [int_literal]
