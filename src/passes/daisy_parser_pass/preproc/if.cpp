@@ -33,9 +33,9 @@ bool evalCondition(DaisyParserPass* pass, SymbolInfo& tkn) {
         return false;
     };
 
-    auto check_sign_mismatch = [](const auto* rhs) {
-        if (std::get<IntegerConst>(rhs[0].val).isSigned() != std::get<IntegerConst>(rhs[2].val).isSigned()) {
-            logger::warning(rhs[1].loc).format("signed/unsigned mismatch");
+    auto check_sign_mismatch = [](const auto* ss) {
+        if (std::get<IntegerConst>(ss[0].val).isSigned() != std::get<IntegerConst>(ss[2].val).isSigned()) {
+            logger::warning(ss[1].loc).format("signed/unsigned mismatch");
         }
     };
 
@@ -51,84 +51,83 @@ bool evalCondition(DaisyParserPass* pass, SymbolInfo& tkn) {
         } else if (act != parser_detail::predef_act_shift) {
             unsigned rlen = static_cast<unsigned>(1 + prev_parser_state_stack_top - parser_state_stack.curr());
             if (rlen == 0) { symbol_stack.emplace_back().loc = tkn.loc, ++rlen; }  // Empty production workaround
-            auto* rhs = &*(symbol_stack.end() - rlen);
+            auto* ss = &*(symbol_stack.end() - rlen);
             if (act >= parser_detail::act_preproc_op_u_minus && act <= parser_detail::act_preproc_op_binary_not) {
-                if (!check_integer_type(rhs[1])) { return true; }
-                const auto& operand = std::get<IntegerConst>(rhs[1].val);
+                if (!check_integer_type(ss[1])) { return true; }
+                const auto& operand = std::get<IntegerConst>(ss[1].val);
                 switch (act) {
-                    case parser_detail::act_preproc_op_u_minus: rhs[0].val = -operand; break;
-                    case parser_detail::act_preproc_op_u_plus: rhs[0].val = operand; break;
-                    case parser_detail::act_preproc_op_binary_not: rhs[0].val = ~operand; break;
+                    case parser_detail::act_preproc_op_u_minus: ss[0].val = -operand; break;
+                    case parser_detail::act_preproc_op_u_plus: ss[0].val = operand; break;
+                    case parser_detail::act_preproc_op_binary_not: ss[0].val = ~operand; break;
                     default: break;
                 }
             } else if (act >= parser_detail::act_preproc_op_add && act <= parser_detail::act_preproc_op_gt) {
-                if (!check_integer_type(rhs[0]) || !check_integer_type(rhs[2])) { return true; }
-                const auto& operand1 = std::get<IntegerConst>(rhs[0].val);
-                const auto& operand2 = std::get<IntegerConst>(rhs[2].val);
+                if (!check_integer_type(ss[0]) || !check_integer_type(ss[2])) { return true; }
+                const auto& operand1 = std::get<IntegerConst>(ss[0].val);
+                const auto& operand2 = std::get<IntegerConst>(ss[2].val);
                 switch (act) {
-                    case parser_detail::act_preproc_op_add: rhs[0].val = operand1 + operand2; break;
-                    case parser_detail::act_preproc_op_sub: rhs[0].val = operand1 - operand2; break;
-                    case parser_detail::act_preproc_op_mul: rhs[0].val = operand1 * operand2; break;
+                    case parser_detail::act_preproc_op_add: ss[0].val = operand1 + operand2; break;
+                    case parser_detail::act_preproc_op_sub: ss[0].val = operand1 - operand2; break;
+                    case parser_detail::act_preproc_op_mul: ss[0].val = operand1 * operand2; break;
                     case parser_detail::act_preproc_op_div: {
-                        if (!check_non_zero(rhs[2])) { return true; }
-                        rhs[0].val = operand1 / operand2;
+                        if (!check_non_zero(ss[2])) { return true; }
+                        ss[0].val = operand1 / operand2;
                     } break;
                     case parser_detail::act_preproc_op_mod: {
-                        if (!check_non_zero(rhs[2])) { return true; }
-                        rhs[0].val = operand1 % operand2;
+                        if (!check_non_zero(ss[2])) { return true; }
+                        ss[0].val = operand1 % operand2;
                     } break;
-                    case parser_detail::act_preproc_op_shl: rhs[0].val = operand1 << operand2; break;
-                    case parser_detail::act_preproc_op_shr: rhs[0].val = operand1 >> operand2; break;
-                    case parser_detail::act_preproc_op_binary_and: rhs[0].val = operand1 & operand2; break;
-                    case parser_detail::act_preproc_op_binary_or: rhs[0].val = operand1 | operand2; break;
-                    case parser_detail::act_preproc_op_binary_xor: rhs[0].val = operand1 ^ operand2; break;
-                    case parser_detail::act_preproc_op_eq: rhs[0].val = operand1 == operand2; break;
-                    case parser_detail::act_preproc_op_ne: rhs[0].val = operand1 != operand2; break;
+                    case parser_detail::act_preproc_op_shl: ss[0].val = operand1 << operand2; break;
+                    case parser_detail::act_preproc_op_shr: ss[0].val = operand1 >> operand2; break;
+                    case parser_detail::act_preproc_op_binary_and: ss[0].val = operand1 & operand2; break;
+                    case parser_detail::act_preproc_op_binary_or: ss[0].val = operand1 | operand2; break;
+                    case parser_detail::act_preproc_op_binary_xor: ss[0].val = operand1 ^ operand2; break;
+                    case parser_detail::act_preproc_op_eq: ss[0].val = operand1 == operand2; break;
+                    case parser_detail::act_preproc_op_ne: ss[0].val = operand1 != operand2; break;
                     case parser_detail::act_preproc_op_lt: {
-                        check_sign_mismatch(rhs);
-                        rhs[0].val = operand1 < operand2;
+                        check_sign_mismatch(ss);
+                        ss[0].val = operand1 < operand2;
                     } break;
                     case parser_detail::act_preproc_op_le: {
-                        check_sign_mismatch(rhs);
-                        rhs[0].val = operand1 <= operand2;
+                        check_sign_mismatch(ss);
+                        ss[0].val = operand1 <= operand2;
                     } break;
                     case parser_detail::act_preproc_op_ge: {
-                        check_sign_mismatch(rhs);
-                        rhs[0].val = operand1 >= operand2;
+                        check_sign_mismatch(ss);
+                        ss[0].val = operand1 >= operand2;
                     } break;
                     case parser_detail::act_preproc_op_gt: {
-                        check_sign_mismatch(rhs);
-                        rhs[0].val = operand1 > operand2;
+                        check_sign_mismatch(ss);
+                        ss[0].val = operand1 > operand2;
                     } break;
                     default: break;
                 }
             } else {
                 switch (act) {
-                    case parser_detail::act_preproc_op_logical_not: rhs[0].val = !cast_to_bool(rhs[1]); break;
+                    case parser_detail::act_preproc_op_logical_not: ss[0].val = !cast_to_bool(ss[1]); break;
                     case parser_detail::act_preproc_op_logical_and: {
-                        rhs[0].val = cast_to_bool(rhs[0]) && cast_to_bool(rhs[2]);
+                        ss[0].val = cast_to_bool(ss[0]) && cast_to_bool(ss[2]);
                     } break;
                     case parser_detail::act_preproc_op_logical_or: {
-                        rhs[0].val = cast_to_bool(rhs[0]) || cast_to_bool(rhs[2]);
+                        ss[0].val = cast_to_bool(ss[0]) || cast_to_bool(ss[2]);
                     } break;
-                    case parser_detail::act_preproc_brackets: rhs[0].val = rhs[1].val; break;
-                    case parser_detail::act_preproc_id_ref: rhs[0].val = IntegerConst(IntegerType::i32, 0); break;
+                    case parser_detail::act_preproc_brackets: ss[0].val = std::move(ss[1].val); break;
                     case parser_detail::act_preproc_op_conditional: {
-                        rhs[0].val = cast_to_bool(rhs[0]) ? std::get<IntegerConst>(rhs[2].val) :
-                                                            std::get<IntegerConst>(rhs[4].val);
+                        ss[0].val = cast_to_bool(ss[0]) ? std::get<IntegerConst>(ss[2].val) :
+                                                          std::get<IntegerConst>(ss[4].val);
                     } break;
                     case parser_detail::act_preproc_operator_begin: {
                         in_ctx.flags |= InputContext::Flags::kDisableMacroExpansion;
                     } break;
                     case parser_detail::act_preproc_operator_end: {
                         in_ctx.flags &= ~InputContext::Flags::kDisableMacroExpansion;
-                        const auto id = std::get<std::string_view>(rhs[0].val);
+                        const auto id = std::get<std::string_view>(ss[0].val);
                         if (id == "defined") {
-                            const auto macro_id = std::get<std::string_view>(rhs[3].val);
+                            const auto macro_id = std::get<std::string_view>(ss[3].val);
                             const auto& ctx = pass->getCompilationContext();
-                            rhs[0].val = ctx.macro_defs.find(macro_id) != ctx.macro_defs.end();
+                            ss[0].val = ctx.macro_defs.find(macro_id) != ctx.macro_defs.end();
                         } else {
-                            logger::error(rhs[0].loc).format("unknown preprocessor operator");
+                            logger::error(ss[0].loc).format("unknown preprocessor operator");
                             return true;
                         }
                     } break;

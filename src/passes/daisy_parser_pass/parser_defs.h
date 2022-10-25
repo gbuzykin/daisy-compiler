@@ -66,7 +66,6 @@ enum {
     act_preproc_op_logical_or,
     act_preproc_op_conditional,
     act_preproc_brackets,
-    act_preproc_id_ref,
     act_preproc_operator_begin,
     act_preproc_operator_end,
     act_begin_namespace,
