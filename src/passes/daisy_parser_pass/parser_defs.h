@@ -42,6 +42,7 @@ enum {
     predef_act_reduce = 1,
     act_begin_namespace,
     act_end_namespace,
+    act_define_const_value,
     act_concatenate_string_const,
     act_relative_name,
     act_absolute_name,
