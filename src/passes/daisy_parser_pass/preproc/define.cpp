@@ -19,6 +19,11 @@ void parseDefineDirective(DaisyParserPass* pass, SymbolInfo& tkn) {
     }
 
     const auto id = std::get<std::string_view>(tkn.val);
+    if (pass->isKeyword(id)) {
+        logger::error(tkn.loc).format("keyword `{}` cannot be used as macro identifier", id);
+        return;
+    }
+
     auto macro_def = std::make_unique<MacroDefinition>(MacroDefinition::Type::kUserDefined, id);
     macro_def->loc = tkn.loc;
 
@@ -30,7 +35,10 @@ void parseDefineDirective(DaisyParserPass* pass, SymbolInfo& tkn) {
             std::string_view arg_id;
             if (tt = pass->lex(tkn); tt == parser_detail::tt_id) {
                 arg_id = std::get<std::string_view>(tkn.val);
-                if (arg_id == kVaArgsId) {  // variable argument identifier
+                if (pass->isKeyword(arg_id)) {  // is a keyword
+                    logger::error(tkn.loc).format("keyword `{}` cannot be used as macro argument identifier", arg_id);
+                    return;
+                } else if (arg_id == kVaArgsId) {  // variable argument identifier
                     logger::error(tkn.loc).format("identifier `{}` is reserved for variable argument", arg_id);
                     return;
                 }

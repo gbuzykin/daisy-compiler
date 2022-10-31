@@ -109,6 +109,7 @@ class DaisyParserPass : public Pass {
     int lex(SymbolInfo& tkn, bool* leading_ws = nullptr);
     static int parse(int tt, int* sptr0, int** p_sptr, int rise_error);
     const InputFileInfo* loadInputFile(std::string_view file_path);
+    bool isKeyword(std::string_view id) const { return keywords_.find(id) != keywords_.end(); }
 
     IfSectionState* getIfSection() { return !if_section_stack_.empty() ? &if_section_stack_.front() : nullptr; }
     IfSectionState& pushIfSection(const SymbolLoc& loc) { return if_section_stack_.emplace_front(IfSectionState{loc}); }

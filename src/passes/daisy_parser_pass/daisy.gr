@@ -36,6 +36,11 @@
 # Keywords
 %token namespace
 %token const
+%token let
+%token if
+%token else
+%token loop
+%token while
 
 # Operator precedence
 %right '?' ':'
@@ -92,6 +97,12 @@
 %action expr_name_ref
 
 %action define_const
+%action define_variable
+%action define_variable_default
+
+%action begin_block_expr
+%action push_expr_result
+%action discard_expr_result
 
 # --------------------------------------------
 # Preprocessor actions
@@ -146,10 +157,59 @@ const_decl_list : const_def
 
 const_def : [id] optional_type_spec '=' expr {define_const} ;
 
-type_spec : name_spec;
+var_decl_list : var_def
+  | var_decl_list ',' var_def
+  ;
+
+var_def : [id] optional_type_spec '=' expr {define_variable}
+  | [id] ':' type_spec {define_variable_default}
+  ;
 
 optional_type_spec : ':' type_spec
   | #empty
+  ;
+
+type_spec : name_spec ;
+
+# -------------------------------------------------------------------------------------
+# Complex expressions with blocks
+block_expr : '{' {begin_block_expr} statement_list optional_expr '}' {end_block} ;
+
+if_expr : [if] if_condition block_expr
+  | [if] if_condition block_expr [else] if_or_block_expr
+  ;
+
+if_condition : expr
+  | $error
+  ;
+
+if_or_block_expr : if_expr
+  | block_expr
+  ;
+
+loop_expr : [loop] block_expr
+  | [while] if_condition block_expr
+  ;
+
+statement_list : statement_list statement
+  | #empty
+  ;
+
+optional_expr : expr {push_expr_result}
+  | $error
+  | #empty
+  ;
+
+complex_expr : block_expr
+  | if_expr
+  | loop_expr
+  ;
+
+statement : expr ';' {discard_expr_result}
+  | [const] const_decl_list ';'
+  | [let] var_decl_list ';'
+  | $error ';'
+  | ';'
   ;
 
 # -------------------------------------------------------------------------------------
@@ -180,6 +240,7 @@ expr : '-' expr %prec $unary {expr_op_u_minus}
   | '(' expr ')' {expr_brackets}
   | name_spec {expr_name_ref}
   | const_literal
+  | complex_expr
   ;
 
 # -------------------------------------------------------------------------------------
