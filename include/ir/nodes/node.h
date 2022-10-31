@@ -79,6 +79,8 @@ class Node : public util::rtti_mixin<Node> {
     Ty& pushChildBack(std::unique_ptr<Ty> node) {
         return insertChild(children_.end(), std::move(node));
     }
+
+    std::unique_ptr<Node> extract(Node& node) { return children_.extract(children_.to_iterator(node)); }
 };
 
 }  // namespace ir

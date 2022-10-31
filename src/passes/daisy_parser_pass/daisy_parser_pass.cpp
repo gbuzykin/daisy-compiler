@@ -26,6 +26,11 @@ void DaisyParserPass::configure() {
     keywords_.insert({
         {"namespace", parser_detail::tt_namespace},
         {"const", parser_detail::tt_const},
+        {"let", parser_detail::tt_let},
+        {"if", parser_detail::tt_if},
+        {"else", parser_detail::tt_else},
+        {"loop", parser_detail::tt_loop},
+        {"while", parser_detail::tt_while},
     });
 
     reduce_action_handlers_.fill(nullptr);
@@ -280,7 +285,6 @@ int DaisyParserPass::lex(SymbolInfo& tkn, bool* leading_ws) {
             // ------ identifiers
             case lex_detail::pat_id: {
                 auto id = std::string_view(lexeme, llen);
-                if (auto it = keywords_.find(id); it != keywords_.end()) { return it->second; }
                 if (const auto* macro_exp = in_ctx->macro_expansion) {
                     assert(macro_exp->macro_def);
                     const auto& macro_def = *macro_exp->macro_def;
@@ -296,6 +300,9 @@ int DaisyParserPass::lex(SymbolInfo& tkn, bool* leading_ws) {
                         reset_token_loc(*(in_ctx = &getInputContext()));
                         break;
                     }
+                }
+                if (!(in_ctx->flags & InputContext::Flags::kPreprocDirective)) {
+                    if (auto it = keywords_.find(id); it != keywords_.end()) { return it->second; }
                 }
                 tkn.val = id;
                 return parser_detail::tt_id;
