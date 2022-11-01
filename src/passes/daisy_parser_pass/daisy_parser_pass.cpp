@@ -27,6 +27,7 @@ void DaisyParserPass::configure() {
         {"namespace", parser_detail::tt_namespace},
         {"const", parser_detail::tt_const},
         {"let", parser_detail::tt_let},
+        {"func", parser_detail::tt_func},
         {"if", parser_detail::tt_if},
         {"else", parser_detail::tt_else},
         {"loop", parser_detail::tt_loop},
@@ -136,6 +137,7 @@ PassResult DaisyParserPass::run(CompilationContext& ctx) {
         }
     }
 
+    assert(ctx.error_count || ir_node_stack_.size() == 1);
     return ctx.error_count == 0 ? PassResult::kSuccess : PassResult::kError;
 }
 

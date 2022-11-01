@@ -37,6 +37,7 @@
 %token namespace
 %token const
 %token let
+%token func
 %token if
 %token else
 %token loop
@@ -109,6 +110,11 @@
 %action loop_expr
 %action loop_with_else_expr
 
+%action begin_func_proto
+%action end_func_decl
+%action end_func_def
+%action add_func_formal_arg
+
 # --------------------------------------------
 # Preprocessor actions
 %action preproc_op_u_minus
@@ -149,6 +155,8 @@ unit_contents : unit_contents unit_item
 
 unit_item : [namespace] [id] '{' {begin_namespace} unit_contents '}' {end_block}
   | [const] const_decl_list ';'
+  | [func] func_proto ';' {end_func_decl}
+  | [func] func_proto block_expr {end_func_def}
   | $error ';'
   | ';'
   ;
@@ -175,6 +183,22 @@ optional_type_spec : ':' type_spec
   ;
 
 type_spec : name_spec ;
+
+func_proto : [id] '(' {begin_func_proto} optional_func_arg_list ')' optional_ret_type_spec ;
+
+optional_ret_type_spec : [arrow] type_spec
+  | #empty
+  ;
+
+optional_func_arg_list : func_arg_list
+  | #empty
+  ;
+
+func_arg_list : func_arg
+  | func_arg_list ',' func_arg
+  ;
+
+func_arg : [id] ':' type_spec {add_func_formal_arg} ;
 
 # -------------------------------------------------------------------------------------
 # Complex expressions with blocks
