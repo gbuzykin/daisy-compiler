@@ -1,11 +1,11 @@
 #include "../daisy_parser_pass.h"
 #include "ir/nodes/bool_const_node.h"
 #include "ir/nodes/float_const_node.h"
+#include "ir/nodes/if_node.h"
 #include "ir/nodes/int_const_node.h"
 #include "ir/nodes/name_ref_node.h"
 #include "ir/nodes/op_node.h"
 #include "ir/nodes/string_const_node.h"
-#include "ir/nodes/ternary_op_node.h"
 
 using namespace daisy;
 
@@ -162,7 +162,7 @@ void makeLogicalOrNode(DaisyParserPass* pass, SymbolInfo* ss, SymbolLoc& loc) {
 }
 
 void makeConditionalNode(DaisyParserPass* pass, SymbolInfo* ss, SymbolLoc& loc) {
-    auto node = std::make_unique<ir::TernaryOpNode>(loc, ss[1].loc, ss[3].loc);
+    auto node = std::make_unique<ir::IfNode>(loc, ss[1].loc, ss[3].loc);
     node->pushChildBack(std::move(std::get<std::unique_ptr<ir::Node>>(ss[0].val)));
     node->pushChildBack(std::move(std::get<std::unique_ptr<ir::Node>>(ss[2].val)));
     node->pushChildBack(std::move(std::get<std::unique_ptr<ir::Node>>(ss[4].val)));
