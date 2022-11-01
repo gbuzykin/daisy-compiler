@@ -103,6 +103,11 @@
 %action begin_block_expr
 %action push_expr_result
 %action discard_expr_result
+%action if_expr
+%action if_else_expr
+%action endless_loop_expr
+%action loop_expr
+%action loop_with_else_expr
 
 # --------------------------------------------
 # Preprocessor actions
@@ -175,8 +180,8 @@ type_spec : name_spec ;
 # Complex expressions with blocks
 block_expr : '{' {begin_block_expr} statement_list optional_expr '}' {end_block} ;
 
-if_expr : [if] if_condition block_expr
-  | [if] if_condition block_expr [else] if_or_block_expr
+if_expr : [if] if_condition block_expr {if_expr}
+  | [if] if_condition block_expr [else] if_or_block_expr {if_else_expr}
   ;
 
 if_condition : expr
@@ -187,8 +192,9 @@ if_or_block_expr : if_expr
   | block_expr
   ;
 
-loop_expr : [loop] block_expr
-  | [while] if_condition block_expr
+loop_expr : [loop] block_expr {endless_loop_expr}
+  | [while] if_condition block_expr {loop_expr}
+  | [while] if_condition block_expr [else] block_expr {loop_with_else_expr}
   ;
 
 statement_list : statement_list statement
