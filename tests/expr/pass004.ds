@@ -1,0 +1,7 @@
+namespace std {
+
+func f (x : int, y : int) -> int {
+  let m = while x < y {}; m
+}
+
+}

@@ -1,0 +1,10 @@
+./expr/pass004.ds:3:6: debug: defining function `f`
+ 3 | func f (x : int, y : int) -> int {
+   |      ^
+./expr/pass004.ds:4:7: debug: defining variable `m`
+ 4 |   let m = while x < y {}; m
+   |       ^
+./expr/pass004.ds:3:1: debug: function `f` definition
+ 3 | func f (x : int, y : int) -> int {
+   | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+./expr/pass004.ds: info: warnings 0, errors 0

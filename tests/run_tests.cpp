@@ -73,8 +73,14 @@ int main(int argc, char** argv) {
 
         size_t total_test_count = test_lst.size(), passed_test_count = 0;
         for (const auto& path : test_lst) {
+            std::string opts;
+            if (std::ifstream fopts((std::filesystem::path(path).remove_filename() / "opts.conf").string()); fopts) {
+                std::getline(fopts, opts);
+            }
+
             std::cout << path << ": " << std::flush;
-            const int result = std::system((compiler_path.string() + " -d3 " + path + " 2>" + path + ".out").c_str());
+            const int result = std::system(
+                (compiler_path.string() + " " + opts + " " + path + " 2>" + path + ".out").c_str());
             const bool must_fail = path.find("fail") != std::string::npos;
             const bool has_warn = path.find("warn") != std::string::npos;
             try {
