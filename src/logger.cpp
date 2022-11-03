@@ -105,18 +105,12 @@ void printMessageImpl(MsgType type, const SymbolLoc& loc, std::string_view msg) 
 }  // namespace
 
 void LoggerSimple::printMessage(std::string_view msg) {
-    if (getType() >= MsgType::kInfo + (g_debug_level - 1)) { return; }
+    if (getType() >= MsgType::kInfo + g_debug_level) { return; }
     printMessageImpl(getType(), header_, msg);
 }
 
 void LoggerExtended::printMessage(std::string_view msg) {
-    if (getType() >= MsgType::kInfo + (g_debug_level - 1)) { return; }
-    assert(loc_.loc_ctx);
-    printMessageImpl(getType(), loc_, msg);
-}
-
-void LoggerExtendedUnwind::printMessage(std::string_view msg) {
-    if (getType() >= MsgType::kInfo + (g_debug_level - 1)) { return; }
+    if (getType() >= MsgType::kInfo + g_debug_level) { return; }
 
     // Unwind location stack
     std::vector<const SymbolLoc*> loc_stack;
@@ -137,19 +131,24 @@ void LoggerExtendedUnwind::printMessage(std::string_view msg) {
     auto it = loc_stack.rbegin();
     while (it != loc_stack.rend() - 1 && !(*(it + 1))->loc_ctx->expansion.macro_def) {
         assert((*it)->loc_ctx->file);
-        uxs::fprintln(uxs::stdbuf::log, "In file included from {}:{}", (*it)->loc_ctx->file->file_name, (*it)->first.ln);
+        if (print_ext_loc_info_) {
+            uxs::fprintln(uxs::stdbuf::log, "In file included from {}:{}", (*it)->loc_ctx->file->file_name,
+                          (*it)->first.ln);
+        }
         ++it;
     }
 
     // Print main message
     printMessageImpl(getType(), **it, msg);
 
-    // Print macro expansion sequence
-    while (++it != loc_stack.rend()) {
-        const auto* loc_ctx = (*it)->loc_ctx;
-        if (!loc_ctx->file) { break; }
-        if (const auto* macro_def = loc_ctx->expansion.macro_def; macro_def) {
-            printMessageImpl(MsgType::kNote, **it, uxs::format("expanded from macro `{}`", macro_def->id));
+    if (print_ext_loc_info_) {
+        // Print macro expansion sequence
+        while (++it != loc_stack.rend()) {
+            const auto* loc_ctx = (*it)->loc_ctx;
+            if (!loc_ctx->file) { break; }
+            if (const auto* macro_def = loc_ctx->expansion.macro_def; macro_def) {
+                printMessageImpl(MsgType::kNote, **it, uxs::format("expanded from macro `{}`", macro_def->id));
+            }
         }
     }
 }

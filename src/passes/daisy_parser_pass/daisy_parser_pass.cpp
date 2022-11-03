@@ -103,23 +103,23 @@ PassResult DaisyParserPass::run(CompilationContext& ctx) {
         } else if (tt != parser_detail::tt_end_of_file) {
             if (logger::g_debug_level >= 3) {
                 if (tt == parser_detail::tt_id) {
-                    logger::debugUnwind(la_tkn_.loc).format("id: {}", std::get<std::string_view>(la_tkn_.val));
+                    logger::debug(la_tkn_.loc, true).format("id: {}", std::get<std::string_view>(la_tkn_.val));
                 } else if (tt == parser_detail::tt_string_literal) {
-                    logger::debugUnwind(la_tkn_.loc)
+                    logger::debug(la_tkn_.loc, true)
                         .format("string: {}", uxs::make_quoted_text(std::get<std::string>(la_tkn_.val)));
                 } else if (tt == parser_detail::tt_int_literal) {
                     if (std::get<ir::IntConst>(la_tkn_.val).isSigned()) {
-                        logger::debugUnwind(la_tkn_.loc)
+                        logger::debug(la_tkn_.loc, true)
                             .format("integer number: {}", std::get<ir::IntConst>(la_tkn_.val).getValue<int64_t>());
                     } else {
-                        logger::debugUnwind(la_tkn_.loc)
+                        logger::debug(la_tkn_.loc, true)
                             .format("integer number: {}", std::get<ir::IntConst>(la_tkn_.val).getValue<uint64_t>());
                     }
                 } else if (tt == parser_detail::tt_float_literal) {
-                    logger::debugUnwind(la_tkn_.loc)
+                    logger::debug(la_tkn_.loc, true)
                         .format("float number: {}", std::get<ir::FloatConst>(la_tkn_.val).getValue<double>());
                 } else {
-                    logger::debugUnwind(la_tkn_.loc).format("token");
+                    logger::debug(la_tkn_.loc, true).format("token");
                 }
             }
             symbol_stack.emplace_back(std::move(la_tkn_));

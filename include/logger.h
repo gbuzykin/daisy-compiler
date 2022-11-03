@@ -50,22 +50,14 @@ class LoggerSimple : public Logger<LoggerSimple> {
 
 class LoggerExtended : public Logger<LoggerExtended> {
  public:
-    LoggerExtended(MsgType type, const SymbolLoc& loc) : Logger<LoggerExtended>(type), loc_(loc) {}
+    LoggerExtended(MsgType type, const SymbolLoc& loc, bool ext_loc_info = false)
+        : Logger<LoggerExtended>(type), loc_(loc), print_ext_loc_info_(ext_loc_info) {}
     ~LoggerExtended() { printMessage(getMessage()); }
     void printMessage(std::string_view msg);
 
  private:
     const SymbolLoc& loc_;
-};
-
-class LoggerExtendedUnwind : public Logger<LoggerExtendedUnwind> {
- public:
-    LoggerExtendedUnwind(MsgType type, const SymbolLoc& loc) : Logger<LoggerExtendedUnwind>(type), loc_(loc) {}
-    ~LoggerExtendedUnwind() { printMessage(getMessage()); }
-    void printMessage(std::string_view msg);
-
- private:
-    const SymbolLoc& loc_;
+    bool print_ext_loc_info_;
 };
 
 inline LoggerSimple debug() { return LoggerSimple(MsgType::kDebug); }
@@ -82,13 +74,18 @@ inline LoggerSimple warning(std::string_view hdr) { return LoggerSimple(MsgType:
 inline LoggerSimple error(std::string_view hdr) { return LoggerSimple(MsgType::kError, hdr); }
 inline LoggerSimple fatal(std::string_view hdr) { return LoggerSimple(MsgType::kFatal, hdr); }
 
-inline LoggerExtended debug(const SymbolLoc& l) { return LoggerExtended(MsgType::kDebug, l); }
-inline LoggerExtendedUnwind debugUnwind(const SymbolLoc& l) { return LoggerExtendedUnwind(MsgType::kDebug, l); }
-inline LoggerExtended info(const SymbolLoc& l) { return LoggerExtended(MsgType::kInfo, l); }
-inline LoggerExtended note(const SymbolLoc& l) { return LoggerExtended(MsgType::kNote, l); }
-inline LoggerExtendedUnwind warning(const SymbolLoc& l) { return LoggerExtendedUnwind(MsgType::kWarning, l); }
-inline LoggerExtendedUnwind error(const SymbolLoc& l) { return LoggerExtendedUnwind(MsgType::kError, l); }
-inline LoggerExtendedUnwind fatal(const SymbolLoc& l) { return LoggerExtendedUnwind(MsgType::kFatal, l); }
+inline LoggerExtended debug(const SymbolLoc& l, bool ext_loc_info = false) {
+    return LoggerExtended(MsgType::kDebug, l, ext_loc_info);
+}
+inline LoggerExtended info(const SymbolLoc& l, bool ext_loc_info = false) {
+    return LoggerExtended(MsgType::kInfo, l, ext_loc_info);
+}
+inline LoggerExtended note(const SymbolLoc& l, bool ext_loc_info = false) {
+    return LoggerExtended(MsgType::kNote, l, ext_loc_info);
+}
+inline LoggerExtended warning(const SymbolLoc& l) { return LoggerExtended(MsgType::kWarning, l, true); }
+inline LoggerExtended error(const SymbolLoc& l) { return LoggerExtended(MsgType::kError, l, true); }
+inline LoggerExtended fatal(const SymbolLoc& l) { return LoggerExtended(MsgType::kFatal, l, true); }
 
 }  // namespace logger
 
