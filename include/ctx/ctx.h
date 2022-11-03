@@ -51,6 +51,7 @@ struct CompilationContext {
     std::unordered_map<std::string, std::unique_ptr<InputFileInfo>> input_files;
     std::vector<std::string_view> include_paths;
     std::unordered_map<std::string_view, std::unique_ptr<MacroDefinition>> macro_defs;
+    std::forward_list<std::string> input_strings;
     std::forward_list<LocationContext> loc_ctx_list;
     mutable unsigned warning_count = 0;
     mutable unsigned error_count = 0;

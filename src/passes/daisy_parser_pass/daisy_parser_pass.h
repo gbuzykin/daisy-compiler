@@ -130,7 +130,7 @@ class DaisyParserPass : public Pass {
     }
 
     InputContext& pushStringInputContext(std::string str, const MacroExpansion& macro_exp) {
-        auto& text = input_strings_.emplace_front(std::move(str));
+        auto& text = ctx_->input_strings.emplace_front(std::move(str));
         return pushInputContext(
             std::make_unique<InputContext>(TextRange{text.data(), text.data() + text.size()},
                                            &newLocationContext(nullptr, macro_exp.loc, macro_exp.macro_def)));
@@ -168,7 +168,6 @@ class DaisyParserPass : public Pass {
     std::forward_list<std::unique_ptr<InputContext>> input_ctx_stack_;
     uxs::basic_inline_dynbuffer<int, 1> lex_state_stack_;
     std::forward_list<IfSectionState> if_section_stack_;
-    std::forward_list<std::string> input_strings_;
 
     ir::Node* ir_node_ = nullptr;
 
