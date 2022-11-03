@@ -24,8 +24,8 @@ DAISY_ADD_PASS(DaisyParserPass);
 
 void DaisyParserPass::configure() {
     keywords_.insert({
-        {"const", parser_detail::tt_const},
         {"namespace", parser_detail::tt_namespace},
+        {"const", parser_detail::tt_const},
     });
 
     reduce_action_handlers_.fill(nullptr);
@@ -42,6 +42,7 @@ void DaisyParserPass::cleanup() {
     input_ctx_stack_.clear();
     lex_state_stack_.clear();
     if_section_stack_.clear();
+    ir_node_stack_.clear();
 }
 
 PassResult DaisyParserPass::run(CompilationContext& ctx) {
@@ -55,7 +56,7 @@ PassResult DaisyParserPass::run(CompilationContext& ctx) {
     symbol_stack.reserve(1024);
 
     ctx_->ir_root = std::make_unique<ir::Node>(std::make_unique<ir::Namespace>());
-    ir_node_ = ctx_->ir_root.get();
+    ir_node_stack_.emplace_back(ctx_->ir_root.get());
 
     defineBuiltinMacros();
 

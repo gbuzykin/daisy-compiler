@@ -307,6 +307,9 @@
 ./preproc/builtin/pass002.ds:3:60: note: expanded from macro `LINE_PLUS_SUM2`
  3 | #define LINE_PLUS_SUM2(a, b, c) ((__line__) + SUM2(a, b, c))
    |                                                            ^
+./preproc/builtin/pass002.ds:5:7: debug: defining constant `a`
+ 5 | const a = LINE_PLUS_SUM2(1, 2, 3);
+   |       ^
 ./preproc/builtin/pass002.ds:5:34: debug: token
  5 | const a = LINE_PLUS_SUM2(1, 2, 3);
    |                                  ^

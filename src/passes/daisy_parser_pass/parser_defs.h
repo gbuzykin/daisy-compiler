@@ -32,8 +32,8 @@ enum {
     tt_shl_assign,
     tt_shr_assign,
     tt_arrow,
-    tt_const,
     tt_namespace,
+    tt_const,
     total_token_count
 };
 
@@ -41,8 +41,7 @@ enum {
     predef_act_shift = 0,
     predef_act_reduce = 1,
     act_begin_namespace,
-    act_end_namespace,
-    act_define_const_value,
+    act_end_block,
     act_concatenate_string_const,
     act_relative_name,
     act_absolute_name,
@@ -76,6 +75,7 @@ enum {
     act_expr_op_conditional,
     act_expr_brackets,
     act_expr_name_ref,
+    act_define_const,
     act_preproc_op_u_minus,
     act_preproc_op_u_plus,
     act_preproc_op_add,

@@ -181,6 +181,9 @@
 ./preproc/define/fail006.ds:2:50: note: expanded from macro `SUM2`
  2 | #define SUM2(a, b,...) ((a) + (b) + (__va_args__))
    |                                                  ^
+./preproc/define/fail006.ds:9:7: debug: defining constant `c2`
+ 9 | const c2 = SUM2(1, 2, 3);
+   |       ^~
 ./preproc/define/fail006.ds:9:25: debug: token
  9 | const c2 = SUM2(1, 2, 3);
    |                         ^

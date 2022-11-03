@@ -34,11 +34,10 @@
 %token arrow
 
 # Keywords
-%token const
 %token namespace
+%token const
 
 # Operator precedence
-%left ','
 %right '?' ':'
 %left or
 %left and
@@ -55,9 +54,7 @@
 # Actions
 
 %action begin_namespace
-%action end_namespace
-%action define_const_value
-
+%action end_block
 %action concatenate_string_const
 %action relative_name
 %action absolute_name
@@ -94,6 +91,8 @@
 %action expr_brackets
 %action expr_name_ref
 
+%action define_const
+
 # --------------------------------------------
 # Preprocessor actions
 %action preproc_op_u_minus
@@ -125,41 +124,36 @@
 
 %%
 
+# -------------------------------------------------------------------------------------
 # Translation unit
 translation_unit<initial> : unit_contents [end_of_file] ;
 unit_contents : unit_contents unit_item
   | #empty
   ;
 
-unit_item : [namespace] [id] '{' {begin_namespace} unit_contents '}' {end_namespace}
-  | [const] const_declarations ';'
+unit_item : [namespace] [id] '{' {begin_namespace} unit_contents '}' {end_block}
+  | [const] const_decl_list ';'
   | $error ';'
   | ';'
   ;
 
-const_declarations : [id] optional_type_name '=' expr {define_const_value}
-  | const_declarations ',' const_declarations
+# -------------------------------------------------------------------------------------
+# Declarations
+
+const_decl_list : const_def
+  | const_decl_list ',' const_def
   ;
 
-name_specifier : [id] {relative_name}
-  | [scope_resolution] [id] {absolute_name}
-  | name_specifier [scope_resolution] [id] {concatenate_name_path}
-  ;
+const_def : [id] optional_type_spec '=' expr {define_const} ;
 
-string_const : [string_literal]
-  | string_const [string_literal] {concatenate_string_const}
-  ;
+type_spec : name_spec;
 
-optional_type_name : ':' name_specifier
+optional_type_spec : ':' type_spec
   | #empty
   ;
 
-const_literal : [bool_literal] {bool_const_literal}
-  | [int_literal] {int_const_literal}
-  | [float_literal] {float_const_literal}
-  | string_const {string_const_literal}
-  ;
-
+# -------------------------------------------------------------------------------------
+# Expressions
 expr : '-' expr %prec $unary {expr_op_u_minus}
   | '+' expr %prec $unary {expr_op_u_plus}
   | expr '+' expr {expr_op_add}
@@ -184,8 +178,25 @@ expr : '-' expr %prec $unary {expr_op_u_minus}
   | expr [or] expr {expr_op_logical_or}
   | expr '?' expr ':' expr {expr_op_conditional}
   | '(' expr ')' {expr_brackets}
-  | name_specifier {expr_name_ref}
+  | name_spec {expr_name_ref}
   | const_literal
+  ;
+
+# -------------------------------------------------------------------------------------
+# Auxiliary
+name_spec : [id] {relative_name}
+  | [scope_resolution] [id] {absolute_name}
+  | name_spec [scope_resolution] [id] {concatenate_name_path}
+  ;
+
+string_const : [string_literal]
+  | string_const [string_literal] {concatenate_string_const}
+  ;
+
+const_literal : [bool_literal] {bool_const_literal}
+  | [int_literal] {int_const_literal}
+  | [float_literal] {float_const_literal}
+  | string_const {string_const_literal}
   ;
 
 # -------------------------------------------------------------------------------------

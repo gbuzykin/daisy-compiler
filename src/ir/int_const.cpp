@@ -106,6 +106,7 @@ using namespace ir;
         case IntType::u32: return {type, v & 0xffffffff};
         case IntType::i64:
         case IntType::u64: return {type, v};
+        default: UNREACHABLE_CODE;
     }
 }
 

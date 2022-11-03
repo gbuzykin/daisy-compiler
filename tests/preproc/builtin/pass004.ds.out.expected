@@ -13,6 +13,9 @@
 ./preproc/builtin/pass004.ds:2:15: debug: integer number: 3
  2 | const ID(x) = 3;
    |               ^
+./preproc/builtin/pass004.ds:2:7: debug: defining constant `identifier_x`
+ 2 | const ID(x) = 3;
+   |       ^~~~~
 ./preproc/builtin/pass004.ds:2:16: debug: token
  2 | const ID(x) = 3;
    |                ^

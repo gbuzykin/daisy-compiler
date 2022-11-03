@@ -10,6 +10,9 @@
 ./lexer/warn001.ds:1:11: debug: integer number: 1
  1 | const a = 1; /* unterminated multiline comment
    |           ^
+./lexer/warn001.ds:1:7: debug: defining constant `a`
+ 1 | const a = 1; /* unterminated multiline comment
+   |       ^
 ./lexer/warn001.ds:1:12: debug: token
  1 | const a = 1; /* unterminated multiline comment
    |            ^

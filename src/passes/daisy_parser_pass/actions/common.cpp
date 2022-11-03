@@ -40,10 +40,10 @@ void beginNamespace(DaisyParserPass* pass, SymbolInfo* ss, SymbolLoc& loc) {
     } else {
         logger::debug(ss[-1].loc).format("entering existing namespace `{}`", name);
     }
-    pass->setIrNode(*nmspace_node);
+    pass->pushIrNode(*nmspace_node);
 }
 
-void endNamespace(DaisyParserPass* pass, SymbolInfo* ss, SymbolLoc& loc) { pass->popIrNode(); }
+void endBlock(DaisyParserPass* pass, SymbolInfo* ss, SymbolLoc& loc) { pass->popIrNode(); }
 
 }  // namespace
 
@@ -52,4 +52,4 @@ DAISY_ADD_REDUCE_ACTION_HANDLER(parser_detail::act_relative_name, relativeName);
 DAISY_ADD_REDUCE_ACTION_HANDLER(parser_detail::act_absolute_name, absoluteName);
 DAISY_ADD_REDUCE_ACTION_HANDLER(parser_detail::act_concatenate_name_path, concatenateNamePath);
 DAISY_ADD_REDUCE_ACTION_HANDLER(parser_detail::act_begin_namespace, beginNamespace);
-DAISY_ADD_REDUCE_ACTION_HANDLER(parser_detail::act_end_namespace, endNamespace);
+DAISY_ADD_REDUCE_ACTION_HANDLER(parser_detail::act_end_block, endBlock);

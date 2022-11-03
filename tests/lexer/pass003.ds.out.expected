@@ -10,6 +10,9 @@
 ./lexer/pass003.ds:1:11: debug: integer number: 1223324
  1 | const a = 1223324; const b = 4.5656; const c = "Привет";
    |           ^~~~~~~
+./lexer/pass003.ds:1:7: debug: defining constant `a`
+ 1 | const a = 1223324; const b = 4.5656; const c = "Привет";
+   |       ^
 ./lexer/pass003.ds:1:18: debug: token
  1 | const a = 1223324; const b = 4.5656; const c = "Привет";
    |                  ^
@@ -25,6 +28,9 @@
 ./lexer/pass003.ds:1:30: debug: float number: 4.5656
  1 | const a = 1223324; const b = 4.5656; const c = "Привет";
    |                              ^~~~~~
+./lexer/pass003.ds:1:26: debug: defining constant `b`
+ 1 | const a = 1223324; const b = 4.5656; const c = "Привет";
+   |                          ^
 ./lexer/pass003.ds:1:36: debug: token
  1 | const a = 1223324; const b = 4.5656; const c = "Привет";
    |                                    ^
@@ -40,6 +46,9 @@
 ./lexer/pass003.ds:1:48: debug: string: "Привет"
  1 | const a = 1223324; const b = 4.5656; const c = "Привет";
    |                                                ^~~~~~~~
+./lexer/pass003.ds:1:44: debug: defining constant `c`
+ 1 | const a = 1223324; const b = 4.5656; const c = "Привет";
+   |                                            ^
 ./lexer/pass003.ds:1:62: debug: token
  1 | const a = 1223324; const b = 4.5656; const c = "Привет";
    |                                                        ^
