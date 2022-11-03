@@ -42,7 +42,6 @@ void DaisyParserPass::cleanup() {
     input_ctx_stack_.clear();
     lex_state_stack_.clear();
     if_section_stack_.clear();
-    input_strings_.clear();
 }
 
 PassResult DaisyParserPass::run(CompilationContext& ctx) {
