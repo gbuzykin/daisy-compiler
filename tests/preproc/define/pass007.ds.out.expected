@@ -55,6 +55,9 @@
 ./preproc/define/pass007.dsh:1:29: note: expanded from macro `SUM`
  1 | #define SUM(a, b) ((a) + (b))
    |                             ^
+./preproc/define/pass007.ds:2:7: debug: defining constant `a`
+ 2 | const a = SUM(1, 2);
+   |       ^
 ./preproc/define/pass007.ds:2:20: debug: token
  2 | const a = SUM(1, 2);
    |                    ^

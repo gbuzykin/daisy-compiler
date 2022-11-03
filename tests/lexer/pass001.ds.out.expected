@@ -10,6 +10,9 @@
 ./lexer/pass001.ds:1:11: debug: integer number: 1223345
  1 | const i = 1223345;
    |           ^~~~~~~
+./lexer/pass001.ds:1:7: debug: defining constant `i`
+ 1 | const i = 1223345;
+   |       ^
 ./lexer/pass001.ds:1:18: debug: token
  1 | const i = 1223345;
    |                  ^
@@ -25,6 +28,9 @@
 ./lexer/pass001.ds:3:11: debug: float number: 4.5656
  3 | const f = 4.5656; /*/ ///*** multiline
    |           ^~~~~~
+./lexer/pass001.ds:3:7: debug: defining constant `f`
+ 3 | const f = 4.5656; /*/ ///*** multiline
+   |       ^
 ./lexer/pass001.ds:3:17: debug: token
  3 | const f = 4.5656; /*/ ///*** multiline
    |                 ^
@@ -48,6 +54,9 @@
    |     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
    |          string";  // singleline comment
    |          ~~~~~~~
+./lexer/pass001.ds:6:7: debug: defining constant `s`
+ 6 | const s = "this is a string"
+   |       ^
 ./lexer/pass001.ds:9:17: debug: token
  9 |          string";  // singleline comment
    |                 ^
@@ -63,6 +72,9 @@
 ./lexer/pass001.ds:11:12: debug: token
  11 | const b1 = true; // singleline wrapped \
     |            ^~~~
+./lexer/pass001.ds:11:7: debug: defining constant `b1`
+ 11 | const b1 = true; // singleline wrapped \
+    |       ^~
 ./lexer/pass001.ds:11:16: debug: token
  11 | const b1 = true; // singleline wrapped \
     |                ^
@@ -78,6 +90,9 @@
 ./lexer/pass001.ds:14:12: debug: token
  14 | const b2 = false; // e \
     |            ^~~~~
+./lexer/pass001.ds:14:7: debug: defining constant `b2`
+ 14 | const b2 = false; // e \
+    |       ^~
 ./lexer/pass001.ds:14:17: debug: token
  14 | const b2 = false; // e \
     |                 ^

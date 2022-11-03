@@ -61,6 +61,9 @@
 ./preproc/define/pass001.ds:1:25: note: expanded from macro `MACRO`
  1 | #define MACRO ((1) + (2))
    |                         ^
+./preproc/define/pass001.ds:3:7: debug: defining constant `a`
+ 3 | const a = MACRO;
+   |       ^
 ./preproc/define/pass001.ds:3:16: debug: token
  3 | const a = MACRO;
    |                ^

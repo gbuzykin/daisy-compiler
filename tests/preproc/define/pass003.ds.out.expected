@@ -25,6 +25,9 @@
 ./preproc/define/pass003.ds:1:26: note: expanded from macro `CONCAT`
  1 | #define CONCAT(a, b) (a b)
    |                          ^
+./preproc/define/pass003.ds:3:7: debug: defining constant `s`
+ 3 | const s = CONCAT  ("a, b", "c, d");
+   |       ^
 ./preproc/define/pass003.ds:3:35: debug: token
  3 | const s = CONCAT  ("a, b", "c, d");
    |                                   ^

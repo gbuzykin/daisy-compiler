@@ -10,6 +10,9 @@
 ./preproc/builtin/pass001.ds:3:11: debug: integer number: 3
  3 | const a = __line__;
    |           ^~~~~~~~
+./preproc/builtin/pass001.ds:3:7: debug: defining constant `a`
+ 3 | const a = __line__;
+   |       ^
 ./preproc/builtin/pass001.ds:3:19: debug: token
  3 | const a = __line__;
    |                   ^
@@ -98,6 +101,9 @@
 ./preproc/builtin/pass001.ds:1:29: note: expanded from macro `SUM`
  1 | #define SUM(a, b) ((a) + (b))
    |                             ^
+./preproc/builtin/pass001.ds:4:7: debug: defining constant `b`
+ 4 | const b = SUM(
+   |       ^
 ./preproc/builtin/pass001.ds:6:2: debug: token
  6 | );
    |  ^

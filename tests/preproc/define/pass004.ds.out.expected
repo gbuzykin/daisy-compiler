@@ -148,6 +148,9 @@
 ./preproc/define/pass004.ds:1:55: note: expanded from macro `VARIADIC`
  1 | #define VARIADIC(a, b, ...) ((a) + (b) + (__va_args__))
    |                                                       ^
+./preproc/define/pass004.ds:3:7: debug: defining constant `a`
+ 3 | const a = VARIADIC  ((1 + 2),
+   |       ^
 ./preproc/define/pass004.ds:6:22: debug: token
  6 |                     );
    |                      ^

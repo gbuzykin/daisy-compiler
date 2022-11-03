@@ -55,6 +55,9 @@
 ./preproc/builtin/pass006.ds:1:60: note: expanded from macro `SUM`
  1 | #define SUM(a, b, ...) ((a) + (b) __va_opt__(+) __va_args__)
    |                                                            ^
+./preproc/builtin/pass006.ds:3:7: debug: defining constant `a`
+ 3 | const a = SUM  (1, 2);
+   |       ^
 ./preproc/builtin/pass006.ds:3:22: debug: token
  3 | const a = SUM  (1, 2);
    |                      ^
@@ -130,6 +133,9 @@
 ./preproc/builtin/pass006.ds:1:60: note: expanded from macro `SUM`
  1 | #define SUM(a, b, ...) ((a) + (b) __va_opt__(+) __va_args__)
    |                                                            ^
+./preproc/builtin/pass006.ds:4:7: debug: defining constant `b`
+ 4 | const b = SUM  (1, 2, 3 + 4);
+   |       ^
 ./preproc/builtin/pass006.ds:4:29: debug: token
  4 | const b = SUM  (1, 2, 3 + 4);
    |                             ^

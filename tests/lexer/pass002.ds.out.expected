@@ -10,6 +10,9 @@
 ./lexer/pass002.ds:1:16: debug: integer number: 127
  1 | const i8_max = 0x7fi8; const u8_max = 0xffu8;
    |                ^~~~~~
+./lexer/pass002.ds:1:7: debug: defining constant `i8_max`
+ 1 | const i8_max = 0x7fi8; const u8_max = 0xffu8;
+   |       ^~~~~~
 ./lexer/pass002.ds:1:22: debug: token
  1 | const i8_max = 0x7fi8; const u8_max = 0xffu8;
    |                      ^
@@ -25,6 +28,9 @@
 ./lexer/pass002.ds:1:39: debug: integer number: 255
  1 | const i8_max = 0x7fi8; const u8_max = 0xffu8;
    |                                       ^~~~~~
+./lexer/pass002.ds:1:30: debug: defining constant `u8_max`
+ 1 | const i8_max = 0x7fi8; const u8_max = 0xffu8;
+   |                              ^~~~~~
 ./lexer/pass002.ds:1:45: debug: token
  1 | const i8_max = 0x7fi8; const u8_max = 0xffu8;
    |                                             ^
@@ -40,6 +46,9 @@
 ./lexer/pass002.ds:2:17: debug: integer number: 32767
  2 | const i16_max = 0x7fffi16; const u16_max = 0xffffu16;
    |                 ^~~~~~~~~
+./lexer/pass002.ds:2:7: debug: defining constant `i16_max`
+ 2 | const i16_max = 0x7fffi16; const u16_max = 0xffffu16;
+   |       ^~~~~~~
 ./lexer/pass002.ds:2:26: debug: token
  2 | const i16_max = 0x7fffi16; const u16_max = 0xffffu16;
    |                          ^
@@ -55,6 +64,9 @@
 ./lexer/pass002.ds:2:44: debug: integer number: 65535
  2 | const i16_max = 0x7fffi16; const u16_max = 0xffffu16;
    |                                            ^~~~~~~~~
+./lexer/pass002.ds:2:34: debug: defining constant `u16_max`
+ 2 | const i16_max = 0x7fffi16; const u16_max = 0xffffu16;
+   |                                  ^~~~~~~
 ./lexer/pass002.ds:2:53: debug: token
  2 | const i16_max = 0x7fffi16; const u16_max = 0xffffu16;
    |                                                     ^
@@ -70,6 +82,9 @@
 ./lexer/pass002.ds:3:17: debug: integer number: 2147483647
  3 | const i32_max = 0x7fffffffi32; const u32_max = 0xffffffffu32;
    |                 ^~~~~~~~~~~~~
+./lexer/pass002.ds:3:7: debug: defining constant `i32_max`
+ 3 | const i32_max = 0x7fffffffi32; const u32_max = 0xffffffffu32;
+   |       ^~~~~~~
 ./lexer/pass002.ds:3:30: debug: token
  3 | const i32_max = 0x7fffffffi32; const u32_max = 0xffffffffu32;
    |                              ^
@@ -85,6 +100,9 @@
 ./lexer/pass002.ds:3:48: debug: integer number: 4294967295
  3 | const i32_max = 0x7fffffffi32; const u32_max = 0xffffffffu32;
    |                                                ^~~~~~~~~~~~~
+./lexer/pass002.ds:3:38: debug: defining constant `u32_max`
+ 3 | const i32_max = 0x7fffffffi32; const u32_max = 0xffffffffu32;
+   |                                      ^~~~~~~
 ./lexer/pass002.ds:3:61: debug: token
  3 | const i32_max = 0x7fffffffi32; const u32_max = 0xffffffffu32;
    |                                                             ^
@@ -100,6 +118,9 @@
 ./lexer/pass002.ds:4:17: debug: integer number: 9223372036854775807
  4 | const i64_max = 0x7fffffffffffffffi64; const u64_max = 0xffffffffffffffffu64;
    |                 ^~~~~~~~~~~~~~~~~~~~~
+./lexer/pass002.ds:4:7: debug: defining constant `i64_max`
+ 4 | const i64_max = 0x7fffffffffffffffi64; const u64_max = 0xffffffffffffffffu64;
+   |       ^~~~~~~
 ./lexer/pass002.ds:4:38: debug: token
  4 | const i64_max = 0x7fffffffffffffffi64; const u64_max = 0xffffffffffffffffu64;
    |                                      ^
@@ -115,6 +136,9 @@
 ./lexer/pass002.ds:4:56: debug: integer number: 18446744073709551615
  4 | const i64_max = 0x7fffffffffffffffi64; const u64_max = 0xffffffffffffffffu64;
    |                                                        ^~~~~~~~~~~~~~~~~~~~~
+./lexer/pass002.ds:4:46: debug: defining constant `u64_max`
+ 4 | const i64_max = 0x7fffffffffffffffi64; const u64_max = 0xffffffffffffffffu64;
+   |                                              ^~~~~~~
 ./lexer/pass002.ds:4:77: debug: token
  4 | const i64_max = 0x7fffffffffffffffi64; const u64_max = 0xffffffffffffffffu64;
    |                                                                             ^
@@ -130,6 +154,9 @@
 ./lexer/pass002.ds:5:15: debug: integer number: 9223372036854775807
  5 | const i_max = 0x7fffffffffffffffi; const u2_max = 0xffffffffffffffffu;
    |               ^~~~~~~~~~~~~~~~~~~
+./lexer/pass002.ds:5:7: debug: defining constant `i_max`
+ 5 | const i_max = 0x7fffffffffffffffi; const u2_max = 0xffffffffffffffffu;
+   |       ^~~~~
 ./lexer/pass002.ds:5:34: debug: token
  5 | const i_max = 0x7fffffffffffffffi; const u2_max = 0xffffffffffffffffu;
    |                                  ^
@@ -145,6 +172,9 @@
 ./lexer/pass002.ds:5:51: debug: integer number: 18446744073709551615
  5 | const i_max = 0x7fffffffffffffffi; const u2_max = 0xffffffffffffffffu;
    |                                                   ^~~~~~~~~~~~~~~~~~~
+./lexer/pass002.ds:5:42: debug: defining constant `u2_max`
+ 5 | const i_max = 0x7fffffffffffffffi; const u2_max = 0xffffffffffffffffu;
+   |                                          ^~~~~~
 ./lexer/pass002.ds:5:70: debug: token
  5 | const i_max = 0x7fffffffffffffffi; const u2_max = 0xffffffffffffffffu;
    |                                                                      ^
@@ -160,6 +190,9 @@
 ./lexer/pass002.ds:6:18: debug: integer number: 18446744073709551615
  6 | const auto_max = 0xffffffffffffffff;
    |                  ^~~~~~~~~~~~~~~~~~
+./lexer/pass002.ds:6:7: debug: defining constant `auto_max`
+ 6 | const auto_max = 0xffffffffffffffff;
+   |       ^~~~~~~~
 ./lexer/pass002.ds:6:36: debug: token
  6 | const auto_max = 0xffffffffffffffff;
    |                                    ^

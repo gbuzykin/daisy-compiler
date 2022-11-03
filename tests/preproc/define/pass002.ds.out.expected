@@ -83,6 +83,9 @@
 ./preproc/define/pass002.ds:1:29: note: expanded from macro `SUM`
  1 | #define SUM(a, b) ((a) + (b))
    |                             ^
+./preproc/define/pass002.ds:5:7: debug: defining constant `a`
+ 5 | const a = SUM // A
+   |       ^
 ./preproc/define/pass002.ds:7:12: debug: token
  7 |           );
    |            ^
@@ -392,6 +395,9 @@
 ./preproc/define/pass002.ds:1:29: note: expanded from macro `SUM`
  1 | #define SUM(a, b) ((a) + (b))
    |                             ^
+./preproc/define/pass002.ds:8:7: debug: defining constant `b`
+ 8 | const b = SUM2  (1/*one*/ ,  2/*two*/ ,\
+   |       ^
 ./preproc/define/pass002.ds:10:19: debug: token
  10 |                  );
     |                   ^
