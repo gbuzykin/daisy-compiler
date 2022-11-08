@@ -9,8 +9,6 @@
 namespace daisy {
 namespace ir {
 
-class Namespace;
-
 class Node : public util::rtti_mixin<Node> {
  private:
     Node* parent_ = nullptr;
@@ -38,14 +36,13 @@ class Node : public util::rtti_mixin<Node> {
 
     Node() = default;
     explicit Node(const SymbolLoc& loc) : loc_(loc) {}
-
     explicit Node(std::unique_ptr<Namespace> nmspace, const SymbolLoc& loc = {})
         : loc_(loc), namespace_(std::move(nmspace)) {}
 
     bool empty() const NOEXCEPT { return children_.empty(); }
     size_type size() const NOEXCEPT { return children_.size(); }
-    iterator begin() { return children_.begin(); }
-    const_iterator begin() const { return children_.begin(); }
+    iterator begin() NOEXCEPT { return children_.begin(); }
+    const_iterator begin() const NOEXCEPT { return children_.begin(); }
     iterator end() NOEXCEPT { return children_.end(); }
     const_iterator end() const NOEXCEPT { return children_.end(); }
     reference front() { return children_.front(); }
@@ -53,17 +50,17 @@ class Node : public util::rtti_mixin<Node> {
     reference back() { return children_.back(); }
     const_reference back() const { return children_.back(); }
 
-    pointer getParent() { return parent_; }
     const_pointer getParent() const { return parent_; }
+    pointer getParent() { return parent_; }
     const SymbolLoc& getLoc() const { return loc_; }
 
-    const Namespace& findNamespace() const;
-    Namespace& findNamespace() { return const_cast<Namespace&>(std::as_const(*this).findNamespace()); }
-
-    const Namespace* getLocalNamespace() const { return namespace_.get(); }
-    Namespace* getLocalNamespace() { return namespace_.get(); }
-    Namespace& getOrCreateLocalNamespace() {
-        return namespace_ ? *namespace_ : *(namespace_ = std::make_unique<Namespace>());
+    const Namespace& getNamespace() const {
+        assert(namespace_);
+        return *namespace_;
+    }
+    Namespace& getNamespace() {
+        assert(namespace_);
+        return *namespace_;
     }
 
     template<typename Ty, typename = std::enable_if_t<std::is_base_of_v<Node, Ty>>>

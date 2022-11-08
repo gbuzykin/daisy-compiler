@@ -13,33 +13,33 @@ void defineConst(DaisyParserPass* pass, SymbolInfo* ss, SymbolLoc& loc) {
                                                              ss[0].loc);
     logger::debug(const_def_node->getLoc()).format("defining constant `{}`", const_def_node->getName());
     const_def_node->pushChildBack(std::move(std::get<std::unique_ptr<ir::Node>>(ss[3].val)));
-    pass->getIrNode().pushChildBack(std::move(const_def_node));
+    pass->getCurrentScope().pushChildBack(std::move(const_def_node));
 }
 
 void defineVariable(DaisyParserPass* pass, SymbolInfo* ss, SymbolLoc& loc) {
     auto var_def_node = std::make_unique<ir::VarDefNode>(std::string(std::get<std::string_view>(ss[0].val)), ss[0].loc);
     logger::debug(var_def_node->getLoc()).format("defining variable `{}`", var_def_node->getName());
     var_def_node->pushChildBack(std::move(std::get<std::unique_ptr<ir::Node>>(ss[3].val)));
-    pass->getIrNode().pushChildBack(std::move(var_def_node));
+    pass->getCurrentScope().pushChildBack(std::move(var_def_node));
 }
 
 void beginFuncProto(DaisyParserPass* pass, SymbolInfo* ss, SymbolLoc& loc) {
     auto func_def_node = std::make_unique<ir::FuncDefNode>(std::string(std::get<std::string_view>(ss[-2].val)),
-                                                           ss[-2].loc);
+                                                           pass->getCurrentScope(), ss[-2].loc);
     logger::debug(func_def_node->getLoc()).format("defining function `{}`", func_def_node->getName());
-    pass->pushIrNode(*ss[-2].val.emplace<std::unique_ptr<ir::Node>>(std::move(func_def_node)));
+    pass->setCurrentScope(*ss[-2].val.emplace<std::unique_ptr<ir::Node>>(std::move(func_def_node)));
 }
 
 void addFuncFormalArg(DaisyParserPass* pass, SymbolInfo* ss, SymbolLoc& loc) {
-    pass->getIrNode().pushChildBack(
+    pass->getCurrentScope().pushChildBack(
         std::make_unique<ir::DefNode>(std::string(std::get<std::string_view>(ss[0].val)), ss[0].loc));
 }
 
 void endFuncDecl(DaisyParserPass* pass, SymbolInfo* ss, SymbolLoc& loc) {
     auto func_def_node = std::move(std::get<std::unique_ptr<ir::Node>>(ss[1].val));
     logger::debug(loc).format("function `{}` declaration", util::cast<ir::NamedNode&>(*func_def_node).getName());
-    pass->popIrNode();
-    pass->getIrNode().pushChildBack(std::move(func_def_node));
+    pass->popCurrentScope();
+    pass->getCurrentScope().pushChildBack(std::move(func_def_node));
 }
 
 void endFuncDef(DaisyParserPass* pass, SymbolInfo* ss, SymbolLoc& loc) {
@@ -47,8 +47,8 @@ void endFuncDef(DaisyParserPass* pass, SymbolInfo* ss, SymbolLoc& loc) {
     logger::debug(ss[0].loc + ss[1].loc)
         .format("function `{}` definition", util::cast<ir::NamedNode&>(*func_def_node).getName());
     func_def_node->pushChildBack(std::move(std::get<std::unique_ptr<ir::Node>>(ss[2].val)));
-    pass->popIrNode();
-    pass->getIrNode().pushChildBack(std::move(func_def_node));
+    pass->popCurrentScope();
+    pass->getCurrentScope().pushChildBack(std::move(func_def_node));
 }
 
 }  // namespace

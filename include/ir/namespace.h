@@ -8,6 +8,7 @@
 namespace daisy {
 namespace ir {
 
+class Node;
 class NamedNode;
 
 class Namespace {
@@ -25,12 +26,18 @@ class Namespace {
     using iterator = typename NameTableType::iterator;
     using const_iterator = typename NameTableType::const_iterator;
 
+    explicit Namespace(Node& parent_scope) : parent_scope_(&parent_scope) {}
+    explicit Namespace(std::nullptr_t) : parent_scope_(nullptr) {}  // for root
+
     bool empty() const NOEXCEPT { return name_table_.empty(); }
     size_type size() const NOEXCEPT { return name_table_.size(); }
-    iterator begin() { return name_table_.begin(); }
-    const_iterator begin() const { return name_table_.begin(); }
+    iterator begin() NOEXCEPT { return name_table_.begin(); }
+    const_iterator begin() const NOEXCEPT { return name_table_.begin(); }
     iterator end() NOEXCEPT { return name_table_.end(); }
     const_iterator end() const NOEXCEPT { return name_table_.end(); }
+
+    const Node* getParentScope() const { return parent_scope_; }
+    Node* getParentScope() { return parent_scope_; }
 
     template<typename Ty>
     const Ty* findNode(std::string_view name) const {
@@ -64,6 +71,7 @@ class Namespace {
     }
 
  private:
+    Node* parent_scope_;
     NameTableType name_table_;
 };
 

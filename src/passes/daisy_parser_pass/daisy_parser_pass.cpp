@@ -48,7 +48,6 @@ void DaisyParserPass::cleanup() {
     input_ctx_stack_.clear();
     lex_state_stack_.clear();
     if_section_stack_.clear();
-    ir_node_stack_.clear();
 }
 
 PassResult DaisyParserPass::run(CompilationContext& ctx) {
@@ -61,8 +60,8 @@ PassResult DaisyParserPass::run(CompilationContext& ctx) {
     parser_state_stack.reserve_at_curr(1024);
     symbol_stack.reserve(1024);
 
-    ctx_->ir_root = std::make_unique<ir::Node>(std::make_unique<ir::Namespace>());
-    ir_node_stack_.emplace_back(ctx_->ir_root.get());
+    ctx_->ir_root = std::make_unique<ir::Node>(std::make_unique<ir::Namespace>(nullptr));
+    current_scope_ = ctx_->ir_root.get();
 
     defineBuiltinMacros();
 
@@ -135,7 +134,7 @@ PassResult DaisyParserPass::run(CompilationContext& ctx) {
         }
     }
 
-    assert(ctx.error_count || ir_node_stack_.size() == 1);
+    assert(ctx.error_count || !current_scope_->getParent());
     return ctx.error_count == 0 ? PassResult::kSuccess : PassResult::kError;
 }
 
