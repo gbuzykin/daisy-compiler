@@ -42,6 +42,7 @@
 %token else
 %token loop
 %token while
+%token struct
 
 # Operator precedence
 %right '?' ':'
@@ -114,6 +115,9 @@
 %action end_func_def
 %action add_func_formal_arg
 
+%action begin_struct_def
+%action define_field
+
 # --------------------------------------------
 # Preprocessor actions
 %action preproc_op_u_minus
@@ -156,6 +160,7 @@ unit_item : [namespace] [id] '{' {begin_namespace} unit_contents '}' {end_block}
   | [const] const_decl_list ';'
   | [func] func_proto ';' {end_func_decl}
   | [func] func_proto block_expr {end_func_def}
+  | type_decl ';'
   | $error ';'
   | ';'
   ;
@@ -173,17 +178,15 @@ var_decl_list : var_def
   | var_decl_list ',' var_def
   ;
 
-var_def : [id] optional_type_spec '=' expr {define_variable} ;
+var_def : type_modifier [id] optional_type_spec '=' expr {define_variable} ;
 
 optional_type_spec : ':' type_spec
   | #empty
   ;
 
-type_spec : scope_spec [id] ;
-
 func_proto : [id] '(' {begin_func_proto} optional_func_arg_list ')' optional_ret_type_spec ;
 
-optional_ret_type_spec : [arrow] type_spec
+optional_ret_type_spec : [arrow] type_modifier type_spec
   | #empty
   ;
 
@@ -195,7 +198,30 @@ func_arg_list : func_arg
   | func_arg_list ',' func_arg
   ;
 
-func_arg : [id] ':' type_spec {add_func_formal_arg} ;
+func_arg : type_modifier [id] ':' type_spec {add_func_formal_arg} ;
+
+type_spec : scope_spec [id] ;
+
+type_modifier : #empty
+  ;
+
+# -------------------------------------------------------------------------------------
+# Type declaration
+
+type_decl : [struct] [id] '{' {begin_struct_def} type_decl_statement_list '}' {end_block} ;
+
+type_decl_statement_list : type_decl_statement_list type_decl_statement
+  | #empty
+  ;
+
+type_decl_statement : [const] const_decl_list ';'
+  | type_modifier [id] ':' type_spec ';' {define_field}
+  | [func] func_proto ';' {end_func_decl}
+  | [func] func_proto block_expr {end_func_def}
+  | type_decl ';'
+  | $error ';'
+  | ';'
+  ;
 
 # -------------------------------------------------------------------------------------
 # Complex expressions with blocks
@@ -235,6 +261,7 @@ complex_expr : block_expr
 statement : expr ';' {discard_expr_result}
   | [const] const_decl_list ';'
   | [let] var_decl_list ';'
+  | type_decl ';'
   | $error ';'
   | ';'
   ;

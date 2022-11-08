@@ -1,0 +1,7 @@
+./struct/pass001.ds:4:3: debug: defining field `i`
+ 4 |   i : i32;
+   |   ^
+./struct/pass001.ds:5:3: debug: defining field `f`
+ 5 |   f : double;
+   |   ^
+./struct/pass001.ds: info: warnings 0, errors 0

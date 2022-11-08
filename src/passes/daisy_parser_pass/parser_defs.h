@@ -40,6 +40,7 @@ enum {
     tt_else,
     tt_loop,
     tt_while,
+    tt_struct,
     total_token_count
 };
 
@@ -95,6 +96,8 @@ enum {
     act_end_func_decl,
     act_end_func_def,
     act_add_func_formal_arg,
+    act_begin_struct_def,
+    act_define_field,
     act_preproc_op_u_minus,
     act_preproc_op_u_plus,
     act_preproc_op_add,

@@ -17,9 +17,9 @@ void defineConst(DaisyParserPass* pass, SymbolInfo* ss, SymbolLoc& loc) {
 }
 
 void defineVariable(DaisyParserPass* pass, SymbolInfo* ss, SymbolLoc& loc) {
-    auto var_def_node = std::make_unique<ir::VarDefNode>(std::string(std::get<std::string_view>(ss[0].val)), ss[0].loc);
+    auto var_def_node = std::make_unique<ir::VarDefNode>(std::string(std::get<std::string_view>(ss[1].val)), ss[1].loc);
     logger::debug(var_def_node->getLoc()).format("defining variable `{}`", var_def_node->getName());
-    var_def_node->pushChildBack(std::move(std::get<std::unique_ptr<ir::Node>>(ss[3].val)));
+    var_def_node->pushChildBack(std::move(std::get<std::unique_ptr<ir::Node>>(ss[4].val)));
     pass->getCurrentScope().pushChildBack(std::move(var_def_node));
 }
 
@@ -28,11 +28,6 @@ void beginFuncProto(DaisyParserPass* pass, SymbolInfo* ss, SymbolLoc& loc) {
                                                            pass->getCurrentScope(), ss[-2].loc);
     logger::debug(func_def_node->getLoc()).format("defining function `{}`", func_def_node->getName());
     pass->setCurrentScope(*ss[-2].val.emplace<std::unique_ptr<ir::Node>>(std::move(func_def_node)));
-}
-
-void addFuncFormalArg(DaisyParserPass* pass, SymbolInfo* ss, SymbolLoc& loc) {
-    pass->getCurrentScope().pushChildBack(
-        std::make_unique<ir::DefNode>(std::string(std::get<std::string_view>(ss[0].val)), ss[0].loc));
 }
 
 void endFuncDecl(DaisyParserPass* pass, SymbolInfo* ss, SymbolLoc& loc) {
@@ -51,11 +46,16 @@ void endFuncDef(DaisyParserPass* pass, SymbolInfo* ss, SymbolLoc& loc) {
     pass->getCurrentScope().pushChildBack(std::move(func_def_node));
 }
 
+void addFuncFormalArg(DaisyParserPass* pass, SymbolInfo* ss, SymbolLoc& loc) {
+    pass->getCurrentScope().pushChildBack(
+        std::make_unique<ir::DefNode>(std::string(std::get<std::string_view>(ss[1].val)), ss[1].loc));
+}
+
 }  // namespace
 
 DAISY_ADD_REDUCE_ACTION_HANDLER(parser_detail::act_define_const, defineConst);
 DAISY_ADD_REDUCE_ACTION_HANDLER(parser_detail::act_define_variable, defineVariable);
 DAISY_ADD_REDUCE_ACTION_HANDLER(parser_detail::act_begin_func_proto, beginFuncProto);
-DAISY_ADD_REDUCE_ACTION_HANDLER(parser_detail::act_add_func_formal_arg, addFuncFormalArg);
 DAISY_ADD_REDUCE_ACTION_HANDLER(parser_detail::act_end_func_decl, endFuncDecl);
 DAISY_ADD_REDUCE_ACTION_HANDLER(parser_detail::act_end_func_def, endFuncDef);
+DAISY_ADD_REDUCE_ACTION_HANDLER(parser_detail::act_add_func_formal_arg, addFuncFormalArg);

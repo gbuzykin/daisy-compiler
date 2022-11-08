@@ -32,6 +32,7 @@ void DaisyParserPass::configure() {
         {"else", parser_detail::tt_else},
         {"loop", parser_detail::tt_loop},
         {"while", parser_detail::tt_while},
+        {"struct", parser_detail::tt_struct},
     });
 
     reduce_action_handlers_.fill(nullptr);
