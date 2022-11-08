@@ -83,7 +83,6 @@ enum {
     act_expr_name_ref,
     act_define_const,
     act_define_variable,
-    act_define_variable_default,
     act_begin_block_expr,
     act_push_expr_result,
     act_discard_expr_result,

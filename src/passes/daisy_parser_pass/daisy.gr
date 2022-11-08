@@ -99,7 +99,6 @@
 
 %action define_const
 %action define_variable
-%action define_variable_default
 
 %action begin_block_expr
 %action push_expr_result
@@ -174,9 +173,7 @@ var_decl_list : var_def
   | var_decl_list ',' var_def
   ;
 
-var_def : [id] optional_type_spec '=' expr {define_variable}
-  | [id] ':' type_spec {define_variable_default}
-  ;
+var_def : [id] optional_type_spec '=' expr {define_variable} ;
 
 optional_type_spec : ':' type_spec
   | #empty
