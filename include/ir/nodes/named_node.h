@@ -10,8 +10,8 @@ namespace ir {
 class NamedNode : public util::rtti_mixin<NamedNode, Node> {
  public:
     NamedNode(std::string name, const SymbolLoc& loc) : rtti_mixin_t(loc), name_(std::move(name)) {}
-    NamedNode(std::string name, std::unique_ptr<Namespace> nmspace)
-        : rtti_mixin_t(std::move(nmspace)), name_(std::move(name)) {}
+    NamedNode(std::string name, std::unique_ptr<Namespace> nmspace, const SymbolLoc& loc)
+        : rtti_mixin_t(std::move(nmspace), loc), name_(std::move(name)) {}
 
     const std::string& getName() const { return name_; }
 

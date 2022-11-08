@@ -29,21 +29,25 @@ void concatenateNamePath(DaisyParserPass* pass, SymbolInfo* ss, SymbolLoc& loc) 
 
 void beginNamespace(DaisyParserPass* pass, SymbolInfo* ss, SymbolLoc& loc) {
     const auto name = std::get<std::string_view>(ss[-2].val);
-    auto& nmspace = pass->getIrNode().findNamespace();
+    auto& nmspace = pass->getCurrentScope().getNamespace();
     auto* nmspace_node = nmspace.findNode(
         name, [](auto& node) { return util::is_kind_of<ir::NamespaceNode, ir::TypeDefNode>(node); });
-    if (!nmspace_node) {
-        nmspace_node = &pass->getIrNode().pushChildBack(std::make_unique<ir::NamespaceNode>(std::string(name)));
-        nmspace.addNode(*nmspace_node);
-    } else if (!util::is_kind_of<ir::NamespaceNode>(*nmspace_node)) {
-        logger::error(ss[-3].loc + ss[-2].loc).format("typename `{}` redefinition", name);
+    if (!util::is_kind_of<ir::NamespaceNode>(nmspace_node)) {
+        auto& new_nmspace_node = pass->getCurrentScope().pushChildBack(
+            std::make_unique<ir::NamespaceNode>(std::string(name), pass->getCurrentScope(), ss[-2].loc));
+        if (!nmspace_node) {
+            nmspace.addNode(new_nmspace_node);
+        } else {
+            logger::error(ss[-3].loc + ss[-2].loc).format("typename `{}` redefinition", name);
+        }
+        nmspace_node = &new_nmspace_node;
     } else {
         logger::debug(ss[-1].loc).format("entering existing namespace `{}`", name);
     }
-    pass->pushIrNode(*nmspace_node);
+    pass->setCurrentScope(*nmspace_node);
 }
 
-void endBlock(DaisyParserPass* pass, SymbolInfo* ss, SymbolLoc& loc) { pass->popIrNode(); }
+void endBlock(DaisyParserPass* pass, SymbolInfo* ss, SymbolLoc& loc) { pass->popCurrentScope(); }
 
 }  // namespace
 

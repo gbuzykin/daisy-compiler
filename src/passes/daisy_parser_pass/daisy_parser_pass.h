@@ -142,10 +142,19 @@ class DaisyParserPass : public Pass {
     bool checkMacroExpansionForRecursion(std::string_view macro_id);
     void ensureEndOfInput(SymbolInfo& tkn);
 
-    const ir::Node& getIrNode() const { return *ir_node_stack_.back(); }
-    ir::Node& getIrNode() { return *ir_node_stack_.back(); }
-    void pushIrNode(ir::Node& node) { ir_node_stack_.emplace_back(&node); }
-    void popIrNode() { ir_node_stack_.pop_back(); }
+    const ir::Node& getCurrentScope() const {
+        assert(current_scope_);
+        return *current_scope_;
+    }
+    ir::Node& getCurrentScope() {
+        assert(current_scope_);
+        return *current_scope_;
+    }
+    void setCurrentScope(ir::Node& scope) { current_scope_ = &scope; }
+    void popCurrentScope() {
+        current_scope_ = current_scope_->getNamespace().getParentScope();
+        assert(current_scope_);
+    }
 
  private:
     struct TextBuffer {
@@ -164,7 +173,7 @@ class DaisyParserPass : public Pass {
     uxs::basic_inline_dynbuffer<int, 1> lex_state_stack_;
     std::forward_list<IfSectionState> if_section_stack_;
 
-    std::vector<ir::Node*> ir_node_stack_;
+    ir::Node* current_scope_;
 
     std::unordered_map<std::string_view, int> keywords_;
     std::array<ReduceActionHandler::FuncType, parser_detail::total_action_count> reduce_action_handlers_;

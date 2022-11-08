@@ -8,18 +8,18 @@ using namespace daisy;
 namespace {
 
 void beginBlockExpr(DaisyParserPass* pass, SymbolInfo* ss, SymbolLoc& loc) {
-    pass->pushIrNode(*ss[-1].val.emplace<std::unique_ptr<ir::Node>>(
-        std::make_unique<ir::Node>(std::make_unique<ir::Namespace>(), loc)));
+    pass->setCurrentScope(*ss[-1].val.emplace<std::unique_ptr<ir::Node>>(
+        std::make_unique<ir::Node>(std::make_unique<ir::Namespace>(pass->getCurrentScope()), loc)));
 }
 
 void pushExpressionResult(DaisyParserPass* pass, SymbolInfo* ss, SymbolLoc& loc) {
-    pass->getIrNode().pushChildBack(std::move(std::get<std::unique_ptr<ir::Node>>(ss[0].val)));
+    pass->getCurrentScope().pushChildBack(std::move(std::get<std::unique_ptr<ir::Node>>(ss[0].val)));
 }
 
 void discardExpressionResult(DaisyParserPass* pass, SymbolInfo* ss, SymbolLoc& loc) {
     auto discard_node = std::make_unique<ir::DiscardExprNode>(ss[0].loc);
     discard_node->pushChildBack(std::move(std::get<std::unique_ptr<ir::Node>>(ss[0].val)));
-    pass->getIrNode().pushChildBack(std::move(discard_node));
+    pass->getCurrentScope().pushChildBack(std::move(discard_node));
 }
 
 void makeIfNode(DaisyParserPass* pass, SymbolInfo* ss, SymbolLoc& loc) {

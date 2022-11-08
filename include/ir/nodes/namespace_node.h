@@ -7,7 +7,8 @@ namespace ir {
 
 class NamespaceNode : public util::rtti_mixin<NamespaceNode, NamedNode> {
  public:
-    explicit NamespaceNode(std::string name) : rtti_mixin_t(std::move(name), std::make_unique<Namespace>()) {}
+    NamespaceNode(std::string name, Node& parent_scope, const SymbolLoc& loc)
+        : rtti_mixin_t(std::move(name), std::make_unique<Namespace>(parent_scope), loc) {}
 };
 
 }  // namespace ir

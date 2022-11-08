@@ -67,10 +67,20 @@ class rtti_mixin<Ty, void> {
     virtual ~rtti_mixin() = default;
 };
 
+namespace detail {
+template<typename Ty, typename = void>
+struct is_complete : std::false_type {};
+template<typename Ty>
+struct is_complete<Ty, decltype(void(sizeof(Ty)))> : std::true_type {};
+template<typename Ty>
+constexpr bool is_complete_v = is_complete<Ty>::value;
+}  // namespace detail
+
 template<typename... Kind, typename Ty, typename = std::void_t<typename Ty::rtti_mixin_t>>
 [[nodiscard]] bool is_kind_of(Ty& ref) {
     using TyNoCV = std::remove_cv_t<Ty>;
     static_assert(sizeof...(Kind) != 0, "unspecified kind");
+    static_assert((detail::is_complete_v<Kind> && ...), "incomplete type");
     if constexpr ((!std::is_convertible_v<TyNoCV*, Kind*> && ...)) {
         for (auto* info = ref.get_rtti_type_info(); ((info->type_id != type_info<Kind>::kId) && ...);
              info = info->super_desc) {
@@ -80,15 +90,24 @@ template<typename... Kind, typename Ty, typename = std::void_t<typename Ty::rtti
     return true;
 }
 
+template<typename... Kind, typename Ty, typename = std::void_t<typename Ty::rtti_mixin_t>>
+[[nodiscard]] bool is_kind_of(Ty* ref) {
+    return ref && is_kind_of<Kind...>(*ref);
+}
+
 template<typename TyTo, typename TyFrom, typename = std::enable_if_t<std::is_reference_v<TyTo>>>
 [[nodiscard]] TyTo cast(TyFrom& ref) {
-    if (!is_kind_of<std::decay_t<TyTo>>(ref)) { throw std::runtime_error("bad cast"); }
+    using Kind = std::decay_t<TyTo>;
+    static_assert(detail::is_complete_v<Kind>, "incomplete type");
+    if (!is_kind_of<Kind>(ref)) { throw std::runtime_error("bad cast"); }
     return static_cast<TyTo>(ref);
 }
 
 template<typename TyTo, typename TyFrom, typename = std::enable_if_t<std::is_pointer_v<TyTo>>>
 [[nodiscard]] TyTo cast(TyFrom* ptr) {
-    return ptr && is_kind_of<std::decay_t<std::remove_pointer_t<TyTo>>>(*ptr) ? static_cast<TyTo>(ptr) : nullptr;
+    using Kind = std::decay_t<std::remove_pointer_t<TyTo>>;
+    static_assert(detail::is_complete_v<Kind>, "incomplete type");
+    return is_kind_of<Kind>(ptr) ? static_cast<TyTo>(ptr) : nullptr;
 }
 
 }  // namespace util
