@@ -1,0 +1,8 @@
+namespace N1 {
+
+struct A {
+  i : i32;
+  f : double;
+};
+
+}

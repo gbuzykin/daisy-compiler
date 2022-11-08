@@ -1,0 +1,4 @@
+namespace ns1 {
+struct ns2 {};
+namespace ns2 {}
+}
