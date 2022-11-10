@@ -1,0 +1,44 @@
+./preproc/define/fail008.ds:3:1: debug: token
+ 3 | const a = SUM(
+   | ^~~~~
+./preproc/define/fail008.ds:3:7: debug: id: a
+ 3 | const a = SUM(
+   |       ^
+./preproc/define/fail008.ds:3:9: debug: token
+ 3 | const a = SUM(
+   |         ^
+./preproc/define/fail008.ds:3:11: debug: token
+ 3 | const a = SUM(
+   |           ^~~~
+   | #info
+   | ~~~~~
+   | ,
+   | ~
+   | #info
+   | ~~~~~
+   |              );
+   |              ~
+./preproc/define/fail008.ds:1:19: note: expanded from macro `SUM`
+ 1 | #define SUM(a, b) ((a) + (b))
+   |                   ^
+./preproc/define/fail008.ds:3:11: debug: token
+ 3 | const a = SUM(
+   |           ^~~~
+   | #info
+   | ~~~~~
+   | ,
+   | ~
+   | #info
+   | ~~~~~
+   |              );
+   |              ~
+./preproc/define/fail008.ds:1:20: note: expanded from macro `SUM`
+ 1 | #define SUM(a, b) ((a) + (b))
+   |                    ^
+./preproc/define/fail008.ds:4:1: error: unexpected token
+ 4 | #info
+   | ^
+./preproc/define/fail008.ds:7:15: debug: token
+ 7 |              );
+   |               ^
+./preproc/define/fail008.ds: info: warnings 0, errors 1

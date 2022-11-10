@@ -66,15 +66,13 @@ PassResult DaisyParserPass::run(CompilationContext& ctx) {
 
     defineBuiltinMacros();
 
-    // Load source file
-    const auto* src_file = loadInputFile(ctx.file_name);
+    // Create main source file input context
+    const auto* src_file = pushInputFile(ctx.file_name, {});
     if (!src_file) {
         logger::fatal().format("could not open input file `{}`", ctx.file_name);
         return PassResult::kFatalError;
     }
 
-    // Create main source file input context
-    pushInputContext(std::make_unique<InputContext>(src_file->getText(), &newLocationContext(src_file)));
     lex_state_stack_.push_back(lex_detail::sc_initial);
 
     // Parse input file
@@ -157,17 +155,17 @@ int DaisyParserPass::lex(SymbolInfo& tkn, bool* leading_ws) {
         unsigned llen = 0;
         const char *first = in_ctx->text.first, *lexeme = first;
         while (true) {
-            bool stack_limitation = false;
+            int lex_flags = at_beginning_of_line_;
             const char* last = in_ctx->text.last;
             if (lex_state_stack_.avail() < static_cast<size_t>(last - first)) {
                 last = first + lex_state_stack_.avail();
-                stack_limitation = true;
+                lex_flags |= lex_detail::flag_has_more;
             }
             assert(first <= last);
-            pat = lex_detail::lex(first, last, lex_state_stack_.p_curr(), &llen, stack_limitation);
+            pat = lex_detail::lex(first, last, lex_state_stack_.p_curr(), &llen, lex_flags);
             if (pat >= lex_detail::predef_pat_default) {
                 break;
-            } else if (stack_limitation) {
+            } else if (lex_flags & lex_detail::flag_has_more) {
                 // enlarge state stack and continue analysis
                 lex_state_stack_.reserve_at_curr(llen);
                 first = last;
@@ -175,7 +173,7 @@ int DaisyParserPass::lex(SymbolInfo& tkn, bool* leading_ws) {
                 if (lex_state_stack_.back() == lex_detail::sc_string) {
                     logger::warning(tkn.loc).format("unterminated string literal");
                     tkn.val = std::move(txt);
-                    lex_state_stack_.pop_back();
+                    lex_state_stack_.back() = lex_detail::sc_initial;
                     return parser_detail::tt_string_literal;
                 }
                 tkn.loc.last = tkn.loc.first = in_ctx->text.pos;
@@ -194,6 +192,7 @@ int DaisyParserPass::lex(SymbolInfo& tkn, bool* leading_ws) {
             }
         }
 
+        at_beginning_of_line_ = 0;
         in_ctx->text.first += llen, in_ctx->text.pos.col += llen;
         tkn.loc.last = {in_ctx->text.pos.ln, in_ctx->text.pos.col - 1};
 
@@ -244,7 +243,7 @@ int DaisyParserPass::lex(SymbolInfo& tkn, bool* leading_ws) {
             case lex_detail::pat_arrow: return parser_detail::tt_arrow;
 
             // ------ string literal
-            case lex_detail::pat_string: lex_state_stack_.push_back(lex_detail::sc_string); break;
+            case lex_detail::pat_string: lex_state_stack_.back() = lex_detail::sc_string; break;
             case lex_detail::pat_string_seq: txt.append(lexeme, llen); break;
             case lex_detail::pat_string_ln_wrap: in_ctx->text.pos.nextLn(); break;  // Skip '\n'
             case lex_detail::pat_string_nl: {
@@ -254,7 +253,7 @@ int DaisyParserPass::lex(SymbolInfo& tkn, bool* leading_ws) {
             } break;
             case lex_detail::pat_string_close: {
                 tkn.val = std::move(txt);
-                lex_state_stack_.pop_back();
+                lex_state_stack_.back() = lex_detail::sc_initial;
                 return parser_detail::tt_string_literal;
             } break;
 
@@ -315,6 +314,9 @@ int DaisyParserPass::lex(SymbolInfo& tkn, bool* leading_ws) {
                 skipTillNewLine(in_ctx->text);
                 if (in_ctx->text.first != in_ctx->text.last) { ++in_ctx->text.first, in_ctx->text.pos.nextLn(); }
                 tkn.loc.first = in_ctx->text.pos;
+                if (!(in_ctx->flags & InputContext::Flags::kExpendingMacro)) {
+                    at_beginning_of_line_ = lex_detail::flag_at_beg_of_line;
+                }
                 if (leading_ws) { *leading_ws = true; }
             } break;
             case lex_detail::pat_comment2: {  // Eat up comment `/* ... */`
@@ -325,8 +327,12 @@ int DaisyParserPass::lex(SymbolInfo& tkn, bool* leading_ws) {
             } break;
 
             // ------ other
-            case lex_detail::pat_fake_nl:
             case lex_detail::pat_nl: {
+                if (!(in_ctx->flags & InputContext::Flags::kExpendingMacro)) {
+                    at_beginning_of_line_ = lex_detail::flag_at_beg_of_line;
+                }
+            } /* fallthrough */
+            case lex_detail::pat_fake_nl: {
                 in_ctx->text.pos.nextLn();
                 tkn.loc.first = in_ctx->text.pos;
                 if (leading_ws) { *leading_ws = true; }
@@ -340,12 +346,8 @@ int DaisyParserPass::lex(SymbolInfo& tkn, bool* leading_ws) {
             case lex_detail::pat_esc_char: return static_cast<unsigned char>(lexeme[1]);
             case lex_detail::pat_concatenate: return parser_detail::tt_concatenate;
             case lex_detail::pat_sharp: {
-                if (!(in_ctx->flags & InputContext::Flags::kPreprocDirective) && !in_ctx->loc_ctx->expansion.macro_def) {
-                    parsePreprocessorDirective();
-                    reset_token_loc(*(in_ctx = &getInputContext()));
-                    break;
-                }
-                return '#';
+                parsePreprocessorDirective();
+                reset_token_loc(*(in_ctx = &getInputContext()));
             } break;
             case lex_detail::pat_other_char: return static_cast<unsigned char>(lexeme[0]);
             default: return parser_detail::tt_end_of_file;
@@ -358,42 +360,48 @@ int DaisyParserPass::lex(SymbolInfo& tkn, bool* leading_ws) {
     return parser_detail::parse(tt, sptr0, p_sptr, rise_error);
 }
 
-const InputFileInfo* DaisyParserPass::loadInputFile(std::string_view file_path) {
+const InputFileInfo* DaisyParserPass::pushInputFile(std::string_view file_path, const SymbolLoc& expansion_loc) {
     std::filesystem::path path(file_path);
     if (path.is_relative()) { path = (std::filesystem::current_path() / path).lexically_normal(); }
 
     std::string normal_path = path.generic_string();
     auto it = ctx_->input_files.find(normal_path);
-    if (it != ctx_->input_files.end()) { return it->second.get(); }
+    InputFileInfo* file_info = it != ctx_->input_files.end() ? it->second.get() : nullptr;
 
-    if (!std::filesystem::exists(path)) { return nullptr; }
+    if (!file_info) {
+        if (!std::filesystem::exists(path)) { return nullptr; }
 
-    uxs::filebuf ifile(normal_path.c_str(), "r");
-    if (!ifile) { return nullptr; }
+        uxs::filebuf ifile(normal_path.c_str(), "r");
+        if (!ifile) { return nullptr; }
 
-    auto& file_info = *ctx_->input_files
-                           .emplace(std::move(normal_path),
-                                    std::make_unique<InputFileInfo>(ctx_, std::string(file_path)))
-                           .first->second;
+        file_info = ctx_->input_files
+                        .emplace(std::move(normal_path), std::make_unique<InputFileInfo>(ctx_, std::string(file_path)))
+                        .first->second.get();
 
-    size_t file_sz = static_cast<size_t>(ifile.seek(0, uxs::seekdir::kEnd));
-    file_info.text = std::make_unique<char[]>(file_sz);
-    ifile.seek(0);
-    size_t n_read = ifile.read(uxs::as_span(file_info.text.get(), file_sz));
+        size_t file_sz = static_cast<size_t>(ifile.seek(0, uxs::seekdir::kEnd));
+        file_info->text = std::make_unique<char[]>(file_sz);
+        ifile.seek(0);
+        size_t n_read = ifile.read(uxs::as_span(file_info->text.get(), file_sz));
 
-    auto get_next_line = [](const char* text, const char* boundary) {
-        return std::string_view(text, std::find_if(text, boundary, [](char ch) { return !ch || ch == '\n'; }) - text);
-    };
+        auto get_next_line = [](const char* text, const char* boundary) {
+            return std::string_view(text,
+                                    std::find_if(text, boundary, [](char ch) { return !ch || ch == '\n'; }) - text);
+        };
 
-    const char* boundary = file_info.text.get() + n_read;
-    const char* last = file_info.text.get() +
-                       file_info.text_lines.emplace_back(get_next_line(file_info.text.get(), boundary)).size();
-    while (last != boundary && *last) {
-        last += file_info.text_lines.emplace_back(get_next_line(++last, boundary)).size();
+        const char* boundary = file_info->text.get() + n_read;
+        const char* last = file_info->text.get() +
+                           file_info->text_lines.emplace_back(get_next_line(file_info->text.get(), boundary)).size();
+        while (last != boundary && *last) {
+            last += file_info->text_lines.emplace_back(get_next_line(++last, boundary)).size();
+        }
+
+        file_info->text_size = last - file_info->text.get();
     }
 
-    file_info.text_size = last - file_info.text.get();
-    return &file_info;
+    pushInputContext(
+        std::make_unique<InputContext>(file_info->getText(), &newLocationContext(file_info, expansion_loc)));
+    at_beginning_of_line_ = lex_detail::flag_at_beg_of_line;
+    return file_info;
 }
 
 void DaisyParserPass::ensureEndOfInput(SymbolInfo& tkn) {
@@ -430,11 +438,7 @@ void DaisyParserPass::parsePreprocessorDirective() {
             logger::error(tkn.loc).format("expected preprocessor directive name");
         }
 
-        if (!!(in_ctx.flags & InputContext::Flags::kSkipFile)) {
-            text.first = text.last;
-        } else if (text.first != text.last) {
-            ++text.first, text.pos.nextLn();
-        }
+        if (!!(in_ctx.flags & InputContext::Flags::kSkipFile)) { text.first = text.last; }
         in_ctx.text = text, in_ctx.flags = flags;
 
         const auto* if_section = getIfSection();

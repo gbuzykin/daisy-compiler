@@ -1,5 +1,2 @@
-#define SUM(a, b) ((a) + (b))
-
-const a = SUM( #include "pass006-1.dsh",
-#include "pass006-2.dsh"
-             );
+#include "pass006.dsh"
+const a = SUM(1, 2);

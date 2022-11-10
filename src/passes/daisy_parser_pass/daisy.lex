@@ -1,9 +1,9 @@
 %start string
 
-dig       [0-9]
+dig       [[:digit:]]
 odig      [0-7]
-hdig      [0-9a-fA-F]
-letter    [a-zA-Z]
+hdig      [[:xdigit:]]
+letter    [[:alpha:]]
 bin       0b(0|1)+(_(0|1)+)*
 oct       0{odig}*(_{odig}+)*
 dec       [1-9]{dig}*(_{dig}+)*
@@ -78,8 +78,8 @@ fake_nl          \\\n
 esc_char         \\.
 scope_resolution "::"
 ellipsis         "..."
-sharp            #
-concatenate      ##
+sharp            ^{ws}*#
+concatenate      !^##
 string           \"
 other_char       .
 

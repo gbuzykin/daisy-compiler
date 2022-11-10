@@ -1,0 +1,7 @@
+#define SUM(a, b) ((a) + (b))
+
+const a = SUM(
+#info
+,
+#info
+             );

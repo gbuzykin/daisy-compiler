@@ -47,14 +47,16 @@ struct InputContext {
         kNone = 0,
         kStopAtEndOfInput = 1,
         kPreprocDirective = 2,
-        kDisableMacroExpansion = 4,
-        kSkipFile = 8,
+        kExpendingMacro = 4,
+        kDisableMacroExpansion = 8,
+        kSkipFile = 0x10,
     };
-    InputContext(TextRange txt, const LocationContext* ctx) : text(txt), loc_ctx(ctx) {}
+    InputContext(TextRange txt, const LocationContext* ctx, Flags f = Flags::kNone)
+        : text(txt), loc_ctx(ctx), flags(f) {}
     virtual ~InputContext() = default;
     TextRange text;
     const LocationContext* loc_ctx;
-    Flags flags = InputContext::Flags::kNone;
+    Flags flags;
     MacroExpansion* macro_expansion = nullptr;
     const IfSectionState* last_if_section_state = nullptr;
 };
@@ -70,7 +72,7 @@ struct MacroExpansion {
 struct MacroExpansionContext : public InputContext {
     template<typename... Args>
     MacroExpansionContext(TextRange txt, const LocationContext* ctx, Args&&... macro_exp_args)
-        : InputContext(txt, ctx), macro_expansion_info{std::forward<Args>(macro_exp_args)...} {}
+        : InputContext(txt, ctx, Flags::kExpendingMacro), macro_expansion_info{std::forward<Args>(macro_exp_args)...} {}
     MacroExpansion macro_expansion_info;
 };
 
@@ -108,7 +110,7 @@ class DaisyParserPass : public Pass {
     CompilationContext& getCompilationContext() const { return *ctx_; }
     int lex(SymbolInfo& tkn, bool* leading_ws = nullptr);
     static int parse(int tt, int* sptr0, int** p_sptr, int rise_error);
-    const InputFileInfo* loadInputFile(std::string_view file_path);
+    const InputFileInfo* pushInputFile(std::string_view file_path, const SymbolLoc& expansion_loc);
     bool isKeyword(std::string_view id) const { return keywords_.find(id) != keywords_.end(); }
 
     IfSectionState* getIfSection() { return !if_section_stack_.empty() ? &if_section_stack_.front() : nullptr; }
@@ -154,6 +156,7 @@ class DaisyParserPass : public Pass {
     };
 
     CompilationContext* ctx_ = nullptr;
+    int at_beginning_of_line_ = 0;
     unsigned error_status_ = 0;
 
     SymbolInfo la_tkn_;
