@@ -22,24 +22,26 @@ DAISY_ADD_PASS(DaisyParserPass);
 /*static*/ const ReduceActionHandler* ReduceActionHandler::first_avail = nullptr;
 /*static*/ const PreprocDirectiveParser* PreprocDirectiveParser::first_avail = nullptr;
 
-void DaisyParserPass::configure() {
-    keywords_.insert({
-        {"namespace", parser_detail::tt_namespace},
-        {"const", parser_detail::tt_const},
-        {"let", parser_detail::tt_let},
-        {"func", parser_detail::tt_func},
-        {"if", parser_detail::tt_if},
-        {"else", parser_detail::tt_else},
-        {"loop", parser_detail::tt_loop},
-        {"while", parser_detail::tt_while},
-        {"struct", parser_detail::tt_struct},
-    });
+namespace {
+std::unordered_map<std::string_view, int> g_keywords = {
+    {"namespace", parser_detail::tt_namespace},
+    {"const", parser_detail::tt_const},
+    {"let", parser_detail::tt_let},
+    {"func", parser_detail::tt_func},
+    {"if", parser_detail::tt_if},
+    {"else", parser_detail::tt_else},
+    {"loop", parser_detail::tt_loop},
+    {"while", parser_detail::tt_while},
+    {"struct", parser_detail::tt_struct},
+    {"mut", parser_detail::tt_mut},
+};
+}
 
+void DaisyParserPass::configure() {
     reduce_action_handlers_.fill(nullptr);
     for (const auto* handler = ReduceActionHandler::first_avail; handler; handler = handler->next_avail) {
         reduce_action_handlers_[handler->act_id] = handler->func;
     }
-
     for (const auto* parser = PreprocDirectiveParser::first_avail; parser; parser = parser->next_avail) {
         preproc_directive_parsers_[parser->directive_id] = parser;
     }
@@ -303,7 +305,7 @@ int DaisyParserPass::lex(SymbolInfo& tkn, bool* leading_ws) {
                     }
                 }
                 if (!(in_ctx->flags & InputContext::Flags::kPreprocDirective)) {
-                    if (auto it = keywords_.find(id); it != keywords_.end()) { return it->second; }
+                    if (auto it = g_keywords.find(id); it != g_keywords.end()) { return it->second; }
                 }
                 tkn.val = id;
                 return parser_detail::tt_id;
@@ -403,6 +405,8 @@ const InputFileInfo* DaisyParserPass::pushInputFile(std::string_view file_path, 
     at_beginning_of_line_ = lex_detail::flag_at_beg_of_line;
     return file_info;
 }
+
+bool DaisyParserPass::isKeyword(std::string_view id) const { return g_keywords.find(id) != g_keywords.end(); }
 
 void DaisyParserPass::ensureEndOfInput(SymbolInfo& tkn) {
     if (lex(tkn) != parser_detail::tt_end_of_input) {
