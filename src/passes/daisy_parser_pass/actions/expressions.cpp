@@ -172,8 +172,8 @@ void makeConditionalNode(DaisyParserPass* pass, SymbolInfo* ss, SymbolLoc& loc) 
 void makeBracketsNode(DaisyParserPass* pass, SymbolInfo* ss, SymbolLoc& loc) { ss[0] = std::move(ss[1]); }
 
 void makeNameRefNode(DaisyParserPass* pass, SymbolInfo* ss, SymbolLoc& loc) {
-    ss[0].val.emplace<std::unique_ptr<ir::Node>>(
-        std::make_unique<ir::NameRefNode>(std::move(std::get<std::string>(ss[0].val)), loc));
+    ss[0].val.emplace<std::unique_ptr<ir::Node>>(std::make_unique<ir::NameRefNode>(
+        std::string(std::get<std::string_view>(ss[1].val)), std::move(std::get<ir::ScopeDescriptor>(ss[0].val)), loc));
 }
 
 void makeBoolConstLiteralNode(DaisyParserPass* pass, SymbolInfo* ss, SymbolLoc& loc) {

@@ -62,9 +62,9 @@
 %action begin_namespace
 %action end_block
 %action concatenate_string_const
-%action relative_name
-%action absolute_name
-%action concatenate_name_path
+%action local_scope
+%action root_scope
+%action resolve_scope
 
 %action bool_const_literal
 %action int_const_literal
@@ -179,7 +179,7 @@ optional_type_spec : ':' type_spec
   | #empty
   ;
 
-type_spec : name_spec ;
+type_spec : scope_spec [id] ;
 
 func_proto : [id] '(' {begin_func_proto} optional_func_arg_list ')' optional_ret_type_spec ;
 
@@ -265,16 +265,16 @@ expr : '-' expr %prec $unary {expr_op_u_minus}
   | expr [or] expr {expr_op_logical_or}
   | expr '?' expr ':' expr {expr_op_conditional}
   | '(' expr ')' {expr_brackets}
-  | name_spec {expr_name_ref}
+  | scope_spec [id] {expr_name_ref}
   | const_literal
   | complex_expr
   ;
 
 # -------------------------------------------------------------------------------------
 # Auxiliary
-name_spec : [id] {relative_name}
-  | [scope_resolution] [id] {absolute_name}
-  | name_spec [scope_resolution] [id] {concatenate_name_path}
+scope_spec : {local_scope} #empty
+  | [scope_resolution] {root_scope}
+  | scope_spec [id] [scope_resolution] {resolve_scope}
   ;
 
 string_const : [string_literal]
