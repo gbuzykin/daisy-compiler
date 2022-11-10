@@ -1,2 +1,0 @@
-#include "pass007.dsh"
-const a = SUM(1, 2);

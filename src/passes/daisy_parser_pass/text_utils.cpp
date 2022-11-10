@@ -160,9 +160,11 @@ void daisy::skipTillPreprocDirective(TextRange& text) {
     const char *p = text.first, *p0 = p;
     while (p != text.last) {
         switch (*p++) {
-            case '#': {  // Stop after single '#' character
-                if (p != text.last && *p != '#') { goto stop; }
-                ++p;
+            case '#': {  // Stop after '#' character at beginning of a line
+                if ((p0 < text.first + 2 || *(p0 - 2) != '\\') &&
+                    std::all_of(p0, p - 1, [](char ch) { return ch == '\r' || ch == '\t' || ch == ' '; })) {
+                    goto stop;
+                }
             } break;
             case '\\': {  // Skip any character after '\\', count newlines
                 if (p != text.last && *p++ == '\n') { text.pos.nextLn(), p0 = p; }

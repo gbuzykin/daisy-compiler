@@ -143,8 +143,8 @@ std::string stringizeMacro(DaisyParserPass* pass, const MacroExpansion& macro_ex
     const auto* loc_ctx = pass->getInputContext().loc_ctx;
     assert(loc_ctx);
 
-    auto& in_ctx = pass->pushInputContext(std::make_unique<InputContext>(macro_exp.actual_args.back(), loc_ctx));
-    in_ctx.flags |= InputContext::Flags::kStopAtEndOfInput;
+    auto& in_ctx = pass->pushInputContext(
+        std::make_unique<InputContext>(macro_exp.actual_args.back(), loc_ctx, InputContext::Flags::kStopAtEndOfInput));
     in_ctx.macro_expansion = in_ctx.macro_expansion;
 
     SymbolInfo tkn;
@@ -312,6 +312,7 @@ void DaisyParserPass::expandMacroArgument(const TextRange& arg) {
     // Note: use location context of macro expansion source
     const auto* source_in_ctx = getInputContext().macro_expansion->source_in_ctx;
     assert(source_in_ctx);
-    pushInputContext(std::make_unique<InputContext>(arg, source_in_ctx->loc_ctx)).macro_expansion =
-        source_in_ctx->macro_expansion;
+    auto arg_exp_ctx = std::make_unique<InputContext>(arg, source_in_ctx->loc_ctx, InputContext::Flags::kExpendingMacro);
+    arg_exp_ctx->macro_expansion = source_in_ctx->macro_expansion;
+    pushInputContext(std::move(arg_exp_ctx));
 }

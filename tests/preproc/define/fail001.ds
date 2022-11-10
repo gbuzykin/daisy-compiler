@@ -4,3 +4,7 @@ const b = # unknown
 ;
 const c = ##
 ;
+#info
+ #info
+##
+;
