@@ -4,6 +4,7 @@
 #include "ctx/ctx.h"
 #include "ir/float_const.h"
 #include "ir/int_const.h"
+#include "ir/scope_descriptor.h"
 #include "ir/type_descriptor.h"
 #include "pass_manager.h"
 #include "uxs/stringcvt.h"
@@ -26,7 +27,7 @@ namespace parser_detail {
 namespace daisy {
 
 using SymbolVal = std::variant<bool, ir::IntConst, ir::FloatConst, std::string, std::string_view,
-                               std::unique_ptr<ir::Node>, std::unique_ptr<ir::TypeDescriptor>>;
+                               std::unique_ptr<ir::Node>, ir::ScopeDescriptor, ir::TypeDescriptor>;
 
 struct SymbolInfo {
     SymbolVal val;
@@ -141,6 +142,15 @@ class DaisyParserPass : public Pass {
 
     bool checkMacroExpansionForRecursion(std::string_view macro_id);
     void ensureEndOfInput(SymbolInfo& tkn);
+
+    const ir::RootNode& getRootScope() const {
+        assert(ctx_->ir_root);
+        return *ctx_->ir_root;
+    }
+    ir::RootNode& getRootScope() {
+        assert(ctx_->ir_root);
+        return *ctx_->ir_root;
+    }
 
     const ir::Node& getCurrentScope() const {
         assert(current_scope_);

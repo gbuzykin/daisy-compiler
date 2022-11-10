@@ -10,14 +10,11 @@ class EvalNode : public util::rtti_mixin<EvalNode, Node> {
  public:
     explicit EvalNode(const SymbolLoc& loc) : rtti_mixin_t(loc) {}
 
-    const TypeDescriptor* getTypeDescriptor() const { return type_desc_.get(); }
-    TypeDescriptor* getTypeDescriptor() { return type_desc_.get(); }
-    TypeDescriptor& getOrCreateTypeDescriptor(DataTypeClass type_class, TypeDefNode* type_def = nullptr) {
-        return type_desc_ ? *type_desc_ : *(type_desc_ = std::make_unique<TypeDescriptor>(type_class, type_def));
-    }
+    const TypeDescriptor& getTypeDescriptor() const { return type_desc_; }
+    TypeDescriptor& getTypeDescriptor() { return type_desc_; }
 
  private:
-    std::unique_ptr<TypeDescriptor> type_desc_;
+    TypeDescriptor type_desc_;
 };
 
 }  // namespace ir

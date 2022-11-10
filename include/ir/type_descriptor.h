@@ -8,7 +8,8 @@ namespace ir {
 class TypeDefNode;
 
 enum class DataTypeClass : unsigned {
-    kBool = 0,
+    kAuto = 0,
+    kBool,
     kInt8,
     kUInt8,
     kInt16,
@@ -22,14 +23,13 @@ enum class DataTypeClass : unsigned {
     kDefinedDataType
 };
 
-enum class DataTypeModifiers : unsigned {
-    kNone = 0,
-};
+enum class DataTypeModifiers : unsigned { kNone = 0 };
 UXS_IMPLEMENT_BITWISE_OPS_FOR_ENUM(DataTypeModifiers, unsigned);
 
 class TypeDescriptor {
  public:
-    explicit TypeDescriptor(DataTypeClass cl, TypeDefNode* type_def = nullptr) : class_(cl), def_(type_def) {}
+    explicit TypeDescriptor(DataTypeClass cl = DataTypeClass::kAuto) : class_(cl) {}
+    TypeDescriptor(DataTypeClass cl, TypeDefNode* type_def) : class_(cl), def_(type_def) {}
 
     DataTypeClass getClass() const { return class_; }
     DataTypeModifiers getModifiers() const { return modifiers_; }
@@ -39,7 +39,7 @@ class TypeDescriptor {
  private:
     DataTypeClass class_;
     DataTypeModifiers modifiers_ = DataTypeModifiers::kNone;
-    TypeDefNode* def_;
+    TypeDefNode* def_ = nullptr;
 };
 
 }  // namespace ir

@@ -1,14 +1,14 @@
 #pragma once
 
-#include "ir/nodes/named_node.h"
+#include "ir/nodes/named_scope_node.h"
 
 namespace daisy {
 namespace ir {
 
-class NamespaceNode : public util::rtti_mixin<NamespaceNode, NamedNode> {
+class NamespaceNode : public util::rtti_mixin<NamespaceNode, NamedScopeNode> {
  public:
     NamespaceNode(std::string name, Node& parent_scope, const SymbolLoc& loc)
-        : rtti_mixin_t(std::move(name), std::make_unique<Namespace>(parent_scope), loc) {}
+        : rtti_mixin_t(std::move(name), parent_scope, loc) {}
 };
 
 }  // namespace ir
