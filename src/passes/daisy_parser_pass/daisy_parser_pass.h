@@ -26,8 +26,9 @@ namespace parser_detail {
 
 namespace daisy {
 
-using SymbolVal = std::variant<bool, ir::IntConst, ir::FloatConst, std::string, std::string_view,
-                               std::unique_ptr<ir::Node>, ir::ScopeDescriptor, ir::TypeDescriptor>;
+using SymbolVal =
+    std::variant<bool, ir::IntConst, ir::FloatConst, std::string, std::string_view, std::unique_ptr<ir::Node>,
+                 ir::ScopeDescriptor, ir::TypeDescriptor, ir::DataTypeModifiers>;
 
 struct SymbolInfo {
     SymbolVal val;
@@ -112,7 +113,7 @@ class DaisyParserPass : public Pass {
     int lex(SymbolInfo& tkn, bool* leading_ws = nullptr);
     static int parse(int tt, int* sptr0, int** p_sptr, int rise_error);
     const InputFileInfo* pushInputFile(std::string_view file_path, const SymbolLoc& expansion_loc);
-    bool isKeyword(std::string_view id) const { return keywords_.find(id) != keywords_.end(); }
+    bool isKeyword(std::string_view id) const;
 
     IfSectionState* getIfSection() { return !if_section_stack_.empty() ? &if_section_stack_.front() : nullptr; }
     IfSectionState& pushIfSection(const SymbolLoc& loc) { return if_section_stack_.emplace_front(IfSectionState{loc}); }
@@ -185,7 +186,6 @@ class DaisyParserPass : public Pass {
 
     ir::Node* current_scope_;
 
-    std::unordered_map<std::string_view, int> keywords_;
     std::array<ReduceActionHandler::FuncType, parser_detail::total_action_count> reduce_action_handlers_;
     std::unordered_map<std::string_view, const PreprocDirectiveParser*> preproc_directive_parsers_;
 

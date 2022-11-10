@@ -23,7 +23,7 @@ enum class DataTypeClass : unsigned {
     kDefinedDataType
 };
 
-enum class DataTypeModifiers : unsigned { kNone = 0 };
+enum class DataTypeModifiers : unsigned { kNone = 0, kMutable = 1, kReference = 2 };
 UXS_IMPLEMENT_BITWISE_OPS_FOR_ENUM(DataTypeModifiers, unsigned);
 
 class TypeDescriptor {
@@ -33,6 +33,7 @@ class TypeDescriptor {
 
     DataTypeClass getClass() const { return class_; }
     DataTypeModifiers getModifiers() const { return modifiers_; }
+    void setModifiers(DataTypeModifiers modifiers) { modifiers_ = modifiers; }
     const TypeDefNode* getDefinitionNode() const { return def_; }
     TypeDefNode* getDefinitionNode() { return def_; }
 

@@ -24,6 +24,9 @@ void beginStructDef(DaisyParserPass* pass, SymbolInfo* ss, SymbolLoc& loc) {
 void defineField(DaisyParserPass* pass, SymbolInfo* ss, SymbolLoc& loc) {
     auto field_def_node = std::make_unique<ir::VarDefNode>(std::string(std::get<std::string_view>(ss[1].val)),
                                                            ss[1].loc);
+    auto& type_desc = std::get<ir::TypeDescriptor>(ss[3].val);
+    type_desc.setModifiers(std::get<ir::DataTypeModifiers>(ss[0].val));
+    field_def_node->setTypeDescriptor(std::move(type_desc));
     logger::debug(field_def_node->getLoc()).format("defining field `{}`", field_def_node->getName());
     pass->getCurrentScope().pushChildBack(std::move(field_def_node));
 }

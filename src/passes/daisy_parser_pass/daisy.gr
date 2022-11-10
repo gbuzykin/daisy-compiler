@@ -43,6 +43,7 @@
 %token loop
 %token while
 %token struct
+%token mut
 
 # Operator precedence
 %right '?' ':'
@@ -100,6 +101,7 @@
 
 %action define_const
 %action define_variable
+%action definition_type_specifier
 
 %action begin_block_expr
 %action push_expr_result
@@ -111,9 +113,19 @@
 %action loop_with_else_expr
 
 %action begin_func_proto
-%action end_func_decl
-%action end_func_def
+%action end_func_proto
+%action declare_func
+%action define_func
 %action add_func_formal_arg
+%action ret_type_specifier
+%action ret_type_modifier
+
+%action no_type_specifier
+%action make_type_specifier
+%action no_type_modifier
+%action mutable_type_modifier
+%action reference_type_modifier
+%action mutable_reference_type_modifier
 
 %action begin_struct_def
 %action define_field
@@ -158,8 +170,8 @@ unit_contents : unit_contents unit_item
 
 unit_item : [namespace] [id] '{' {begin_namespace} unit_contents '}' {end_block}
   | [const] const_decl_list ';'
-  | [func] func_proto ';' {end_func_decl}
-  | [func] func_proto block_expr {end_func_def}
+  | [func] func_proto ';' {declare_func}
+  | [func] func_proto block_expr {define_func}
   | type_decl ';'
   | $error ';'
   | ';'
@@ -180,14 +192,15 @@ var_decl_list : var_def
 
 var_def : type_modifier [id] optional_type_spec '=' expr {define_variable} ;
 
-optional_type_spec : ':' type_spec
-  | #empty
+optional_type_spec : {no_type_specifier} #empty
+  | ':' type_spec {definition_type_specifier}
   ;
 
-func_proto : [id] '(' {begin_func_proto} optional_func_arg_list ')' optional_ret_type_spec ;
+func_proto : [id] '(' {begin_func_proto} optional_func_arg_list ')' optional_ret_type_spec {end_func_proto} ;
 
-optional_ret_type_spec : [arrow] type_modifier type_spec
-  | #empty
+optional_ret_type_spec : {no_type_specifier} #empty
+  | [arrow] type_modifier type_spec {ret_type_specifier}
+  | [arrow] type_modifier {ret_type_modifier}
   ;
 
 optional_func_arg_list : func_arg_list
@@ -200,9 +213,12 @@ func_arg_list : func_arg
 
 func_arg : type_modifier [id] ':' type_spec {add_func_formal_arg} ;
 
-type_spec : scope_spec [id] ;
+type_spec : scope_spec [id] {make_type_specifier} ;
 
-type_modifier : #empty
+type_modifier : {no_type_modifier} #empty
+  | [mut] {mutable_type_modifier}
+  | '&' {reference_type_modifier}
+  | '&' [mut] {mutable_reference_type_modifier}
   ;
 
 # -------------------------------------------------------------------------------------
@@ -216,8 +232,8 @@ type_decl_statement_list : type_decl_statement_list type_decl_statement
 
 type_decl_statement : [const] const_decl_list ';'
   | type_modifier [id] ':' type_spec ';' {define_field}
-  | [func] func_proto ';' {end_func_decl}
-  | [func] func_proto block_expr {end_func_def}
+  | [func] func_proto ';' {declare_func}
+  | [func] func_proto block_expr {define_func}
   | type_decl ';'
   | $error ';'
   | ';'

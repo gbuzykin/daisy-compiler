@@ -1,0 +1,32 @@
+namespace N1 {
+
+struct A1 {
+  i : i32;
+  f : double;
+};
+
+namespace N2 {
+
+struct A2 {
+  i : i32;
+  f : double;
+};
+
+func f1 (x : A1) {}
+func f2 (x : A2) {}
+func f3 (x : N1::A1) {}
+func f4 (x : N2::A2) {}
+func f5 (x : ::N1::A1) {}
+func f6 (x : ::N1::N2::A2) {}
+
+}
+
+func f7 (x : A1) {}
+func f8 (x : N2::A2) {}
+
+}
+
+func f9 (x : N1::A1) {}
+func f10 (x : N1::N2::A2) {}
+func f11 (x : ::N1::A1) {}
+func f12 (x : ::N1::N2::A2) {}
