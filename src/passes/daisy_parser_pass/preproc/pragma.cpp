@@ -23,9 +23,9 @@ const std::unordered_map<std::string_view, PragmaImpl> g_pragma_impl = {
 }  // namespace
 
 void parsePragmaDirective(DaisyParserPass* pass, SymbolInfo& tkn) {
-    int tt = pass->lex(tkn);  // Parse pragma name
+    int tt = pass->lex(tkn);  // Parse pragma identifier
     if (tt != parser_detail::tt_id) {
-        logger::error(tkn.loc).format("expected pragma name");
+        logger::error(tkn.loc).format("expected pragma identifier");
         return;
     }
 
@@ -33,7 +33,7 @@ void parsePragmaDirective(DaisyParserPass* pass, SymbolInfo& tkn) {
     if (it != g_pragma_impl.end()) {
         it->second(pass, tkn);
     } else {
-        logger::warning(tkn.loc).format("unknown pragma name");
+        logger::warning(tkn.loc).format("unknown pragma identifier");
     }
 }
 

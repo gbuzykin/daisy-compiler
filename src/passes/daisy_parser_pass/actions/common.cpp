@@ -42,7 +42,8 @@ void beginNamespace(DaisyParserPass* pass, SymbolInfo* ss, SymbolLoc& loc) {
         if (!nmspace_node) {
             nmspace.addNode(new_nmspace_node);
         } else {
-            logger::error(ss[-3].loc + ss[-2].loc).format("typename `{}` redefinition", name);
+            logger::error(ss[-2].loc).format("redefinition of `{}` as different kind of entity", name);
+            logger::note(nmspace_node->getLoc()).format("previous definition is here");
         }
         nmspace_node = &new_nmspace_node;
     } else {
