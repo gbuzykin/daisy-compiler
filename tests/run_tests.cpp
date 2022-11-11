@@ -71,6 +71,7 @@ int main(int argc, char** argv) {
         std::filesystem::current_path(tests_path);
         if (!getTestList(".", subdir_list, test_lst)) { return -1; }
 
+        unsigned busy_cnt = 0;
         size_t total_test_count = test_lst.size(), passed_test_count = 0;
         for (const auto& path : test_lst) {
             std::string opts;
@@ -78,7 +79,10 @@ int main(int argc, char** argv) {
                 std::getline(fopts, opts);
             }
 
-            std::cout << path << ": " << std::flush;
+            constexpr std::string_view busy = "|/-\\";
+            std::cout << busy[busy_cnt] << '\b' << std::flush;
+            busy_cnt = (busy_cnt + 1) & 3;
+
             const int result = std::system(
                 (compiler_path.string() + " " + opts + " " + path + " 2>" + path + ".out").c_str());
             const bool must_fail = path.find("fail") != std::string::npos;
@@ -115,24 +119,24 @@ int main(int argc, char** argv) {
                                     std::istreambuf_iterator<char>{})) {
                         throw std::runtime_error("FAILED!");
                     }
-                    std::cout << "SUCCESS!" << std::endl;
                 } else {
                     std::ofstream of2(path + ".out.expected");
                     if (!of2) {
                         throw std::runtime_error("cannot open file `" + path + ".out.expected" + "` for writing");
                     }
                     std::copy(sout.begin(), sout.end(), std::ostreambuf_iterator<char>{of2});
-                    std::cout << "UPDATED!" << std::endl;
+                    std::cout << path << ": UPDATED!" << std::endl;
                 }
                 std::filesystem::remove(path + ".out");
                 ++passed_test_count;
             } catch (const std::exception& ex) {
-                std::cout << ex.what() << std::endl;
+                std::cout << path << ": \033[0;31m" << ex.what() << "\033[0m" << std::endl;
                 ret_result = -1;
             }
         }
         std::filesystem::current_path(old_current_path);
-        std::cout << "PASSED: " << passed_test_count << '/' << total_test_count << std::endl;
+        std::cout << "Test result: " << (passed_test_count == total_test_count ? "\033[1;32m" : "\033[1;31m")
+                  << passed_test_count << '/' << total_test_count << " PASSED\033[0m" << std::endl;
         return ret_result;
     } catch (const std::exception& ex) { std::cout << ex.what() << std::endl; }
     return -1;

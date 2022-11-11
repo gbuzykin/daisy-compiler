@@ -405,7 +405,7 @@ const InputFileInfo* DaisyParserPass::pushInputFile(std::string_view file_path, 
 
 void DaisyParserPass::ensureEndOfInput(SymbolInfo& tkn) {
     if (lex(tkn) != parser_detail::tt_end_of_input) {
-        logger::warning(tkn.loc).format("extra tokens at end of preprocessor directive");
+        logger::warning(tkn.loc).format("extra tokens at end of preprocessing directive");
     }
 }
 
@@ -431,10 +431,10 @@ void DaisyParserPass::parsePreprocessorDirective() {
             if (it != preproc_directive_parsers_.end()) {
                 if (!is_text_disabled || it->second->parse_disabled_text) { it->second->func(this, tkn); }
             } else if (!is_text_disabled) {
-                logger::error(tkn.loc).format("unknown preprocessor directive");
+                logger::error(tkn.loc).format("unknown preprocessing directive");
             }
         } else if (!is_text_disabled) {
-            logger::error(tkn.loc).format("expected preprocessor directive name");
+            logger::error(tkn.loc).format("expected preprocessing directive identifier");
         }
 
         if (!!(in_ctx.flags & InputContext::Flags::kSkipFile)) { text.first = text.last; }

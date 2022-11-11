@@ -14,7 +14,7 @@ namespace {
 void parseDefineDirective(DaisyParserPass* pass, SymbolInfo& tkn) {
     int tt = pass->lex(tkn);  // Parse identifier
     if (tt != parser_detail::tt_id) {
-        logger::error(tkn.loc).format("expected macro name");
+        logger::error(tkn.loc).format("expected macro identifier");
         return;
     }
 
@@ -38,8 +38,8 @@ void parseDefineDirective(DaisyParserPass* pass, SymbolInfo& tkn) {
                 if (pass->isKeyword(arg_id)) {  // is a keyword
                     logger::error(tkn.loc).format("keyword `{}` cannot be used as macro argument identifier", arg_id);
                     return;
-                } else if (arg_id == kVaArgsId) {  // variable argument identifier
-                    logger::error(tkn.loc).format("identifier `{}` is reserved for variable argument", arg_id);
+                } else if (arg_id == kVaArgsId) {  // variadic argument identifier
+                    logger::error(tkn.loc).format("identifier `{}` is reserved for variadic argument", arg_id);
                     return;
                 }
             } else if (tt == parser_detail::tt_ellipsis) {
@@ -87,7 +87,7 @@ void parseDefineDirective(DaisyParserPass* pass, SymbolInfo& tkn) {
 void parseUndefDirective(DaisyParserPass* pass, SymbolInfo& tkn) {
     int tt = pass->lex(tkn);  // Parse identifier
     if (tt != parser_detail::tt_id) {
-        logger::error(tkn.loc).format("expected macro name");
+        logger::error(tkn.loc).format("expected macro identifier");
         return;
     }
     auto& ctx = pass->getCompilationContext();

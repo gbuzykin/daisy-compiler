@@ -1,4 +1,4 @@
-./preproc/include/warn001.ds:2:31: warning: extra tokens at end of preprocessor directive
+./preproc/include/warn001.ds:2:31: warning: extra tokens at end of preprocessing directive
  2 |    #   include  "pass001.dsh" 1
    |                               ^
 In file included from ./preproc/include/warn001.ds:2

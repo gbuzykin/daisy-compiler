@@ -52,7 +52,7 @@
 ./preproc/define/fail001.ds:8:3: info: 
  8 |  #info
    |   ^~~~
-./preproc/define/fail001.ds:9:2: error: expected preprocessor directive name
+./preproc/define/fail001.ds:9:2: error: expected preprocessing directive identifier
  9 | ##
    |  ^
 ./preproc/define/fail001.ds:10:1: debug: token

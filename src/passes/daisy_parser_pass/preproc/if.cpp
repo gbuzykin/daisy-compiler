@@ -128,7 +128,7 @@ bool evalCondition(DaisyParserPass* pass, SymbolInfo& tkn) {
                             const auto& ctx = pass->getCompilationContext();
                             ss[0].val = ctx.macro_defs.find(macro_id) != ctx.macro_defs.end();
                         } else {
-                            logger::error(ss[0].loc).format("unknown preprocessor operator");
+                            logger::error(ss[0].loc).format("unknown preprocessing operator");
                             return true;
                         }
                     } break;
@@ -152,7 +152,7 @@ bool evalCondition(DaisyParserPass* pass, SymbolInfo& tkn) {
 bool evalIsDefined(DaisyParserPass* pass, SymbolInfo& tkn) {
     int tt = pass->lex(tkn);
     if (tt != parser_detail::tt_id) {
-        logger::error(tkn.loc).format("expected macro name");
+        logger::error(tkn.loc).format("expected macro identifier");
         return true;
     }
 
