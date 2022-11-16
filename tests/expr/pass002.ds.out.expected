@@ -1,10 +1,10 @@
 ./expr/pass002.ds:3:6: debug: defining function `f`
- 3 | func f (x : int, y : int) -> int {
+ 3 | func f(x : int, y : int) -> int {
    |      ^
 ./expr/pass002.ds:4:7: debug: defining variable `m`
  4 |   let m = if x > y { x } else { y }; m
    |       ^
-./expr/pass002.ds:3:1: debug: function `f` definition
- 3 | func f (x : int, y : int) -> int {
-   | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+./expr/pass002.ds:3:1: debug: function `func f(i32, i32) -> i32` definition
+ 3 | func f(x : int, y : int) -> int {
+   | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ./expr/pass002.ds: info: warnings 0, errors 0

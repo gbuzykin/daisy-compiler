@@ -12,6 +12,7 @@ class FuncDefNode : public util::rtti_mixin<FuncDefNode, DefNode> {
 
     const SymbolLoc& getFullDefinitionLoc() const { return full_def_loc_; }
     void setDefinitionLoc(const SymbolLoc& loc) { full_def_loc_ = loc; }
+    std::string getProtoString() const;
 
  private:
     SymbolLoc full_def_loc_;

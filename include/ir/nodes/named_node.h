@@ -14,6 +14,7 @@ class NamedNode : public util::rtti_mixin<NamedNode, Node> {
         : rtti_mixin_t(std::move(nmspace), loc), name_(std::move(name)) {}
 
     const std::string& getName() const { return name_; }
+    std::string getGlobalName() const;
 
  private:
     std::string name_;

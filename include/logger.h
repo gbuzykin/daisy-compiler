@@ -28,7 +28,7 @@ class Logger {
 
     template<typename... Ts>
     LoggerTy& format(std::string_view fmt, const Ts&... args) {
-        msg_ = uxs::format(fmt, args...);
+        if (getType() < MsgType::kInfo + g_debug_level) { msg_ = uxs::format(fmt, args...); }
         return static_cast<LoggerTy&>(*this);
     }
 
