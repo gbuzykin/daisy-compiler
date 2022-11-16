@@ -117,7 +117,7 @@ int main(int argc, char** argv) {
                     }
                     if (!std::equal(sout.begin(), sout.end(), std::istreambuf_iterator<char>{if2},
                                     std::istreambuf_iterator<char>{})) {
-                        throw std::runtime_error("FAILED!");
+                        throw std::runtime_error("diffs with expected compiler output");
                     }
                 } else {
                     std::ofstream of2(path + ".out.expected");
@@ -135,8 +135,14 @@ int main(int argc, char** argv) {
             }
         }
         std::filesystem::current_path(old_current_path);
-        std::cout << "Test result: " << (passed_test_count == total_test_count ? "\033[1;32m" : "\033[1;31m")
-                  << passed_test_count << '/' << total_test_count << " PASSED\033[0m" << std::endl;
+        if (passed_test_count == total_test_count) {
+            std::cout << "Test result: "
+                      << "\033[1;32m" << passed_test_count << '/' << total_test_count << " PASSED\033[0m" << std::endl;
+        } else {
+            std::cout << "Test result: "
+                      << "\033[1;31m" << total_test_count - passed_test_count << '/' << total_test_count
+                      << " FAILED\033[0m" << std::endl;
+        }
         return ret_result;
     } catch (const std::exception& ex) { std::cout << ex.what() << std::endl; }
     return -1;

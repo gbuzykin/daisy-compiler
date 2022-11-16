@@ -1,6 +1,6 @@
 namespace std {
 
-func f (x : int, y : int) -> int {
+func f(x : int, y : int) -> int {
   x + y
 }
 

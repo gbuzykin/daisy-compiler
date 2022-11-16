@@ -2,6 +2,8 @@
 
 #include "uxs/utility.h"
 
+#include <string>
+
 namespace daisy {
 namespace ir {
 
@@ -34,8 +36,10 @@ class TypeDescriptor {
     DataTypeClass getClass() const { return class_; }
     DataTypeModifiers getModifiers() const { return modifiers_; }
     void setModifiers(DataTypeModifiers modifiers) { modifiers_ = modifiers; }
+    bool isAuto() const { return class_ == DataTypeClass::kAuto && modifiers_ == DataTypeModifiers::kNone; }
     const TypeDefNode* getDefinitionNode() const { return def_; }
     TypeDefNode* getDefinitionNode() { return def_; }
+    std::string getTypeString() const;
 
  private:
     DataTypeClass class_;
