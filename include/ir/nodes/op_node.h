@@ -6,7 +6,8 @@ namespace daisy {
 namespace ir {
 
 enum class EvalOperator {
-    kUnaryMinus = 0,
+    kAssign = 0,
+    kUnaryMinus,
     kUnaryPlus,
     kAdd,
     kSub,
@@ -32,14 +33,14 @@ enum class EvalOperator {
 
 class OpNode : public util::rtti_mixin<OpNode, EvalNode> {
  public:
-    OpNode(EvalOperator type, const SymbolLoc& loc, const SymbolLoc& op_loc)
-        : rtti_mixin_t(loc), type_(type), op_loc_(op_loc) {}
+    OpNode(EvalOperator op, const SymbolLoc& loc, const SymbolLoc& op_loc)
+        : rtti_mixin_t(loc), op_(op), op_loc_(op_loc) {}
 
-    EvalOperator getType() const { return type_; }
+    EvalOperator getOp() const { return op_; }
     const SymbolLoc& getOpLoc() const { return op_loc_; }
 
  private:
-    EvalOperator type_;
+    EvalOperator op_;
     SymbolLoc op_loc_;
 };
 

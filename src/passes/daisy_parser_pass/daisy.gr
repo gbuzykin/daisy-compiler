@@ -46,6 +46,7 @@
 %token mut
 
 # Operator precedence
+%nonassoc '='
 %right '?' ':'
 %left or
 %left and
@@ -98,6 +99,7 @@
 %action expr_op_conditional
 %action expr_brackets
 %action expr_name_ref
+%action expr_assignment
 
 %action define_const
 %action define_variable
@@ -309,6 +311,7 @@ expr : '-' expr %prec $unary {expr_op_u_minus}
   | expr '?' expr ':' expr {expr_op_conditional}
   | '(' expr ')' {expr_brackets}
   | scope_spec [id] {expr_name_ref}
+  | expr '=' expr {expr_assignment}
   | const_literal
   | complex_expr
   ;

@@ -83,6 +83,7 @@ enum {
     act_expr_op_conditional,
     act_expr_brackets,
     act_expr_name_ref,
+    act_expr_assignment,
     act_define_const,
     act_define_variable,
     act_definition_type_specifier,
