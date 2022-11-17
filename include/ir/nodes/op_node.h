@@ -7,6 +7,7 @@ namespace ir {
 
 enum class EvalOperator {
     kAssign = 0,
+    kFuncCall,
     kUnaryMinus,
     kUnaryPlus,
     kAdd,

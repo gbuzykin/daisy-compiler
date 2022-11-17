@@ -59,6 +59,7 @@
 %left '+' '-'
 %left '*' '/' '%'
 %right '!' '~' $unary
+%left '('
 
 # Actions
 
@@ -99,7 +100,12 @@
 %action expr_op_conditional
 %action expr_brackets
 %action expr_name_ref
+%action expr_func_call
 %action expr_assignment
+
+%action func_actual_args
+%action init_expr_list
+%action append_expr_list
 
 %action define_const
 %action define_variable
@@ -114,8 +120,8 @@
 %action loop_expr
 %action loop_with_else_expr
 
-%action begin_func_proto
-%action end_func_proto
+%action begin_func_decl
+%action set_ret_type
 %action declare_func
 %action define_func
 %action add_func_formal_arg
@@ -198,22 +204,22 @@ optional_type_spec : {no_type_specifier} #empty
   | ':' type_spec {definition_type_specifier}
   ;
 
-func_proto : [id] '(' {begin_func_proto} optional_func_arg_list ')' optional_ret_type_spec {end_func_proto} ;
+func_proto : [id] '(' {begin_func_decl} optional_func_format_arg_list ')' optional_ret_type_spec {set_ret_type} ;
 
 optional_ret_type_spec : {no_type_specifier} #empty
   | [arrow] type_modifier type_spec {ret_type_specifier}
   | [arrow] type_modifier {ret_type_modifier}
   ;
 
-optional_func_arg_list : func_arg_list
-  | #empty
+optional_func_format_arg_list : #empty
+  | func_formal_arg_list
   ;
 
-func_arg_list : func_arg
-  | func_arg_list ',' func_arg
+func_formal_arg_list : func_formal_arg
+  | func_formal_arg_list ',' func_formal_arg
   ;
 
-func_arg : type_modifier [id] ':' type_spec {add_func_formal_arg} ;
+func_formal_arg : type_modifier [id] ':' type_spec {add_func_formal_arg} ;
 
 type_spec : scope_spec [id] {make_type_specifier} ;
 
@@ -311,9 +317,18 @@ expr : '-' expr %prec $unary {expr_op_u_minus}
   | expr '?' expr ':' expr {expr_op_conditional}
   | '(' expr ')' {expr_brackets}
   | scope_spec [id] {expr_name_ref}
+  | expr '(' {func_actual_args} optional_expr_list ')' {expr_func_call}
   | expr '=' expr {expr_assignment}
   | const_literal
   | complex_expr
+  ;
+
+optional_expr_list : #empty
+  | expr_list
+  ;
+
+expr_list : expr {init_expr_list}
+  | expr_list ',' expr {append_expr_list}
   ;
 
 # -------------------------------------------------------------------------------------

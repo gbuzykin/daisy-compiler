@@ -59,3 +59,13 @@ DAISY_ADD_REDUCE_ACTION_HANDLER(act_root_scope, [](DaisyParserPass* pass, Symbol
 
 DAISY_ADD_REDUCE_ACTION_HANDLER(act_end_block,
                                 [](DaisyParserPass* pass, SymbolInfo* ss, SymbolLoc& loc) { pass->popCurrentScope(); });
+
+DAISY_ADD_REDUCE_ACTION_HANDLER(act_init_expr_list, [](DaisyParserPass* pass, SymbolInfo* ss, SymbolLoc& loc) {
+    auto& node = std::get<std::unique_ptr<ir::Node>>(ss[-1].val);
+    node->push_back(std::move(std::get<std::unique_ptr<ir::Node>>(ss[0].val)));
+});
+
+DAISY_ADD_REDUCE_ACTION_HANDLER(act_append_expr_list, [](DaisyParserPass* pass, SymbolInfo* ss, SymbolLoc& loc) {
+    auto& node = std::get<std::unique_ptr<ir::Node>>(ss[-1].val);
+    node->push_back(std::move(std::get<std::unique_ptr<ir::Node>>(ss[2].val)));
+});

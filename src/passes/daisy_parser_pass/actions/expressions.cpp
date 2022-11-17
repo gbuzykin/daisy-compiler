@@ -120,6 +120,16 @@ DAISY_ADD_REDUCE_ACTION_HANDLER(act_expr_name_ref, [](DaisyParserPass* pass, Sym
                                                   std::move(std::get<ir::ScopeDescriptor>(ss[0].val)), loc);
 });
 
+// Function call
+DAISY_ADD_REDUCE_ACTION_HANDLER(act_func_actual_args, [](DaisyParserPass* pass, SymbolInfo* ss, SymbolLoc& loc) {
+    ss[0].val = std::make_unique<ir::OpNode>(ir::EvalOperator::kFuncCall, loc, ss[-2].loc);
+});
+DAISY_ADD_REDUCE_ACTION_HANDLER(act_expr_func_call, [](DaisyParserPass* pass, SymbolInfo* ss, SymbolLoc& loc) {
+    auto func_call_node = std::move(std::move(std::get<std::unique_ptr<ir::Node>>(ss[2].val)));
+    func_call_node->push_front(std::move(std::get<std::unique_ptr<ir::Node>>(ss[0].val)));
+    ss[0].val = std::move(func_call_node);
+});
+
 // Assignment
 DAISY_ADD_REDUCE_ACTION_HANDLER(act_expr_assignment, [](DaisyParserPass* pass, SymbolInfo* ss, SymbolLoc& loc) {
     makeBinaryOpNode(ir::EvalOperator::kAssign, ss, loc);

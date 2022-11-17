@@ -1,6 +1,3 @@
-./expr/pass003.ds:3:6: debug: defining function `f`
- 3 | func f(x : int, y : int) -> int {
-   |      ^
 ./expr/pass003.ds:4:7: debug: defining variable `m`
  4 |   let m = loop { x; 0 }; m
    |       ^

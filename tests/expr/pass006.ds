@@ -1,0 +1,11 @@
+namespace std {
+
+func f(x : int, y : int) -> int {
+  let m = if x > y { x } else { y }; m
+}
+
+func g(x : int, y : int) {
+  f(x, y)
+}
+
+}
