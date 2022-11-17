@@ -9,7 +9,7 @@ namespace {
 
 void beginStructDef(DaisyParserPass* pass, SymbolInfo* ss, SymbolLoc& loc) {
     const auto name = std::get<std::string_view>(ss[-2].val);
-    auto& struct_def_node = pass->getCurrentScope().pushChildBack(
+    auto& struct_def_node = pass->getCurrentScope().push_back(
         std::make_unique<ir::StructDefNode>(std::string(name), pass->getCurrentScope(), ss[-2].loc));
     auto& nmspace = pass->getCurrentScope().getNamespace();
     if (auto* nmspace_node = nmspace.findNode<ir::NamedScopeNode>(name)) {
@@ -34,7 +34,7 @@ void defineField(DaisyParserPass* pass, SymbolInfo* ss, SymbolLoc& loc) {
             .format("defining field `{}` of type `{}`", field_def_node->getName(),
                     field_def_node->getTypeDescriptor().getTypeString());
     }
-    pass->getCurrentScope().pushChildBack(std::move(field_def_node));
+    pass->getCurrentScope().push_back(std::move(field_def_node));
 }
 
 }  // namespace

@@ -31,8 +31,8 @@ void defineConst(DaisyParserPass* pass, SymbolInfo* ss, SymbolLoc& loc) {
             .format("defining constant `{}` of type `{}`", const_def_node->getName(),
                     const_def_node->getTypeDescriptor().getTypeString());
     }
-    const_def_node->pushChildBack(std::move(std::get<std::unique_ptr<ir::Node>>(ss[3].val)));
-    pass->getCurrentScope().pushChildBack(std::move(const_def_node));
+    const_def_node->push_back(std::move(std::get<std::unique_ptr<ir::Node>>(ss[3].val)));
+    pass->getCurrentScope().push_back(std::move(const_def_node));
 }
 
 void defineVariable(DaisyParserPass* pass, SymbolInfo* ss, SymbolLoc& loc) {
@@ -47,8 +47,8 @@ void defineVariable(DaisyParserPass* pass, SymbolInfo* ss, SymbolLoc& loc) {
             .format("defining variable `{}` of type `{}`", var_def_node->getName(),
                     var_def_node->getTypeDescriptor().getTypeString());
     }
-    var_def_node->pushChildBack(std::move(std::get<std::unique_ptr<ir::Node>>(ss[4].val)));
-    pass->getCurrentScope().pushChildBack(std::move(var_def_node));
+    var_def_node->push_back(std::move(std::get<std::unique_ptr<ir::Node>>(ss[4].val)));
+    pass->getCurrentScope().push_back(std::move(var_def_node));
 }
 
 void makeTypeSpecifier(DaisyParserPass* pass, SymbolInfo* ss, SymbolLoc& loc) {
@@ -81,16 +81,16 @@ void declareFunc(DaisyParserPass* pass, SymbolInfo* ss, SymbolLoc& loc) {
     logger::debug(loc).format("function `{}` declaration",
                               util::cast<ir::FuncDefNode&>(*func_def_node).getProtoString());
     pass->popCurrentScope();
-    pass->getCurrentScope().pushChildBack(std::move(func_def_node));
+    pass->getCurrentScope().push_back(std::move(func_def_node));
 }
 
 void defineFunc(DaisyParserPass* pass, SymbolInfo* ss, SymbolLoc& loc) {
     auto func_def_node = std::move(std::get<std::unique_ptr<ir::Node>>(ss[1].val));
     logger::debug(ss[0].loc + ss[1].loc)
         .format("function `{}` definition", util::cast<ir::FuncDefNode&>(*func_def_node).getProtoString());
-    func_def_node->pushChildBack(std::move(std::get<std::unique_ptr<ir::Node>>(ss[2].val)));
+    func_def_node->push_back(std::move(std::get<std::unique_ptr<ir::Node>>(ss[2].val)));
     pass->popCurrentScope();
-    pass->getCurrentScope().pushChildBack(std::move(func_def_node));
+    pass->getCurrentScope().push_back(std::move(func_def_node));
 }
 
 void addFuncFormalArg(DaisyParserPass* pass, SymbolInfo* ss, SymbolLoc& loc) {
@@ -98,7 +98,7 @@ void addFuncFormalArg(DaisyParserPass* pass, SymbolInfo* ss, SymbolLoc& loc) {
     auto& type_desc = std::get<ir::TypeDescriptor>(ss[3].val);
     type_desc.setModifiers(std::get<ir::DataTypeModifiers>(ss[0].val));
     formal_arg_def->setTypeDescriptor(std::move(type_desc));
-    pass->getCurrentScope().pushChildBack(std::move(formal_arg_def));
+    pass->getCurrentScope().push_back(std::move(formal_arg_def));
 }
 
 }  // namespace

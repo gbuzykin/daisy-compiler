@@ -13,14 +13,14 @@ namespace {
 
 void makeUnaryOpNode(ir::EvalOperator op, SymbolInfo* ss, SymbolLoc& loc) {
     auto node = std::make_unique<ir::OpNode>(op, loc, ss[0].loc);
-    node->pushChildBack(std::move(std::get<std::unique_ptr<ir::Node>>(ss[1].val)));
+    node->push_back(std::move(std::get<std::unique_ptr<ir::Node>>(ss[1].val)));
     ss[0].val = std::move(node);
 }
 
 void makeBinaryOpNode(ir::EvalOperator op, SymbolInfo* ss, SymbolLoc& loc) {
     auto node = std::make_unique<ir::OpNode>(op, loc, ss[1].loc);
-    node->pushChildBack(std::move(std::get<std::unique_ptr<ir::Node>>(ss[0].val)));
-    node->pushChildBack(std::move(std::get<std::unique_ptr<ir::Node>>(ss[2].val)));
+    node->push_back(std::move(std::get<std::unique_ptr<ir::Node>>(ss[0].val)));
+    node->push_back(std::move(std::get<std::unique_ptr<ir::Node>>(ss[2].val)));
     ss[0].val = std::move(node);
 }
 
@@ -103,9 +103,9 @@ DAISY_ADD_REDUCE_ACTION_HANDLER(act_expr_op_logical_or, [](DaisyParserPass* pass
 // Conditional expression
 DAISY_ADD_REDUCE_ACTION_HANDLER(act_expr_op_conditional, [](DaisyParserPass* pass, SymbolInfo* ss, SymbolLoc& loc) {
     auto node = std::make_unique<ir::IfNode>(loc, ss[1].loc, ss[3].loc);
-    node->pushChildBack(std::move(std::get<std::unique_ptr<ir::Node>>(ss[0].val)));
-    node->pushChildBack(std::move(std::get<std::unique_ptr<ir::Node>>(ss[2].val)));
-    node->pushChildBack(std::move(std::get<std::unique_ptr<ir::Node>>(ss[4].val)));
+    node->push_back(std::move(std::get<std::unique_ptr<ir::Node>>(ss[0].val)));
+    node->push_back(std::move(std::get<std::unique_ptr<ir::Node>>(ss[2].val)));
+    node->push_back(std::move(std::get<std::unique_ptr<ir::Node>>(ss[4].val)));
     ss[0].val = std::move(node);
 });
 
