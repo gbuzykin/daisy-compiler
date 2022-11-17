@@ -197,8 +197,8 @@ const std::vector<std::tuple<std::string_view, bool, BuiltInMacroImpl>> g_builti
 
 }  // namespace
 
-DAISY_ADD_PREPROC_DIRECTIVE_PARSER("define", parseDefineDirective);
-DAISY_ADD_PREPROC_DIRECTIVE_PARSER("undef", parseUndefDirective);
+DAISY_ADD_PREPROC_DIRECTIVE_PARSER(define, parseDefineDirective);
+DAISY_ADD_PREPROC_DIRECTIVE_PARSER(undef, parseUndefDirective);
 
 bool DaisyParserPass::checkMacroExpansionForRecursion(std::string_view macro_id) {
     const auto& in_ctx = getInputContext();
