@@ -64,7 +64,7 @@ class Node : public util::rtti_mixin<Node> {
     }
 
     template<typename Ty, typename = std::enable_if_t<std::is_base_of_v<Node, Ty>>>
-    Ty& insertChild(const_iterator pos, std::unique_ptr<Ty> node) {
+    Ty& insert(const_iterator pos, std::unique_ptr<Ty> node) {
         auto* ptr = node.get();
         assert(ptr);
         children_.insert(pos, std::move(node));
@@ -73,11 +73,19 @@ class Node : public util::rtti_mixin<Node> {
     }
 
     template<typename Ty, typename = std::enable_if_t<std::is_base_of_v<Node, Ty>>>
-    Ty& pushChildBack(std::unique_ptr<Ty> node) {
-        return insertChild(children_.end(), std::move(node));
+    Ty& push_front(std::unique_ptr<Ty> node) {
+        return insert(children_.begin(), std::move(node));
     }
 
-    std::unique_ptr<Node> extract(Node& node) { return children_.extract(children_.to_iterator(node)); }
+    template<typename Ty, typename = std::enable_if_t<std::is_base_of_v<Node, Ty>>>
+    Ty& push_back(std::unique_ptr<Ty> node) {
+        return insert(children_.end(), std::move(node));
+    }
+
+    std::unique_ptr<Node> extract(Node& node) {
+        node.parent_ = nullptr;
+        return children_.extract(children_.to_iterator(node));
+    }
 };
 
 }  // namespace ir

@@ -25,7 +25,7 @@ void beginNamespace(DaisyParserPass* pass, SymbolInfo* ss, SymbolLoc& loc) {
     auto& nmspace = pass->getCurrentScope().getNamespace();
     auto* nmspace_node = nmspace.findNode<ir::NamedScopeNode>(name);
     if (!util::is_kind_of<ir::NamespaceNode>(nmspace_node)) {
-        auto& new_nmspace_node = pass->getCurrentScope().pushChildBack(
+        auto& new_nmspace_node = pass->getCurrentScope().push_back(
             std::make_unique<ir::NamespaceNode>(std::string(name), pass->getCurrentScope(), ss[-2].loc));
         if (!nmspace_node) {
             nmspace.addNode(new_nmspace_node);
