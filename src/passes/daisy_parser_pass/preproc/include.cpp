@@ -37,4 +37,4 @@ void parseIncludeDirective(DaisyParserPass* pass, SymbolInfo& tkn) {
 
 }  // namespace
 
-DAISY_ADD_PREPROC_DIRECTIVE_PARSER("include", parseIncludeDirective);
+DAISY_ADD_PREPROC_DIRECTIVE_PARSER(include, parseIncludeDirective);

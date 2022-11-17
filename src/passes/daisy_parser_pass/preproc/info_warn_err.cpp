@@ -12,18 +12,14 @@ inline std::string_view parseMessageDirective(DaisyParserPass* pass) {
     return std::string_view(msg.first, msg.last - msg.first);
 }
 
-void parseInfoDirective(DaisyParserPass* pass, SymbolInfo& tkn) {
+DAISY_ADD_PREPROC_DIRECTIVE_PARSER(info, [](DaisyParserPass* pass, SymbolInfo& tkn) {
     logger::info(tkn.loc).format("{}", parseMessageDirective(pass));
-}
+});
 
-void parseWarningDirective(DaisyParserPass* pass, SymbolInfo& tkn) {
+DAISY_ADD_PREPROC_DIRECTIVE_PARSER(warning, [](DaisyParserPass* pass, SymbolInfo& tkn) {
     logger::warning(tkn.loc).format("{}", parseMessageDirective(pass));
-}
+});
 
-void parseErrorDirective(DaisyParserPass* pass, SymbolInfo& tkn) {
+DAISY_ADD_PREPROC_DIRECTIVE_PARSER(error, [](DaisyParserPass* pass, SymbolInfo& tkn) {
     logger::error(tkn.loc).format("{}", parseMessageDirective(pass));
-}
-
-DAISY_ADD_PREPROC_DIRECTIVE_PARSER("info", parseInfoDirective);
-DAISY_ADD_PREPROC_DIRECTIVE_PARSER("warning", parseWarningDirective);
-DAISY_ADD_PREPROC_DIRECTIVE_PARSER("error", parseErrorDirective);
+});

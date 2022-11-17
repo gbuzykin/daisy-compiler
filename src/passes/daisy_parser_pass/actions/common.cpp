@@ -6,18 +6,6 @@ using namespace daisy;
 
 namespace {
 
-void concatenateStringConst(DaisyParserPass* pass, SymbolInfo* ss, SymbolLoc& loc) {
-    std::get<std::string>(ss[0].val) += std::get<std::string>(ss[1].val);
-}
-
-void setLocalScope(DaisyParserPass* pass, SymbolInfo* ss, SymbolLoc& loc) {
-    ss[0].val.emplace<ir::ScopeDescriptor>(ir::ScopeClass::kLocal, pass->getCurrentScope());
-}
-
-void setRootScope(DaisyParserPass* pass, SymbolInfo* ss, SymbolLoc& loc) {
-    ss[0].val.emplace<ir::ScopeDescriptor>(ir::ScopeClass::kSpecified, pass->getRootScope());
-}
-
 void resolveScope(DaisyParserPass* pass, SymbolInfo* ss, SymbolLoc& loc) {
     auto name = std::get<std::string_view>(ss[1].val);
     auto& scope_desc = std::get<ir::ScopeDescriptor>(ss[0].val);
@@ -52,13 +40,22 @@ void beginNamespace(DaisyParserPass* pass, SymbolInfo* ss, SymbolLoc& loc) {
     pass->setCurrentScope(*nmspace_node);
 }
 
-void endBlock(DaisyParserPass* pass, SymbolInfo* ss, SymbolLoc& loc) { pass->popCurrentScope(); }
-
 }  // namespace
 
-DAISY_ADD_REDUCE_ACTION_HANDLER(parser_detail::act_concatenate_string_const, concatenateStringConst);
-DAISY_ADD_REDUCE_ACTION_HANDLER(parser_detail::act_local_scope, setLocalScope);
-DAISY_ADD_REDUCE_ACTION_HANDLER(parser_detail::act_root_scope, setRootScope);
-DAISY_ADD_REDUCE_ACTION_HANDLER(parser_detail::act_resolve_scope, resolveScope);
-DAISY_ADD_REDUCE_ACTION_HANDLER(parser_detail::act_begin_namespace, beginNamespace);
-DAISY_ADD_REDUCE_ACTION_HANDLER(parser_detail::act_end_block, endBlock);
+DAISY_ADD_REDUCE_ACTION_HANDLER(act_resolve_scope, resolveScope);
+DAISY_ADD_REDUCE_ACTION_HANDLER(act_begin_namespace, beginNamespace);
+
+DAISY_ADD_REDUCE_ACTION_HANDLER(act_concatenate_string_const, [](DaisyParserPass* pass, SymbolInfo* ss, SymbolLoc& loc) {
+    std::get<std::string>(ss[0].val) += std::get<std::string>(ss[1].val);
+});
+
+DAISY_ADD_REDUCE_ACTION_HANDLER(act_local_scope, [](DaisyParserPass* pass, SymbolInfo* ss, SymbolLoc& loc) {
+    ss[0].val.emplace<ir::ScopeDescriptor>(ir::ScopeClass::kLocal, pass->getCurrentScope());
+});
+
+DAISY_ADD_REDUCE_ACTION_HANDLER(act_root_scope, [](DaisyParserPass* pass, SymbolInfo* ss, SymbolLoc& loc) {
+    ss[0].val.emplace<ir::ScopeDescriptor>(ir::ScopeClass::kSpecified, pass->getRootScope());
+});
+
+DAISY_ADD_REDUCE_ACTION_HANDLER(act_end_block,
+                                [](DaisyParserPass* pass, SymbolInfo* ss, SymbolLoc& loc) { pass->popCurrentScope(); });

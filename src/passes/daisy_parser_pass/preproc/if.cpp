@@ -179,12 +179,6 @@ void parseIfDirective(DaisyParserPass* pass, SymbolInfo& tkn,
     }
 }
 
-void parseIfDirective(DaisyParserPass* pass, SymbolInfo& tkn) { parseIfDirective(pass, tkn, evalCondition); }
-void parseIfdefDirective(DaisyParserPass* pass, SymbolInfo& tkn) { parseIfDirective(pass, tkn, evalIsDefined); }
-void parseIfndefDirective(DaisyParserPass* pass, SymbolInfo& tkn) {
-    parseIfDirective(pass, tkn, [](DaisyParserPass* pass, SymbolInfo& tkn) { return !evalIsDefined(pass, tkn); });
-}
-
 void parseElifDirective(DaisyParserPass* pass, SymbolInfo& tkn,
                         bool (*eval_condition)(DaisyParserPass* pass, SymbolInfo& tkn)) {
     auto* if_section = pass->getIfSection();
@@ -203,12 +197,6 @@ void parseElifDirective(DaisyParserPass* pass, SymbolInfo& tkn,
     } else {  // Skip further if false or one of conditions is already matched
         if_section->section_disable_counter = 1;
     }
-}
-
-void parseElifDirective(DaisyParserPass* pass, SymbolInfo& tkn) { parseElifDirective(pass, tkn, evalCondition); }
-void parseElifdefDirective(DaisyParserPass* pass, SymbolInfo& tkn) { parseElifDirective(pass, tkn, evalIsDefined); }
-void parseElifndefDirective(DaisyParserPass* pass, SymbolInfo& tkn) {
-    parseElifDirective(pass, tkn, [](DaisyParserPass* pass, SymbolInfo& tkn) { return !evalIsDefined(pass, tkn); });
 }
 
 void parseElseDirective(DaisyParserPass* pass, SymbolInfo& tkn) {
@@ -249,11 +237,31 @@ void parseEndifDirective(DaisyParserPass* pass, SymbolInfo& tkn) {
 
 }  // namespace
 
-DAISY_ADD_PREPROC_DIRECTIVE_PARSER("if", parseIfDirective, true);
-DAISY_ADD_PREPROC_DIRECTIVE_PARSER("ifdef", parseIfdefDirective, true);
-DAISY_ADD_PREPROC_DIRECTIVE_PARSER("ifndef", parseIfndefDirective, true);
-DAISY_ADD_PREPROC_DIRECTIVE_PARSER("elif", parseElifDirective, true);
-DAISY_ADD_PREPROC_DIRECTIVE_PARSER("elifdef", parseElifdefDirective, true);
-DAISY_ADD_PREPROC_DIRECTIVE_PARSER("elifndef", parseElifndefDirective, true);
-DAISY_ADD_PREPROC_DIRECTIVE_PARSER("else", parseElseDirective, true);
-DAISY_ADD_PREPROC_DIRECTIVE_PARSER("endif", parseEndifDirective, true);
+DAISY_ADD_PREPROC_DIRECTIVE_PARSER(
+    if, [](DaisyParserPass* pass, SymbolInfo& tkn) { parseIfDirective(pass, tkn, evalCondition); }, true);
+
+DAISY_ADD_PREPROC_DIRECTIVE_PARSER(
+    ifdef, [](DaisyParserPass* pass, SymbolInfo& tkn) { parseIfDirective(pass, tkn, evalIsDefined); }, true);
+
+DAISY_ADD_PREPROC_DIRECTIVE_PARSER(
+    ifndef,
+    [](DaisyParserPass* pass, SymbolInfo& tkn) {
+        parseIfDirective(pass, tkn, [](DaisyParserPass* pass, SymbolInfo& tkn) { return !evalIsDefined(pass, tkn); });
+    },
+    true);
+
+DAISY_ADD_PREPROC_DIRECTIVE_PARSER(
+    elif, [](DaisyParserPass* pass, SymbolInfo& tkn) { parseElifDirective(pass, tkn, evalCondition); }, true);
+
+DAISY_ADD_PREPROC_DIRECTIVE_PARSER(
+    elifdef, [](DaisyParserPass* pass, SymbolInfo& tkn) { parseElifDirective(pass, tkn, evalIsDefined); }, true);
+
+DAISY_ADD_PREPROC_DIRECTIVE_PARSER(
+    elifndef,
+    [](DaisyParserPass* pass, SymbolInfo& tkn) {
+        parseElifDirective(pass, tkn, [](DaisyParserPass* pass, SymbolInfo& tkn) { return !evalIsDefined(pass, tkn); });
+    },
+    true);
+
+DAISY_ADD_PREPROC_DIRECTIVE_PARSER(else, parseElseDirective, true);
+DAISY_ADD_PREPROC_DIRECTIVE_PARSER(endif, parseEndifDirective, true);

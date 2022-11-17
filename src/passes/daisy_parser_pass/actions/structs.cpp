@@ -39,5 +39,5 @@ void defineField(DaisyParserPass* pass, SymbolInfo* ss, SymbolLoc& loc) {
 
 }  // namespace
 
-DAISY_ADD_REDUCE_ACTION_HANDLER(parser_detail::act_begin_struct_def, beginStructDef);
-DAISY_ADD_REDUCE_ACTION_HANDLER(parser_detail::act_define_field, defineField);
+DAISY_ADD_REDUCE_ACTION_HANDLER(act_begin_struct_def, beginStructDef);
+DAISY_ADD_REDUCE_ACTION_HANDLER(act_define_field, defineField);

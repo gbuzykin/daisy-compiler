@@ -12,9 +12,10 @@
 #include <array>
 #include <variant>
 
-#define DAISY_ADD_REDUCE_ACTION_HANDLER(act_id, fn) static daisy::ReduceActionHandler g_act_handler_##fn(act_id, fn)
+#define DAISY_ADD_REDUCE_ACTION_HANDLER(act_id, fn) \
+    static daisy::ReduceActionHandler g_act_handler_##act_id(parser_detail::act_id, fn)
 #define DAISY_ADD_PREPROC_DIRECTIVE_PARSER(directive_id, fn, ...) \
-    static daisy::PreprocDirectiveParser g_preproc_directive_parser_##fn(directive_id, fn, ##__VA_ARGS__)
+    static daisy::PreprocDirectiveParser g_preproc_directive_parser_##directive_id(#directive_id, fn, ##__VA_ARGS__)
 
 namespace lex_detail {
 #include "lex_defs.h"

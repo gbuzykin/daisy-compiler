@@ -37,4 +37,4 @@ void parsePragmaDirective(DaisyParserPass* pass, SymbolInfo& tkn) {
     }
 }
 
-DAISY_ADD_PREPROC_DIRECTIVE_PARSER("pragma", parsePragmaDirective);
+DAISY_ADD_PREPROC_DIRECTIVE_PARSER(pragma, parsePragmaDirective);
