@@ -1,205 +1,205 @@
 ./preproc/builtin/pass005.ds:5:1: debug: token
- 5 | const v = __str__(LINE_PLUS_SUM2  (1, 2, 3) ## SUM2  (1, 2, 3));
+ 5 | const v1 = __str__(LINE_PLUS_SUM2  (1, 2, 3) ## SUM2  (1, 2, 3));
    | ^~~~~
-./preproc/builtin/pass005.ds:5:7: debug: id: v
- 5 | const v = __str__(LINE_PLUS_SUM2  (1, 2, 3) ## SUM2  (1, 2, 3));
-   |       ^
-./preproc/builtin/pass005.ds:5:9: debug: token
- 5 | const v = __str__(LINE_PLUS_SUM2  (1, 2, 3) ## SUM2  (1, 2, 3));
-   |         ^
-./preproc/builtin/pass005.ds:5:11: debug: string: "((5) + ((((1) + (3))) + (((2) + (3)))))((((1) + (3))) + (((2) + (3))))"
- 5 | const v = __str__(LINE_PLUS_SUM2  (1, 2, 3) ## SUM2  (1, 2, 3));
-   |           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-./preproc/builtin/pass005.ds:5:7: debug: defining constant `v`
- 5 | const v = __str__(LINE_PLUS_SUM2  (1, 2, 3) ## SUM2  (1, 2, 3));
-   |       ^
-./preproc/builtin/pass005.ds:5:64: debug: token
- 5 | const v = __str__(LINE_PLUS_SUM2  (1, 2, 3) ## SUM2  (1, 2, 3));
-   |                                                                ^
+./preproc/builtin/pass005.ds:5:7: debug: id: v1
+ 5 | const v1 = __str__(LINE_PLUS_SUM2  (1, 2, 3) ## SUM2  (1, 2, 3));
+   |       ^~
+./preproc/builtin/pass005.ds:5:10: debug: token
+ 5 | const v1 = __str__(LINE_PLUS_SUM2  (1, 2, 3) ## SUM2  (1, 2, 3));
+   |          ^
+./preproc/builtin/pass005.ds:5:12: debug: string: "((5) + ((((1) + (3))) + (((2) + (3)))))((((1) + (3))) + (((2) + (3))))"
+ 5 | const v1 = __str__(LINE_PLUS_SUM2  (1, 2, 3) ## SUM2  (1, 2, 3));
+   |            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+./preproc/builtin/pass005.ds:5:7: debug: defining constant `v1`
+ 5 | const v1 = __str__(LINE_PLUS_SUM2  (1, 2, 3) ## SUM2  (1, 2, 3));
+   |       ^~
+./preproc/builtin/pass005.ds:5:65: debug: token
+ 5 | const v1 = __str__(LINE_PLUS_SUM2  (1, 2, 3) ## SUM2  (1, 2, 3));
+   |                                                                 ^
 ./preproc/builtin/pass005.ds:6:1: debug: token
- 6 | const v = __paste__(LINE_PLUS_SUM2  (1, 2, 3) ## + ## SUM2  (1, 2, 3));
+ 6 | const v2 = __paste__(LINE_PLUS_SUM2  (1, 2, 3) ## + ## SUM2  (1, 2, 3));
    | ^~~~~
-./preproc/builtin/pass005.ds:6:7: debug: id: v
- 6 | const v = __paste__(LINE_PLUS_SUM2  (1, 2, 3) ## + ## SUM2  (1, 2, 3));
-   |       ^
-./preproc/builtin/pass005.ds:6:9: debug: token
- 6 | const v = __paste__(LINE_PLUS_SUM2  (1, 2, 3) ## + ## SUM2  (1, 2, 3));
-   |         ^
-./preproc/builtin/pass005.ds:6:11: debug: token
- 6 | const v = __paste__(LINE_PLUS_SUM2  (1, 2, 3) ## + ## SUM2  (1, 2, 3));
-   |           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-./preproc/builtin/pass005.ds:6:11: debug: token
- 6 | const v = __paste__(LINE_PLUS_SUM2  (1, 2, 3) ## + ## SUM2  (1, 2, 3));
-   |           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-./preproc/builtin/pass005.ds:6:11: debug: integer number: 6
- 6 | const v = __paste__(LINE_PLUS_SUM2  (1, 2, 3) ## + ## SUM2  (1, 2, 3));
-   |           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-./preproc/builtin/pass005.ds:6:11: debug: token
- 6 | const v = __paste__(LINE_PLUS_SUM2  (1, 2, 3) ## + ## SUM2  (1, 2, 3));
-   |           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-./preproc/builtin/pass005.ds:6:11: debug: token
- 6 | const v = __paste__(LINE_PLUS_SUM2  (1, 2, 3) ## + ## SUM2  (1, 2, 3));
-   |           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-./preproc/builtin/pass005.ds:6:11: debug: token
- 6 | const v = __paste__(LINE_PLUS_SUM2  (1, 2, 3) ## + ## SUM2  (1, 2, 3));
-   |           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-./preproc/builtin/pass005.ds:6:11: debug: token
- 6 | const v = __paste__(LINE_PLUS_SUM2  (1, 2, 3) ## + ## SUM2  (1, 2, 3));
-   |           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-./preproc/builtin/pass005.ds:6:11: debug: token
- 6 | const v = __paste__(LINE_PLUS_SUM2  (1, 2, 3) ## + ## SUM2  (1, 2, 3));
-   |           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-./preproc/builtin/pass005.ds:6:11: debug: token
- 6 | const v = __paste__(LINE_PLUS_SUM2  (1, 2, 3) ## + ## SUM2  (1, 2, 3));
-   |           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-./preproc/builtin/pass005.ds:6:11: debug: integer number: 1
- 6 | const v = __paste__(LINE_PLUS_SUM2  (1, 2, 3) ## + ## SUM2  (1, 2, 3));
-   |           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-./preproc/builtin/pass005.ds:6:11: debug: token
- 6 | const v = __paste__(LINE_PLUS_SUM2  (1, 2, 3) ## + ## SUM2  (1, 2, 3));
-   |           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-./preproc/builtin/pass005.ds:6:11: debug: token
- 6 | const v = __paste__(LINE_PLUS_SUM2  (1, 2, 3) ## + ## SUM2  (1, 2, 3));
-   |           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-./preproc/builtin/pass005.ds:6:11: debug: token
- 6 | const v = __paste__(LINE_PLUS_SUM2  (1, 2, 3) ## + ## SUM2  (1, 2, 3));
-   |           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-./preproc/builtin/pass005.ds:6:11: debug: integer number: 3
- 6 | const v = __paste__(LINE_PLUS_SUM2  (1, 2, 3) ## + ## SUM2  (1, 2, 3));
-   |           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-./preproc/builtin/pass005.ds:6:11: debug: token
- 6 | const v = __paste__(LINE_PLUS_SUM2  (1, 2, 3) ## + ## SUM2  (1, 2, 3));
-   |           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-./preproc/builtin/pass005.ds:6:11: debug: token
- 6 | const v = __paste__(LINE_PLUS_SUM2  (1, 2, 3) ## + ## SUM2  (1, 2, 3));
-   |           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-./preproc/builtin/pass005.ds:6:11: debug: token
- 6 | const v = __paste__(LINE_PLUS_SUM2  (1, 2, 3) ## + ## SUM2  (1, 2, 3));
-   |           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-./preproc/builtin/pass005.ds:6:11: debug: token
- 6 | const v = __paste__(LINE_PLUS_SUM2  (1, 2, 3) ## + ## SUM2  (1, 2, 3));
-   |           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-./preproc/builtin/pass005.ds:6:11: debug: token
- 6 | const v = __paste__(LINE_PLUS_SUM2  (1, 2, 3) ## + ## SUM2  (1, 2, 3));
-   |           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-./preproc/builtin/pass005.ds:6:11: debug: token
- 6 | const v = __paste__(LINE_PLUS_SUM2  (1, 2, 3) ## + ## SUM2  (1, 2, 3));
-   |           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-./preproc/builtin/pass005.ds:6:11: debug: token
- 6 | const v = __paste__(LINE_PLUS_SUM2  (1, 2, 3) ## + ## SUM2  (1, 2, 3));
-   |           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-./preproc/builtin/pass005.ds:6:11: debug: integer number: 2
- 6 | const v = __paste__(LINE_PLUS_SUM2  (1, 2, 3) ## + ## SUM2  (1, 2, 3));
-   |           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-./preproc/builtin/pass005.ds:6:11: debug: token
- 6 | const v = __paste__(LINE_PLUS_SUM2  (1, 2, 3) ## + ## SUM2  (1, 2, 3));
-   |           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-./preproc/builtin/pass005.ds:6:11: debug: token
- 6 | const v = __paste__(LINE_PLUS_SUM2  (1, 2, 3) ## + ## SUM2  (1, 2, 3));
-   |           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-./preproc/builtin/pass005.ds:6:11: debug: token
- 6 | const v = __paste__(LINE_PLUS_SUM2  (1, 2, 3) ## + ## SUM2  (1, 2, 3));
-   |           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-./preproc/builtin/pass005.ds:6:11: debug: integer number: 3
- 6 | const v = __paste__(LINE_PLUS_SUM2  (1, 2, 3) ## + ## SUM2  (1, 2, 3));
-   |           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-./preproc/builtin/pass005.ds:6:11: debug: token
- 6 | const v = __paste__(LINE_PLUS_SUM2  (1, 2, 3) ## + ## SUM2  (1, 2, 3));
-   |           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-./preproc/builtin/pass005.ds:6:11: debug: token
- 6 | const v = __paste__(LINE_PLUS_SUM2  (1, 2, 3) ## + ## SUM2  (1, 2, 3));
-   |           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-./preproc/builtin/pass005.ds:6:11: debug: token
- 6 | const v = __paste__(LINE_PLUS_SUM2  (1, 2, 3) ## + ## SUM2  (1, 2, 3));
-   |           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-./preproc/builtin/pass005.ds:6:11: debug: token
- 6 | const v = __paste__(LINE_PLUS_SUM2  (1, 2, 3) ## + ## SUM2  (1, 2, 3));
-   |           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-./preproc/builtin/pass005.ds:6:11: debug: token
- 6 | const v = __paste__(LINE_PLUS_SUM2  (1, 2, 3) ## + ## SUM2  (1, 2, 3));
-   |           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-./preproc/builtin/pass005.ds:6:11: debug: token
- 6 | const v = __paste__(LINE_PLUS_SUM2  (1, 2, 3) ## + ## SUM2  (1, 2, 3));
-   |           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-./preproc/builtin/pass005.ds:6:11: debug: token
- 6 | const v = __paste__(LINE_PLUS_SUM2  (1, 2, 3) ## + ## SUM2  (1, 2, 3));
-   |           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-./preproc/builtin/pass005.ds:6:11: debug: token
- 6 | const v = __paste__(LINE_PLUS_SUM2  (1, 2, 3) ## + ## SUM2  (1, 2, 3));
-   |           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-./preproc/builtin/pass005.ds:6:11: debug: token
- 6 | const v = __paste__(LINE_PLUS_SUM2  (1, 2, 3) ## + ## SUM2  (1, 2, 3));
-   |           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-./preproc/builtin/pass005.ds:6:11: debug: token
- 6 | const v = __paste__(LINE_PLUS_SUM2  (1, 2, 3) ## + ## SUM2  (1, 2, 3));
-   |           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-./preproc/builtin/pass005.ds:6:11: debug: integer number: 1
- 6 | const v = __paste__(LINE_PLUS_SUM2  (1, 2, 3) ## + ## SUM2  (1, 2, 3));
-   |           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-./preproc/builtin/pass005.ds:6:11: debug: token
- 6 | const v = __paste__(LINE_PLUS_SUM2  (1, 2, 3) ## + ## SUM2  (1, 2, 3));
-   |           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-./preproc/builtin/pass005.ds:6:11: debug: token
- 6 | const v = __paste__(LINE_PLUS_SUM2  (1, 2, 3) ## + ## SUM2  (1, 2, 3));
-   |           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-./preproc/builtin/pass005.ds:6:11: debug: token
- 6 | const v = __paste__(LINE_PLUS_SUM2  (1, 2, 3) ## + ## SUM2  (1, 2, 3));
-   |           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-./preproc/builtin/pass005.ds:6:11: debug: integer number: 3
- 6 | const v = __paste__(LINE_PLUS_SUM2  (1, 2, 3) ## + ## SUM2  (1, 2, 3));
-   |           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-./preproc/builtin/pass005.ds:6:11: debug: token
- 6 | const v = __paste__(LINE_PLUS_SUM2  (1, 2, 3) ## + ## SUM2  (1, 2, 3));
-   |           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-./preproc/builtin/pass005.ds:6:11: debug: token
- 6 | const v = __paste__(LINE_PLUS_SUM2  (1, 2, 3) ## + ## SUM2  (1, 2, 3));
-   |           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-./preproc/builtin/pass005.ds:6:11: debug: token
- 6 | const v = __paste__(LINE_PLUS_SUM2  (1, 2, 3) ## + ## SUM2  (1, 2, 3));
-   |           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-./preproc/builtin/pass005.ds:6:11: debug: token
- 6 | const v = __paste__(LINE_PLUS_SUM2  (1, 2, 3) ## + ## SUM2  (1, 2, 3));
-   |           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-./preproc/builtin/pass005.ds:6:11: debug: token
- 6 | const v = __paste__(LINE_PLUS_SUM2  (1, 2, 3) ## + ## SUM2  (1, 2, 3));
-   |           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-./preproc/builtin/pass005.ds:6:11: debug: token
- 6 | const v = __paste__(LINE_PLUS_SUM2  (1, 2, 3) ## + ## SUM2  (1, 2, 3));
-   |           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-./preproc/builtin/pass005.ds:6:11: debug: token
- 6 | const v = __paste__(LINE_PLUS_SUM2  (1, 2, 3) ## + ## SUM2  (1, 2, 3));
-   |           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-./preproc/builtin/pass005.ds:6:11: debug: integer number: 2
- 6 | const v = __paste__(LINE_PLUS_SUM2  (1, 2, 3) ## + ## SUM2  (1, 2, 3));
-   |           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-./preproc/builtin/pass005.ds:6:11: debug: token
- 6 | const v = __paste__(LINE_PLUS_SUM2  (1, 2, 3) ## + ## SUM2  (1, 2, 3));
-   |           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-./preproc/builtin/pass005.ds:6:11: debug: token
- 6 | const v = __paste__(LINE_PLUS_SUM2  (1, 2, 3) ## + ## SUM2  (1, 2, 3));
-   |           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-./preproc/builtin/pass005.ds:6:11: debug: token
- 6 | const v = __paste__(LINE_PLUS_SUM2  (1, 2, 3) ## + ## SUM2  (1, 2, 3));
-   |           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-./preproc/builtin/pass005.ds:6:11: debug: integer number: 3
- 6 | const v = __paste__(LINE_PLUS_SUM2  (1, 2, 3) ## + ## SUM2  (1, 2, 3));
-   |           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-./preproc/builtin/pass005.ds:6:11: debug: token
- 6 | const v = __paste__(LINE_PLUS_SUM2  (1, 2, 3) ## + ## SUM2  (1, 2, 3));
-   |           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-./preproc/builtin/pass005.ds:6:11: debug: token
- 6 | const v = __paste__(LINE_PLUS_SUM2  (1, 2, 3) ## + ## SUM2  (1, 2, 3));
-   |           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-./preproc/builtin/pass005.ds:6:11: debug: token
- 6 | const v = __paste__(LINE_PLUS_SUM2  (1, 2, 3) ## + ## SUM2  (1, 2, 3));
-   |           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-./preproc/builtin/pass005.ds:6:11: debug: token
- 6 | const v = __paste__(LINE_PLUS_SUM2  (1, 2, 3) ## + ## SUM2  (1, 2, 3));
-   |           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-./preproc/builtin/pass005.ds:6:7: debug: defining constant `v`
- 6 | const v = __paste__(LINE_PLUS_SUM2  (1, 2, 3) ## + ## SUM2  (1, 2, 3));
-   |       ^
-./preproc/builtin/pass005.ds:6:71: debug: token
- 6 | const v = __paste__(LINE_PLUS_SUM2  (1, 2, 3) ## + ## SUM2  (1, 2, 3));
-   |                                                                       ^
+./preproc/builtin/pass005.ds:6:7: debug: id: v2
+ 6 | const v2 = __paste__(LINE_PLUS_SUM2  (1, 2, 3) ## + ## SUM2  (1, 2, 3));
+   |       ^~
+./preproc/builtin/pass005.ds:6:10: debug: token
+ 6 | const v2 = __paste__(LINE_PLUS_SUM2  (1, 2, 3) ## + ## SUM2  (1, 2, 3));
+   |          ^
+./preproc/builtin/pass005.ds:6:12: debug: token
+ 6 | const v2 = __paste__(LINE_PLUS_SUM2  (1, 2, 3) ## + ## SUM2  (1, 2, 3));
+   |            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+./preproc/builtin/pass005.ds:6:12: debug: token
+ 6 | const v2 = __paste__(LINE_PLUS_SUM2  (1, 2, 3) ## + ## SUM2  (1, 2, 3));
+   |            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+./preproc/builtin/pass005.ds:6:12: debug: integer number: 6
+ 6 | const v2 = __paste__(LINE_PLUS_SUM2  (1, 2, 3) ## + ## SUM2  (1, 2, 3));
+   |            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+./preproc/builtin/pass005.ds:6:12: debug: token
+ 6 | const v2 = __paste__(LINE_PLUS_SUM2  (1, 2, 3) ## + ## SUM2  (1, 2, 3));
+   |            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+./preproc/builtin/pass005.ds:6:12: debug: token
+ 6 | const v2 = __paste__(LINE_PLUS_SUM2  (1, 2, 3) ## + ## SUM2  (1, 2, 3));
+   |            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+./preproc/builtin/pass005.ds:6:12: debug: token
+ 6 | const v2 = __paste__(LINE_PLUS_SUM2  (1, 2, 3) ## + ## SUM2  (1, 2, 3));
+   |            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+./preproc/builtin/pass005.ds:6:12: debug: token
+ 6 | const v2 = __paste__(LINE_PLUS_SUM2  (1, 2, 3) ## + ## SUM2  (1, 2, 3));
+   |            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+./preproc/builtin/pass005.ds:6:12: debug: token
+ 6 | const v2 = __paste__(LINE_PLUS_SUM2  (1, 2, 3) ## + ## SUM2  (1, 2, 3));
+   |            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+./preproc/builtin/pass005.ds:6:12: debug: token
+ 6 | const v2 = __paste__(LINE_PLUS_SUM2  (1, 2, 3) ## + ## SUM2  (1, 2, 3));
+   |            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+./preproc/builtin/pass005.ds:6:12: debug: integer number: 1
+ 6 | const v2 = __paste__(LINE_PLUS_SUM2  (1, 2, 3) ## + ## SUM2  (1, 2, 3));
+   |            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+./preproc/builtin/pass005.ds:6:12: debug: token
+ 6 | const v2 = __paste__(LINE_PLUS_SUM2  (1, 2, 3) ## + ## SUM2  (1, 2, 3));
+   |            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+./preproc/builtin/pass005.ds:6:12: debug: token
+ 6 | const v2 = __paste__(LINE_PLUS_SUM2  (1, 2, 3) ## + ## SUM2  (1, 2, 3));
+   |            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+./preproc/builtin/pass005.ds:6:12: debug: token
+ 6 | const v2 = __paste__(LINE_PLUS_SUM2  (1, 2, 3) ## + ## SUM2  (1, 2, 3));
+   |            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+./preproc/builtin/pass005.ds:6:12: debug: integer number: 3
+ 6 | const v2 = __paste__(LINE_PLUS_SUM2  (1, 2, 3) ## + ## SUM2  (1, 2, 3));
+   |            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+./preproc/builtin/pass005.ds:6:12: debug: token
+ 6 | const v2 = __paste__(LINE_PLUS_SUM2  (1, 2, 3) ## + ## SUM2  (1, 2, 3));
+   |            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+./preproc/builtin/pass005.ds:6:12: debug: token
+ 6 | const v2 = __paste__(LINE_PLUS_SUM2  (1, 2, 3) ## + ## SUM2  (1, 2, 3));
+   |            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+./preproc/builtin/pass005.ds:6:12: debug: token
+ 6 | const v2 = __paste__(LINE_PLUS_SUM2  (1, 2, 3) ## + ## SUM2  (1, 2, 3));
+   |            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+./preproc/builtin/pass005.ds:6:12: debug: token
+ 6 | const v2 = __paste__(LINE_PLUS_SUM2  (1, 2, 3) ## + ## SUM2  (1, 2, 3));
+   |            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+./preproc/builtin/pass005.ds:6:12: debug: token
+ 6 | const v2 = __paste__(LINE_PLUS_SUM2  (1, 2, 3) ## + ## SUM2  (1, 2, 3));
+   |            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+./preproc/builtin/pass005.ds:6:12: debug: token
+ 6 | const v2 = __paste__(LINE_PLUS_SUM2  (1, 2, 3) ## + ## SUM2  (1, 2, 3));
+   |            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+./preproc/builtin/pass005.ds:6:12: debug: token
+ 6 | const v2 = __paste__(LINE_PLUS_SUM2  (1, 2, 3) ## + ## SUM2  (1, 2, 3));
+   |            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+./preproc/builtin/pass005.ds:6:12: debug: integer number: 2
+ 6 | const v2 = __paste__(LINE_PLUS_SUM2  (1, 2, 3) ## + ## SUM2  (1, 2, 3));
+   |            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+./preproc/builtin/pass005.ds:6:12: debug: token
+ 6 | const v2 = __paste__(LINE_PLUS_SUM2  (1, 2, 3) ## + ## SUM2  (1, 2, 3));
+   |            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+./preproc/builtin/pass005.ds:6:12: debug: token
+ 6 | const v2 = __paste__(LINE_PLUS_SUM2  (1, 2, 3) ## + ## SUM2  (1, 2, 3));
+   |            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+./preproc/builtin/pass005.ds:6:12: debug: token
+ 6 | const v2 = __paste__(LINE_PLUS_SUM2  (1, 2, 3) ## + ## SUM2  (1, 2, 3));
+   |            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+./preproc/builtin/pass005.ds:6:12: debug: integer number: 3
+ 6 | const v2 = __paste__(LINE_PLUS_SUM2  (1, 2, 3) ## + ## SUM2  (1, 2, 3));
+   |            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+./preproc/builtin/pass005.ds:6:12: debug: token
+ 6 | const v2 = __paste__(LINE_PLUS_SUM2  (1, 2, 3) ## + ## SUM2  (1, 2, 3));
+   |            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+./preproc/builtin/pass005.ds:6:12: debug: token
+ 6 | const v2 = __paste__(LINE_PLUS_SUM2  (1, 2, 3) ## + ## SUM2  (1, 2, 3));
+   |            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+./preproc/builtin/pass005.ds:6:12: debug: token
+ 6 | const v2 = __paste__(LINE_PLUS_SUM2  (1, 2, 3) ## + ## SUM2  (1, 2, 3));
+   |            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+./preproc/builtin/pass005.ds:6:12: debug: token
+ 6 | const v2 = __paste__(LINE_PLUS_SUM2  (1, 2, 3) ## + ## SUM2  (1, 2, 3));
+   |            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+./preproc/builtin/pass005.ds:6:12: debug: token
+ 6 | const v2 = __paste__(LINE_PLUS_SUM2  (1, 2, 3) ## + ## SUM2  (1, 2, 3));
+   |            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+./preproc/builtin/pass005.ds:6:12: debug: token
+ 6 | const v2 = __paste__(LINE_PLUS_SUM2  (1, 2, 3) ## + ## SUM2  (1, 2, 3));
+   |            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+./preproc/builtin/pass005.ds:6:12: debug: token
+ 6 | const v2 = __paste__(LINE_PLUS_SUM2  (1, 2, 3) ## + ## SUM2  (1, 2, 3));
+   |            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+./preproc/builtin/pass005.ds:6:12: debug: token
+ 6 | const v2 = __paste__(LINE_PLUS_SUM2  (1, 2, 3) ## + ## SUM2  (1, 2, 3));
+   |            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+./preproc/builtin/pass005.ds:6:12: debug: token
+ 6 | const v2 = __paste__(LINE_PLUS_SUM2  (1, 2, 3) ## + ## SUM2  (1, 2, 3));
+   |            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+./preproc/builtin/pass005.ds:6:12: debug: token
+ 6 | const v2 = __paste__(LINE_PLUS_SUM2  (1, 2, 3) ## + ## SUM2  (1, 2, 3));
+   |            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+./preproc/builtin/pass005.ds:6:12: debug: integer number: 1
+ 6 | const v2 = __paste__(LINE_PLUS_SUM2  (1, 2, 3) ## + ## SUM2  (1, 2, 3));
+   |            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+./preproc/builtin/pass005.ds:6:12: debug: token
+ 6 | const v2 = __paste__(LINE_PLUS_SUM2  (1, 2, 3) ## + ## SUM2  (1, 2, 3));
+   |            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+./preproc/builtin/pass005.ds:6:12: debug: token
+ 6 | const v2 = __paste__(LINE_PLUS_SUM2  (1, 2, 3) ## + ## SUM2  (1, 2, 3));
+   |            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+./preproc/builtin/pass005.ds:6:12: debug: token
+ 6 | const v2 = __paste__(LINE_PLUS_SUM2  (1, 2, 3) ## + ## SUM2  (1, 2, 3));
+   |            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+./preproc/builtin/pass005.ds:6:12: debug: integer number: 3
+ 6 | const v2 = __paste__(LINE_PLUS_SUM2  (1, 2, 3) ## + ## SUM2  (1, 2, 3));
+   |            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+./preproc/builtin/pass005.ds:6:12: debug: token
+ 6 | const v2 = __paste__(LINE_PLUS_SUM2  (1, 2, 3) ## + ## SUM2  (1, 2, 3));
+   |            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+./preproc/builtin/pass005.ds:6:12: debug: token
+ 6 | const v2 = __paste__(LINE_PLUS_SUM2  (1, 2, 3) ## + ## SUM2  (1, 2, 3));
+   |            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+./preproc/builtin/pass005.ds:6:12: debug: token
+ 6 | const v2 = __paste__(LINE_PLUS_SUM2  (1, 2, 3) ## + ## SUM2  (1, 2, 3));
+   |            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+./preproc/builtin/pass005.ds:6:12: debug: token
+ 6 | const v2 = __paste__(LINE_PLUS_SUM2  (1, 2, 3) ## + ## SUM2  (1, 2, 3));
+   |            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+./preproc/builtin/pass005.ds:6:12: debug: token
+ 6 | const v2 = __paste__(LINE_PLUS_SUM2  (1, 2, 3) ## + ## SUM2  (1, 2, 3));
+   |            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+./preproc/builtin/pass005.ds:6:12: debug: token
+ 6 | const v2 = __paste__(LINE_PLUS_SUM2  (1, 2, 3) ## + ## SUM2  (1, 2, 3));
+   |            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+./preproc/builtin/pass005.ds:6:12: debug: token
+ 6 | const v2 = __paste__(LINE_PLUS_SUM2  (1, 2, 3) ## + ## SUM2  (1, 2, 3));
+   |            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+./preproc/builtin/pass005.ds:6:12: debug: integer number: 2
+ 6 | const v2 = __paste__(LINE_PLUS_SUM2  (1, 2, 3) ## + ## SUM2  (1, 2, 3));
+   |            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+./preproc/builtin/pass005.ds:6:12: debug: token
+ 6 | const v2 = __paste__(LINE_PLUS_SUM2  (1, 2, 3) ## + ## SUM2  (1, 2, 3));
+   |            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+./preproc/builtin/pass005.ds:6:12: debug: token
+ 6 | const v2 = __paste__(LINE_PLUS_SUM2  (1, 2, 3) ## + ## SUM2  (1, 2, 3));
+   |            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+./preproc/builtin/pass005.ds:6:12: debug: token
+ 6 | const v2 = __paste__(LINE_PLUS_SUM2  (1, 2, 3) ## + ## SUM2  (1, 2, 3));
+   |            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+./preproc/builtin/pass005.ds:6:12: debug: integer number: 3
+ 6 | const v2 = __paste__(LINE_PLUS_SUM2  (1, 2, 3) ## + ## SUM2  (1, 2, 3));
+   |            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+./preproc/builtin/pass005.ds:6:12: debug: token
+ 6 | const v2 = __paste__(LINE_PLUS_SUM2  (1, 2, 3) ## + ## SUM2  (1, 2, 3));
+   |            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+./preproc/builtin/pass005.ds:6:12: debug: token
+ 6 | const v2 = __paste__(LINE_PLUS_SUM2  (1, 2, 3) ## + ## SUM2  (1, 2, 3));
+   |            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+./preproc/builtin/pass005.ds:6:12: debug: token
+ 6 | const v2 = __paste__(LINE_PLUS_SUM2  (1, 2, 3) ## + ## SUM2  (1, 2, 3));
+   |            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+./preproc/builtin/pass005.ds:6:12: debug: token
+ 6 | const v2 = __paste__(LINE_PLUS_SUM2  (1, 2, 3) ## + ## SUM2  (1, 2, 3));
+   |            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+./preproc/builtin/pass005.ds:6:7: debug: defining constant `v2`
+ 6 | const v2 = __paste__(LINE_PLUS_SUM2  (1, 2, 3) ## + ## SUM2  (1, 2, 3));
+   |       ^~
+./preproc/builtin/pass005.ds:6:72: debug: token
+ 6 | const v2 = __paste__(LINE_PLUS_SUM2  (1, 2, 3) ## + ## SUM2  (1, 2, 3));
+   |                                                                        ^
 ./preproc/builtin/pass005.ds: info: warnings 0, errors 0

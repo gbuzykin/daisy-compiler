@@ -1,7 +1,10 @@
 ./expr/pass003.ds:4:7: debug: defining variable `m`
  4 |   let m = loop { x; 0 }; m
    |       ^
-./expr/pass003.ds:3:1: debug: function `func f(i32, i32) -> i32` definition
+./expr/pass003.ds:3:1: debug: defining function `func f(i32, i32) -> i32`
+ 3 | func f(x : int, y : int) -> int {
+   | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+./expr/pass003.ds:3:1: debug: function `func f(i32, i32) -> i32` declaration
  3 | func f(x : int, y : int) -> int {
    | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ./expr/pass003.ds: info: warnings 0, errors 0

@@ -4,11 +4,10 @@
 #include "ir/nodes/root_node.h"
 
 using namespace daisy;
-using namespace ir;
 
-RTTI_IMPLEMENT_TYPE_INFO(NamedNode);
+RTTI_IMPLEMENT_TYPE_INFO(ir::NamedNode);
 
-std::string NamedNode::getGlobalName() const {
+std::string ir::NamedNode::getGlobalName() const {
     const auto* parent = getParent();
     if (!util::is_kind_of<NamedScopeNode>(parent)) { return name_; }
 

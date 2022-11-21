@@ -22,19 +22,17 @@ void beginStructDef(DaisyParserPass* pass, SymbolInfo* ss, SymbolLoc& loc) {
 }
 
 void defineField(DaisyParserPass* pass, SymbolInfo* ss, SymbolLoc& loc) {
-    auto field_def_node = std::make_unique<ir::VarDefNode>(std::string(std::get<std::string_view>(ss[1].val)),
-                                                           ss[1].loc);
-    auto& type_desc = std::get<ir::TypeDescriptor>(ss[3].val);
+    const auto name = std::get<std::string_view>(ss[1].val);
+    auto& field_def_node = pass->getCurrentScope().push_back(
+        std::make_unique<ir::VarDefNode>(std::string(name), ss[1].loc));
+    auto& type_desc = field_def_node.setTypeDescriptor(std::move(std::get<ir::TypeDescriptor>(ss[3].val)));
     type_desc.setModifiers(std::get<ir::DataTypeModifiers>(ss[0].val));
-    field_def_node->setTypeDescriptor(std::move(type_desc));
-    if (field_def_node->getTypeDescriptor().isAuto()) {
-        logger::debug(field_def_node->getLoc()).format("defining field `{}`", field_def_node->getName());
+    if (field_def_node.getTypeDescriptor().isAuto()) {
+        logger::debug(field_def_node.getLoc()).format("defining field `{}`", name);
     } else {
-        logger::debug(field_def_node->getLoc())
-            .format("defining field `{}` of type `{}`", field_def_node->getName(),
-                    field_def_node->getTypeDescriptor().getTypeString());
+        logger::debug(field_def_node.getLoc())
+            .format("defining field `{}` of type `{}`", name, field_def_node.getTypeDescriptor().getTypeString());
     }
-    pass->getCurrentScope().push_back(std::move(field_def_node));
 }
 
 }  // namespace

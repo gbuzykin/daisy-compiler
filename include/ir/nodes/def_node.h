@@ -14,7 +14,7 @@ class DefNode : public util::rtti_mixin<DefNode, NamedNode> {
 
     const TypeDescriptor& getTypeDescriptor() const { return type_desc_; }
     TypeDescriptor& getTypeDescriptor() { return type_desc_; }
-    void setTypeDescriptor(TypeDescriptor type_desc) { type_desc_ = std::move(type_desc); }
+    TypeDescriptor& setTypeDescriptor(TypeDescriptor type_desc) { return (type_desc_ = std::move(type_desc)); }
 
  private:
     TypeDescriptor type_desc_;

@@ -7,7 +7,7 @@ using namespace daisy;
 namespace {
 
 void resolveScope(DaisyParserPass* pass, SymbolInfo* ss, SymbolLoc& loc) {
-    auto name = std::get<std::string_view>(ss[1].val);
+    const auto name = std::get<std::string_view>(ss[1].val);
     auto& scope_desc = std::get<ir::ScopeDescriptor>(ss[0].val);
     if (scope_desc.getClass() != ir::ScopeClass::kInvalid) {
         if (auto* scope = scope_desc.lookupName<ir::NamedScopeNode>(name)) {

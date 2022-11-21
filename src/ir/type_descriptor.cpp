@@ -3,9 +3,8 @@
 #include "ir/nodes/type_def_node.h"
 
 using namespace daisy;
-using namespace ir;
 
-std::string TypeDescriptor::getTypeString() const {
+std::string ir::TypeDescriptor::getTypeString() const {
     std::string s;
     if (!!(modifiers_ & DataTypeModifiers::kReference)) { s += '&'; }
     if (!!(modifiers_ & DataTypeModifiers::kMutable)) { s += "mut"; }
