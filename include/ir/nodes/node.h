@@ -39,12 +39,12 @@ class Node : public util::rtti_mixin<Node> {
     explicit Node(std::unique_ptr<Namespace> nmspace, const SymbolLoc& loc = {})
         : loc_(loc), namespace_(std::move(nmspace)) {}
 
-    bool empty() const NOEXCEPT { return children_.empty(); }
-    size_type size() const NOEXCEPT { return children_.size(); }
-    iterator begin() NOEXCEPT { return children_.begin(); }
-    const_iterator begin() const NOEXCEPT { return children_.begin(); }
-    iterator end() NOEXCEPT { return children_.end(); }
-    const_iterator end() const NOEXCEPT { return children_.end(); }
+    bool empty() const noexcept { return children_.empty(); }
+    size_type size() const noexcept { return children_.size(); }
+    iterator begin() noexcept { return children_.begin(); }
+    const_iterator begin() const noexcept { return children_.begin(); }
+    iterator end() noexcept { return children_.end(); }
+    const_iterator end() const noexcept { return children_.end(); }
     reference front() { return children_.front(); }
     const_reference front() const { return children_.front(); }
     reference back() { return children_.back(); }

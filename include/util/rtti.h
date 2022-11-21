@@ -54,7 +54,7 @@ class rtti_mixin : public SuperTy {
  public:
     using rtti_mixin_t = rtti_mixin;
     using super_class_t = SuperTy;
-    const type_info_desc* get_rtti_type_info() const override { return &type_info<Ty>::desc; };
+    const type_info_desc* get_rtti_type_info() const noexcept override { return &type_info<Ty>::desc; };
     template<typename... Args>
     explicit rtti_mixin(Args&&... args) : SuperTy(std::forward<Args>(args)...) {}
 };
@@ -63,24 +63,27 @@ template<typename Ty>
 class rtti_mixin<Ty, void> {
  public:
     using rtti_mixin_t = rtti_mixin;
-    virtual const type_info_desc* get_rtti_type_info() const { return &type_info<Ty>::desc; };
+    virtual const type_info_desc* get_rtti_type_info() const noexcept { return &type_info<Ty>::desc; };
     virtual ~rtti_mixin() = default;
 };
 
 namespace detail {
-template<typename Ty, typename = void>
-struct is_complete : std::false_type {};
-template<typename Ty>
-struct is_complete<Ty, decltype(void(sizeof(Ty)))> : std::true_type {};
-template<typename Ty>
-constexpr bool is_complete_v = is_complete<Ty>::value;
+template<typename FromTy, typename ToTy, typename = void>
+struct has_relation : std::false_type {};
+template<typename FromTy, typename ToTy>
+struct has_relation<FromTy, ToTy,  //
+                    std::void_t<decltype(static_cast<ToTy*>(std::declval<FromTy*>()))>> : std::true_type {};
+template<typename FromTy, typename ToTy>
+constexpr bool has_relation_v = has_relation<FromTy, ToTy>::value;
 }  // namespace detail
 
 template<typename... Kind, typename Ty, typename = std::void_t<typename Ty::rtti_mixin_t>>
-[[nodiscard]] bool is_kind_of(Ty& ref) {
+[[nodiscard]] constexpr bool is_kind_of(Ty& ref) noexcept {
     using TyNoCV = std::remove_cv_t<Ty>;
     static_assert(sizeof...(Kind) != 0, "unspecified kind");
-    static_assert((detail::is_complete_v<Kind> && ...), "incomplete type");
+    static_assert((std::is_same_v<Kind, std::remove_cv_t<std::remove_reference_t<Kind>>> && ...),
+                  "kind should neither be a reference nor has cv-qualifiers");
+    static_assert((detail::has_relation_v<TyNoCV, Kind> && ...), "incomplete or incompatible types");
     if constexpr ((!std::is_convertible_v<TyNoCV*, Kind*> && ...)) {
         for (auto* info = ref.get_rtti_type_info(); ((info->type_id != type_info<Kind>::kId) && ...);
              info = info->super_desc) {
@@ -91,23 +94,21 @@ template<typename... Kind, typename Ty, typename = std::void_t<typename Ty::rtti
 }
 
 template<typename... Kind, typename Ty, typename = std::void_t<typename Ty::rtti_mixin_t>>
-[[nodiscard]] bool is_kind_of(Ty* ref) {
+[[nodiscard]] bool is_kind_of(Ty* ref) noexcept {
     return ref && is_kind_of<Kind...>(*ref);
 }
 
-template<typename TyTo, typename TyFrom, typename = std::enable_if_t<std::is_reference_v<TyTo>>>
-[[nodiscard]] TyTo cast(TyFrom& ref) {
-    using Kind = std::decay_t<TyTo>;
-    static_assert(detail::is_complete_v<Kind>, "incomplete type");
+template<typename ToTy, typename FromTy, typename = std::enable_if_t<std::is_reference_v<ToTy>>>
+[[nodiscard]] ToTy cast(FromTy& ref) {
+    using Kind = std::remove_cv_t<std::remove_reference_t<ToTy>>;
     if (!is_kind_of<Kind>(ref)) { throw std::runtime_error("bad cast"); }
-    return static_cast<TyTo>(ref);
+    return static_cast<ToTy>(ref);
 }
 
-template<typename TyTo, typename TyFrom, typename = std::enable_if_t<std::is_pointer_v<TyTo>>>
-[[nodiscard]] TyTo cast(TyFrom* ptr) {
-    using Kind = std::decay_t<std::remove_pointer_t<TyTo>>;
-    static_assert(detail::is_complete_v<Kind>, "incomplete type");
-    return is_kind_of<Kind>(ptr) ? static_cast<TyTo>(ptr) : nullptr;
+template<typename ToTy, typename FromTy, typename = std::enable_if_t<std::is_pointer_v<ToTy>>>
+[[nodiscard]] ToTy cast(FromTy* ptr) noexcept {
+    using Kind = std::remove_cv_t<std::remove_pointer_t<ToTy>>;
+    return is_kind_of<Kind>(ptr) ? static_cast<ToTy>(ptr) : nullptr;
 }
 
 }  // namespace util
