@@ -28,7 +28,7 @@ class ScopeDescriptor {
 };
 
 template<typename Ty>
-const Ty* ir::ScopeDescriptor::lookupName(std::string_view name) const {
+const Ty* ScopeDescriptor::lookupName(std::string_view name) const {
     assert(!name.empty());
     switch (class_) {
         case ScopeClass::kLocal: {

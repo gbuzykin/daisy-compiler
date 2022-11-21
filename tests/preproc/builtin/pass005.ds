@@ -2,5 +2,5 @@
 #define SUM2(a, b, c) SUM  (SUM (a, c), SUM   (b, c))
 #define LINE_PLUS_SUM2(a, b, c) ((__line__) + SUM2(a, b, c))
 
-const v = __str__(LINE_PLUS_SUM2  (1, 2, 3) ## SUM2  (1, 2, 3));
-const v = __paste__(LINE_PLUS_SUM2  (1, 2, 3) ## + ## SUM2  (1, 2, 3));
+const v1 = __str__(LINE_PLUS_SUM2  (1, 2, 3) ## SUM2  (1, 2, 3));
+const v2 = __paste__(LINE_PLUS_SUM2  (1, 2, 3) ## + ## SUM2  (1, 2, 3));

@@ -15,9 +15,8 @@ DAISY_ADD_REDUCE_ACTION_HANDLER(act_push_expr_result, [](DaisyParserPass* pass, 
 });
 
 DAISY_ADD_REDUCE_ACTION_HANDLER(act_discard_expr_result, [](DaisyParserPass* pass, SymbolInfo* ss, SymbolLoc& loc) {
-    auto discard_node = std::make_unique<ir::DiscardExprNode>(ss[0].loc);
-    discard_node->push_back(std::move(std::get<std::unique_ptr<ir::Node>>(ss[0].val)));
-    pass->getCurrentScope().push_back(std::move(discard_node));
+    auto& discard_node = pass->getCurrentScope().push_back(std::make_unique<ir::DiscardExprNode>(ss[0].loc));
+    discard_node.push_back(std::move(std::get<std::unique_ptr<ir::Node>>(ss[0].val)));
 });
 
 DAISY_ADD_REDUCE_ACTION_HANDLER(act_if_expr, [](DaisyParserPass* pass, SymbolInfo* ss, SymbolLoc& loc) {

@@ -1,7 +1,10 @@
 ./expr/pass005.ds:4:7: debug: defining variable `m`
  4 |   let m = while x < y {} else {0}; m
    |       ^
-./expr/pass005.ds:3:1: debug: function `func f(i32, i32) -> i32` definition
+./expr/pass005.ds:3:1: debug: defining function `func f(i32, i32) -> i32`
+ 3 | func f(x : int, y : int) -> int {
+   | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+./expr/pass005.ds:3:1: debug: function `func f(i32, i32) -> i32` declaration
  3 | func f(x : int, y : int) -> int {
    | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ./expr/pass005.ds: info: warnings 0, errors 0

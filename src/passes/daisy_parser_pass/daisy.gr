@@ -179,7 +179,7 @@ unit_contents : unit_contents unit_item
 unit_item : [namespace] [id] '{' {begin_namespace} unit_contents '}' {end_block}
   | [const] const_decl_list ';'
   | [func] func_proto ';' {declare_func}
-  | [func] func_proto block_expr {define_func}
+  | [func] func_proto block_expr {define_func} {declare_func}
   | type_decl ';'
   | $error ';'
   | ';'
