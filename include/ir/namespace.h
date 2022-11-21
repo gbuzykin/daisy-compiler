@@ -29,12 +29,12 @@ class Namespace {
     explicit Namespace(Node& parent_scope) : parent_scope_(&parent_scope) {}
     explicit Namespace(std::nullptr_t) : parent_scope_(nullptr) {}  // for root
 
-    bool empty() const NOEXCEPT { return name_table_.empty(); }
-    size_type size() const NOEXCEPT { return name_table_.size(); }
-    iterator begin() NOEXCEPT { return name_table_.begin(); }
-    const_iterator begin() const NOEXCEPT { return name_table_.begin(); }
-    iterator end() NOEXCEPT { return name_table_.end(); }
-    const_iterator end() const NOEXCEPT { return name_table_.end(); }
+    bool empty() const noexcept { return name_table_.empty(); }
+    size_type size() const noexcept { return name_table_.size(); }
+    iterator begin() noexcept { return name_table_.begin(); }
+    const_iterator begin() const noexcept { return name_table_.begin(); }
+    iterator end() noexcept { return name_table_.end(); }
+    const_iterator end() const noexcept { return name_table_.end(); }
 
     const Node* getParentScope() const { return parent_scope_; }
     Node* getParentScope() { return parent_scope_; }
