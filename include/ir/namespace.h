@@ -10,6 +10,8 @@ namespace ir {
 
 class Node;
 class NamedNode;
+class NamedScopeNode;
+class DefNode;
 
 class Namespace {
  private:
@@ -52,23 +54,27 @@ class Namespace {
         return const_cast<Ty*>(std::as_const(*this).findNode<Ty>(name));
     }
 
-    template<typename Pred>
-    const NamedNode* findNode(std::string_view name, Pred p) const {
+    template<typename Ty, typename Pred>
+    const Ty* findNode(std::string_view name, Pred p) const {
         for (const auto& item : uxs::make_range(name_table_.equal_range(name))) {
-            if (p(*item.second)) { return item.second; }
+            if (const auto* obj = util::cast<const Ty*>(item.second); obj && p(*obj)) { return obj; }
         }
         return nullptr;
     }
 
-    template<typename Pred>
-    NamedNode* findNode(std::string_view name, Pred p) {
-        return const_cast<NamedNode*>(std::as_const(*this).findNode(name, p));
+    template<typename Ty, typename Pred>
+    Ty* findNode(std::string_view name, Pred p) {
+        return const_cast<Ty*>(std::as_const(*this).findNode<Ty>(name, p));
     }
 
     template<typename Ty, typename = std::enable_if_t<std::is_base_of_v<NamedNode, Ty>>>
-    void addNode(Ty& obj) {
+    Ty& addNode(Ty& obj) {
         name_table_.emplace(obj.getName(), &obj);
+        return obj;
     }
+
+    std::pair<NamedScopeNode*, bool> defineName(NamedScopeNode& named_scope);
+    std::pair<DefNode*, bool> defineName(DefNode& def_node);
 
  private:
     Node* parent_scope_;

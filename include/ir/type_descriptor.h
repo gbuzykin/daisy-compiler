@@ -41,6 +41,12 @@ class TypeDescriptor {
     TypeDefNode* getDefinitionNode() { return def_; }
     std::string getTypeString() const;
 
+    friend bool operator==(const TypeDescriptor& lhs, const TypeDescriptor& rhs) {
+        return lhs.class_ == rhs.class_ && lhs.modifiers_ == rhs.modifiers_ &&
+               (lhs.class_ != DataTypeClass::kDefinedDataType || lhs.def_ == rhs.def_);
+    }
+    friend bool operator!=(const TypeDescriptor& lhs, const TypeDescriptor& rhs) { return !(lhs == rhs); }
+
  private:
     DataTypeClass class_;
     DataTypeModifiers modifiers_ = DataTypeModifiers::kNone;

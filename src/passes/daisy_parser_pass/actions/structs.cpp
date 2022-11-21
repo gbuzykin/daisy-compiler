@@ -8,16 +8,9 @@ using namespace daisy;
 namespace {
 
 void beginStructDef(DaisyParserPass* pass, SymbolInfo* ss, SymbolLoc& loc) {
-    const auto name = std::get<std::string_view>(ss[-2].val);
-    auto& struct_def_node = pass->getCurrentScope().push_back(
-        std::make_unique<ir::StructDefNode>(std::string(name), pass->getCurrentScope(), ss[-2].loc));
-    auto& nmspace = pass->getCurrentScope().getNamespace();
-    if (auto* nmspace_node = nmspace.findNode<ir::NamedScopeNode>(name)) {
-        logger::error(ss[-2].loc).format("redefinition of `{}` as different kind of entity", name);
-        logger::note(nmspace_node->getLoc()).format("previous definition is here");
-    } else {
-        nmspace.addNode(struct_def_node);
-    }
+    auto& struct_def_node = pass->getCurrentScope().push_back(std::make_unique<ir::StructDefNode>(
+        std::string(std::get<std::string_view>(ss[-2].val)), pass->getCurrentScope(), ss[-2].loc));
+    pass->getCurrentScope().getNamespace().defineName(struct_def_node);
     pass->setCurrentScope(struct_def_node);
 }
 
@@ -33,6 +26,7 @@ void defineField(DaisyParserPass* pass, SymbolInfo* ss, SymbolLoc& loc) {
         logger::debug(field_def_node.getLoc())
             .format("defining field `{}` of type `{}`", name, field_def_node.getTypeDescriptor().getTypeString());
     }
+    pass->getCurrentScope().getNamespace().defineName(field_def_node);
 }
 
 }  // namespace

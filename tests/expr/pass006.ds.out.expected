@@ -4,13 +4,13 @@
 ./expr/pass006.ds:3:1: debug: defining function `func f(i32, i32) -> i32`
  3 | func f(x : int, y : int) -> int {
    | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-./expr/pass006.ds:3:1: debug: function `func f(i32, i32) -> i32` declaration
+./expr/pass006.ds:3:1: debug: function `func std::f(i32, i32) -> i32` declaration
  3 | func f(x : int, y : int) -> int {
    | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ./expr/pass006.ds:7:1: debug: defining function `func g(i32, i32)`
  7 | func g(x : int, y : int) {
    | ^~~~~~~~~~~~~~~~~~~~~~~~
-./expr/pass006.ds:7:1: debug: function `func g(i32, i32)` declaration
+./expr/pass006.ds:7:1: debug: function `func std::g(i32, i32)` declaration
  7 | func g(x : int, y : int) {
    | ^~~~~~~~~~~~~~~~~~~~~~~~
 ./expr/pass006.ds: info: warnings 0, errors 0

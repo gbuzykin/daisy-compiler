@@ -4,7 +4,7 @@
 ./expr/pass005.ds:3:1: debug: defining function `func f(i32, i32) -> i32`
  3 | func f(x : int, y : int) -> int {
    | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-./expr/pass005.ds:3:1: debug: function `func f(i32, i32) -> i32` declaration
+./expr/pass005.ds:3:1: debug: function `func std::f(i32, i32) -> i32` declaration
  3 | func f(x : int, y : int) -> int {
    | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ./expr/pass005.ds: info: warnings 0, errors 0
