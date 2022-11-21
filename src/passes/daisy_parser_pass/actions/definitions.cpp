@@ -32,6 +32,7 @@ void defineConst(DaisyParserPass* pass, SymbolInfo* ss, SymbolLoc& loc) {
         logger::debug(const_def_node.getLoc())
             .format("defining constant `{}` of type `{}`", name, const_def_node.getTypeDescriptor().getTypeString());
     }
+    pass->getCurrentScope().getNamespace().defineName(const_def_node);
 }
 
 void defineVariable(DaisyParserPass* pass, SymbolInfo* ss, SymbolLoc& loc) {
@@ -47,6 +48,7 @@ void defineVariable(DaisyParserPass* pass, SymbolInfo* ss, SymbolLoc& loc) {
         logger::debug(var_def_node.getLoc())
             .format("defining variable `{}` of type `{}`", name, var_def_node.getTypeDescriptor().getTypeString());
     }
+    pass->getCurrentScope().getNamespace().defineName(var_def_node);
 }
 
 void makeTypeSpecifier(DaisyParserPass* pass, SymbolInfo* ss, SymbolLoc& loc) {
@@ -73,6 +75,28 @@ void declareFunc(DaisyParserPass* pass, SymbolInfo* ss, SymbolLoc& loc) {
     auto& func_def_node = util::cast<ir::FuncDefNode&>(
         pass->getCurrentScope().push_back(std::move(std::get<std::unique_ptr<ir::Node>>(ss[1].val))));
     logger::debug(ss[0].loc + ss[1].loc).format("function `{}` declaration", func_def_node.getProtoString());
+
+    ir::FuncProtoCompareResult func_proto_compare_result = ir::FuncProtoCompareResult::kEqual;
+    auto* existing_def_node = pass->getCurrentScope().getNamespace().findNode<ir::FuncDefNode>(
+        func_def_node.getName(), [&func_def_node, &func_proto_compare_result](auto& def_node) {
+            return (func_proto_compare_result = def_node.compareProto(func_def_node)) <=
+                   ir::FuncProtoCompareResult::kRetTypeDiff;
+        });
+    if (!existing_def_node) {  // declare or overload function
+        pass->getCurrentScope().getNamespace().addNode(func_def_node);
+    } else if (func_proto_compare_result != ir::FuncProtoCompareResult::kEqual) {
+        logger::error(func_def_node.getLoc())
+            .format("functions that differ only in their return type cannot be overloaded");
+        logger::note(existing_def_node->getLoc()).format("previous declaration is here");
+    } else if (func_def_node.isDefined()) {
+        if (!existing_def_node->isDefined()) {  // move definition to existing function declaration
+            existing_def_node->push_back(func_def_node.extract(func_def_node.back()));
+            existing_def_node->setDefined(func_def_node.getDefinitionLoc());
+        } else {
+            logger::error(func_def_node.getLoc()).format("redefinition of `{}`", func_def_node.getName());
+            logger::note(existing_def_node->getDefinitionLoc()).format("previous definition is here");
+        }
+    }
 }
 
 void defineFunc(DaisyParserPass* pass, SymbolInfo* ss, SymbolLoc& loc) {

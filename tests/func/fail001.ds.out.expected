@@ -1,0 +1,7 @@
+./func/fail001.ds:5:6: error: functions that differ only in their return type cannot be overloaded
+ 5 | func f(x: i32, y: i32) -> i64 {}
+   |      ^
+./func/fail001.ds:3:6: note: previous declaration is here
+ 3 | func f(x: i32, y: i32) -> i32;
+   |      ^
+./func/fail001.ds: info: warnings 0, errors 1

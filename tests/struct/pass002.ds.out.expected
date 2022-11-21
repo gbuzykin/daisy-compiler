@@ -10,76 +10,76 @@
 ./struct/pass002.ds:12:3: debug: defining field `f` of type `f64`
  12 |   f : double;
     |   ^
-./struct/pass002.ds:15:1: debug: defining function `func f1(::N1::A1)`
+./struct/pass002.ds:15:1: debug: defining function `func f1(N1::A1)`
  15 | func f1(x : A1) {}
     | ^~~~~~~~~~~~~~~
-./struct/pass002.ds:15:1: debug: function `func f1(::N1::A1)` declaration
+./struct/pass002.ds:15:1: debug: function `func N1::N2::f1(N1::A1)` declaration
  15 | func f1(x : A1) {}
     | ^~~~~~~~~~~~~~~
-./struct/pass002.ds:16:1: debug: defining function `func f2(::N1::N2::A2)`
+./struct/pass002.ds:16:1: debug: defining function `func f2(N1::N2::A2)`
  16 | func f2(x : A2) {}
     | ^~~~~~~~~~~~~~~
-./struct/pass002.ds:16:1: debug: function `func f2(::N1::N2::A2)` declaration
+./struct/pass002.ds:16:1: debug: function `func N1::N2::f2(N1::N2::A2)` declaration
  16 | func f2(x : A2) {}
     | ^~~~~~~~~~~~~~~
-./struct/pass002.ds:17:1: debug: defining function `func f3(::N1::A1)`
+./struct/pass002.ds:17:1: debug: defining function `func f3(N1::A1)`
  17 | func f3(x : N1::A1) {}
     | ^~~~~~~~~~~~~~~~~~~
-./struct/pass002.ds:17:1: debug: function `func f3(::N1::A1)` declaration
+./struct/pass002.ds:17:1: debug: function `func N1::N2::f3(N1::A1)` declaration
  17 | func f3(x : N1::A1) {}
     | ^~~~~~~~~~~~~~~~~~~
-./struct/pass002.ds:18:1: debug: defining function `func f4(::N1::N2::A2)`
+./struct/pass002.ds:18:1: debug: defining function `func f4(N1::N2::A2)`
  18 | func f4(x : N2::A2) {}
     | ^~~~~~~~~~~~~~~~~~~
-./struct/pass002.ds:18:1: debug: function `func f4(::N1::N2::A2)` declaration
+./struct/pass002.ds:18:1: debug: function `func N1::N2::f4(N1::N2::A2)` declaration
  18 | func f4(x : N2::A2) {}
     | ^~~~~~~~~~~~~~~~~~~
-./struct/pass002.ds:19:1: debug: defining function `func f5(::N1::A1)`
+./struct/pass002.ds:19:1: debug: defining function `func f5(N1::A1)`
  19 | func f5(x : ::N1::A1) {}
     | ^~~~~~~~~~~~~~~~~~~~~
-./struct/pass002.ds:19:1: debug: function `func f5(::N1::A1)` declaration
+./struct/pass002.ds:19:1: debug: function `func N1::N2::f5(N1::A1)` declaration
  19 | func f5(x : ::N1::A1) {}
     | ^~~~~~~~~~~~~~~~~~~~~
-./struct/pass002.ds:20:1: debug: defining function `func f6(::N1::N2::A2)`
+./struct/pass002.ds:20:1: debug: defining function `func f6(N1::N2::A2)`
  20 | func f6(x : ::N1::N2::A2) {}
     | ^~~~~~~~~~~~~~~~~~~~~~~~~
-./struct/pass002.ds:20:1: debug: function `func f6(::N1::N2::A2)` declaration
+./struct/pass002.ds:20:1: debug: function `func N1::N2::f6(N1::N2::A2)` declaration
  20 | func f6(x : ::N1::N2::A2) {}
     | ^~~~~~~~~~~~~~~~~~~~~~~~~
-./struct/pass002.ds:24:1: debug: defining function `func f7(::N1::A1)`
+./struct/pass002.ds:24:1: debug: defining function `func f7(N1::A1)`
  24 | func f7(x : A1) {}
     | ^~~~~~~~~~~~~~~
-./struct/pass002.ds:24:1: debug: function `func f7(::N1::A1)` declaration
+./struct/pass002.ds:24:1: debug: function `func N1::f7(N1::A1)` declaration
  24 | func f7(x : A1) {}
     | ^~~~~~~~~~~~~~~
-./struct/pass002.ds:25:1: debug: defining function `func f8(::N1::N2::A2)`
+./struct/pass002.ds:25:1: debug: defining function `func f8(N1::N2::A2)`
  25 | func f8(x : N2::A2) {}
     | ^~~~~~~~~~~~~~~~~~~
-./struct/pass002.ds:25:1: debug: function `func f8(::N1::N2::A2)` declaration
+./struct/pass002.ds:25:1: debug: function `func N1::f8(N1::N2::A2)` declaration
  25 | func f8(x : N2::A2) {}
     | ^~~~~~~~~~~~~~~~~~~
-./struct/pass002.ds:29:1: debug: defining function `func f9(::N1::A1)`
+./struct/pass002.ds:29:1: debug: defining function `func f9(N1::A1)`
  29 | func f9(x : N1::A1) {}
     | ^~~~~~~~~~~~~~~~~~~
-./struct/pass002.ds:29:1: debug: function `func f9(::N1::A1)` declaration
+./struct/pass002.ds:29:1: debug: function `func f9(N1::A1)` declaration
  29 | func f9(x : N1::A1) {}
     | ^~~~~~~~~~~~~~~~~~~
-./struct/pass002.ds:30:1: debug: defining function `func f10(::N1::N2::A2)`
+./struct/pass002.ds:30:1: debug: defining function `func f10(N1::N2::A2)`
  30 | func f10(x : N1::N2::A2) {}
     | ^~~~~~~~~~~~~~~~~~~~~~~~
-./struct/pass002.ds:30:1: debug: function `func f10(::N1::N2::A2)` declaration
+./struct/pass002.ds:30:1: debug: function `func f10(N1::N2::A2)` declaration
  30 | func f10(x : N1::N2::A2) {}
     | ^~~~~~~~~~~~~~~~~~~~~~~~
-./struct/pass002.ds:31:1: debug: defining function `func f11(::N1::A1)`
+./struct/pass002.ds:31:1: debug: defining function `func f11(N1::A1)`
  31 | func f11(x : ::N1::A1) {}
     | ^~~~~~~~~~~~~~~~~~~~~~
-./struct/pass002.ds:31:1: debug: function `func f11(::N1::A1)` declaration
+./struct/pass002.ds:31:1: debug: function `func f11(N1::A1)` declaration
  31 | func f11(x : ::N1::A1) {}
     | ^~~~~~~~~~~~~~~~~~~~~~
-./struct/pass002.ds:32:1: debug: defining function `func f12(::N1::N2::A2)`
+./struct/pass002.ds:32:1: debug: defining function `func f12(N1::N2::A2)`
  32 | func f12(x : ::N1::N2::A2) {}
     | ^~~~~~~~~~~~~~~~~~~~~~~~~~
-./struct/pass002.ds:32:1: debug: function `func f12(::N1::N2::A2)` declaration
+./struct/pass002.ds:32:1: debug: function `func f12(N1::N2::A2)` declaration
  32 | func f12(x : ::N1::N2::A2) {}
     | ^~~~~~~~~~~~~~~~~~~~~~~~~~
 ./struct/pass002.ds: info: warnings 0, errors 0

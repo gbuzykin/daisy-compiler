@@ -1,0 +1,7 @@
+./func/fail002.ds:7:6: error: redefinition of `f`
+ 7 | func f(x: i32, y: i32) -> i32 {}
+   |      ^
+./func/fail002.ds:5:6: note: previous definition is here
+ 5 | func f(x: i32, y: i32) -> i32 {}
+   |      ^
+./func/fail002.ds: info: warnings 0, errors 1

@@ -5,6 +5,8 @@
 namespace daisy {
 namespace ir {
 
+enum class FuncProtoCompareResult { kEqual = 0, kRetTypeDiff, kArgTypeDiff, kArgCountDiff };
+
 class FuncDefNode : public util::rtti_mixin<FuncDefNode, DefNode> {
  public:
     FuncDefNode(std::string name, Node& parent_scope, const SymbolLoc& loc)
@@ -14,6 +16,7 @@ class FuncDefNode : public util::rtti_mixin<FuncDefNode, DefNode> {
     const SymbolLoc& getDefinitionLoc() const { return def_loc_; }
     void setDefined(const SymbolLoc& loc) { is_defined_ = true, def_loc_ = loc; }
     std::string getProtoString() const;
+    FuncProtoCompareResult compareProto(const FuncDefNode& other_proto) const;
 
  private:
     bool is_defined_ = false;
