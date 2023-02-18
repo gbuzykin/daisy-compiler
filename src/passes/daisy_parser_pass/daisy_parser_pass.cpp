@@ -54,13 +54,13 @@ void DaisyParserPass::cleanup() {
 }
 
 PassResult DaisyParserPass::run(CompilationContext& ctx) {
-    uxs::basic_inline_dynbuffer<int, 1> parser_state_stack;
+    uxs::inline_basic_dynbuffer<int, 1> parser_state_stack;
     std::vector<SymbolInfo> symbol_stack;
 
     ctx_ = &ctx;
     error_status_ = 0;
-    lex_state_stack_.reserve_at_curr(256);
-    parser_state_stack.reserve_at_curr(1024);
+    lex_state_stack_.reserve(256);
+    parser_state_stack.reserve(1024);
     symbol_stack.reserve(1024);
 
     ctx_->ir_root = std::make_unique<ir::RootNode>();
@@ -82,8 +82,8 @@ PassResult DaisyParserPass::run(CompilationContext& ctx) {
     parser_state_stack.push_back(parser_detail::sc_initial);  // Push initial state
     while (true) {
         int* prev_parser_state_stack_top = parser_state_stack.curr();
-        parser_state_stack.reserve_at_curr(1);
-        int act = parse(tt, parser_state_stack.first(), parser_state_stack.p_curr(), 0);
+        parser_state_stack.reserve(1);
+        int act = parse(tt, parser_state_stack.data(), parser_state_stack.p_curr(), 0);
         if (act != parser_detail::predef_act_shift) {
             unsigned rlen = static_cast<unsigned>(1 + prev_parser_state_stack_top - parser_state_stack.curr());
             if (act < 0) {  // Syntax error
@@ -113,7 +113,7 @@ PassResult DaisyParserPass::run(CompilationContext& ctx) {
                     logger::debug(la_tkn_.loc, true).format("id: {}", std::get<std::string_view>(la_tkn_.val));
                 } else if (tt == parser_detail::tt_string_literal) {
                     logger::debug(la_tkn_.loc, true)
-                        .format("string: {}", uxs::make_quoted_text(std::get<std::string>(la_tkn_.val)));
+                        .format("string: {}", uxs::make_quoted_string(std::get<std::string>(la_tkn_.val)));
                 } else if (tt == parser_detail::tt_int_literal) {
                     if (std::get<ir::IntConst>(la_tkn_.val).isSigned()) {
                         logger::debug(la_tkn_.loc, true)
@@ -169,7 +169,7 @@ int DaisyParserPass::lex(SymbolInfo& tkn, bool* leading_ws) {
                 break;
             } else if (lex_flags & lex_detail::flag_has_more) {
                 // enlarge state stack and continue analysis
-                lex_state_stack_.reserve_at_curr(llen);
+                lex_state_stack_.reserve(llen);
                 first = last;
             } else {  // Input buffer is over
                 if (lex_state_stack_.back() == lex_detail::sc_string) {
@@ -212,14 +212,14 @@ int DaisyParserPass::lex(SymbolInfo& tkn, bool* leading_ws) {
                 txt.push_back(lexeme[1]);
             } break;
             case lex_detail::pat_escape_hex: {
-                char escape = uxs::dig_v<16>(lexeme[2]);
-                if (llen > 3) { escape = (escape << 4) + uxs::dig_v<16>(lexeme[3]); }
+                char escape = uxs::dig_v(lexeme[2]);
+                if (llen > 3) { escape = (escape << 4) + uxs::dig_v(lexeme[3]); }
                 txt.push_back(escape);
             } break;
             case lex_detail::pat_escape_oct: {
-                char escape = uxs::dig_v<8>(lexeme[1]);
-                if (llen > 2) { escape = (escape << 3) + uxs::dig_v<8>(lexeme[2]); }
-                if (llen > 3) { escape = (escape << 3) + uxs::dig_v<8>(lexeme[3]); }
+                char escape = uxs::dig_v(lexeme[1]);
+                if (llen > 2) { escape = (escape << 3) + uxs::dig_v(lexeme[2]); }
+                if (llen > 3) { escape = (escape << 3) + uxs::dig_v(lexeme[3]); }
                 txt.push_back(escape);
             } break;
 
@@ -462,5 +462,5 @@ void daisy::logSyntaxError(int tt, const SymbolLoc& loc) {
         case parser_detail::tt_end_of_input: msg = "expected token in expression"; break;
         default: msg = "unexpected token"; break;
     }
-    logger::error(loc).format(msg);
+    logger::error(loc).format(uxs::make_runtime_string(msg));
 }

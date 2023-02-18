@@ -79,7 +79,7 @@ std::string_view typeString(MsgType type) {
 }
 
 void printMessageImpl(MsgType type, std::string_view msg_hdr, std::string_view msg) {
-    uxs::fprintln(uxs::stdbuf::log, "\033[1;37m{}{}{}", msg_hdr, typeString(type), msg);
+    uxs::println(uxs::stdbuf::log, "\033[1;37m{}{}{}", msg_hdr, typeString(type), msg);
 }
 
 void printMessageImpl(MsgType type, const SymbolLoc& loc, std::string_view msg) {
@@ -87,8 +87,8 @@ void printMessageImpl(MsgType type, const SymbolLoc& loc, std::string_view msg) 
     assert(file);
 
     std::string n_line = uxs::to_string(loc.first.ln);
-    uxs::fprintln(uxs::stdbuf::log, "\033[1;37m{}:{}:{}{}{}", file->file_name, n_line, loc.first.col, typeString(type),
-                  msg);
+    uxs::println(uxs::stdbuf::log, "\033[1;37m{}:{}:{}{}{}", file->file_name, n_line, loc.first.col, typeString(type),
+                 msg);
 
     std::string left_padding(n_line.size(), ' ');
     const auto& text_lines = file->text_lines;
@@ -97,8 +97,8 @@ void printMessageImpl(MsgType type, const SymbolLoc& loc, std::string_view msg) 
         // Note: line and column numbers start from 1
         auto [tab2space_line, mark] = markInputLine(text_lines[ln - 1], ln == loc.first.ln ? loc.first.col : 0,
                                                     ln == loc.last.ln ? loc.last.col : 0);
-        uxs::fprintln(uxs::stdbuf::log, " {} | {}", ln == loc.first.ln ? n_line : left_padding, tab2space_line);
-        uxs::fprintln(uxs::stdbuf::log, " {} | \033[0;32m{}\033[0m", left_padding, mark);
+        uxs::println(uxs::stdbuf::log, " {} | {}", ln == loc.first.ln ? n_line : left_padding, tab2space_line);
+        uxs::println(uxs::stdbuf::log, " {} | \033[0;32m{}\033[0m", left_padding, mark);
     }
 }
 
@@ -132,8 +132,8 @@ void LoggerExtended::printMessage(std::string_view msg) {
     while (it != loc_stack.rend() - 1 && !(*(it + 1))->loc_ctx->expansion.macro_def) {
         assert((*it)->loc_ctx->file);
         if (print_ext_loc_info_) {
-            uxs::fprintln(uxs::stdbuf::log, "In file included from {}:{}", (*it)->loc_ctx->file->file_name,
-                          (*it)->first.ln);
+            uxs::println(uxs::stdbuf::log, "In file included from {}:{}", (*it)->loc_ctx->file->file_name,
+                         (*it)->first.ln);
         }
         ++it;
     }
