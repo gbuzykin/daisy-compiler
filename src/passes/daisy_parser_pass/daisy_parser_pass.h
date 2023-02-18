@@ -182,7 +182,7 @@ class DaisyParserPass : public Pass {
 
     SymbolInfo la_tkn_;
     std::forward_list<std::unique_ptr<InputContext>> input_ctx_stack_;
-    uxs::basic_inline_dynbuffer<int, 1> lex_state_stack_;
+    uxs::inline_basic_dynbuffer<int, 1> lex_state_stack_;
     std::forward_list<IfSectionState> if_section_stack_;
 
     ir::Node* current_scope_;
