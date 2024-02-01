@@ -2,7 +2,7 @@
 
 #include "common/symbol_loc.h"
 #include "ir/namespace.h"
-#include "uxs/intrusive_list.h"
+#include "uxs/intrusive/list.h"
 
 #include <memory>
 
@@ -13,10 +13,18 @@ class Node : public util::rtti_mixin<Node> {
  private:
     Node* parent_ = nullptr;
 
-    using ChildListHookType = uxs::intrusive_list_hook_t<Node, std::unique_ptr<Node>>;
-    ChildListHookType child_list_hook_;
+    struct ChildListHookType : uxs::intrusive::list_links_t {
+        std::unique_ptr<Node> self;
+    } child_list_hook_;
 
-    using ChildListType = uxs::intrusive_list<Node, ChildListHookType, &Node::child_list_hook_>;
+    using ChildListType = uxs::intrusive::list<
+        Node,
+        uxs::intrusive::list_hook_traits<
+            Node, ChildListHookType,
+            uxs::intrusive::opt_internal_pointer<ChildListHookType, std::unique_ptr<Node>, &ChildListHookType::self>>,
+        uxs::intrusive::list_hook_getter<
+            uxs::intrusive::opt_member_hook<Node, ChildListHookType, &Node::child_list_hook_>>>;
+
     ChildListType children_;
 
     SymbolLoc loc_;
@@ -84,7 +92,7 @@ class Node : public util::rtti_mixin<Node> {
 
     std::unique_ptr<Node> extract(Node& node) {
         node.parent_ = nullptr;
-        return children_.extract(children_.to_iterator(node));
+        return children_.extract(children_.to_iterator(node)).second;
     }
 };
 

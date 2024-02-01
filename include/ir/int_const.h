@@ -73,8 +73,8 @@ class IntConst {
     template<unsigned base>
     static std::pair<const char*, bool> accumValue(const char* p, const char* p_end, uint64_t& v) {
         for (; p != p_end; ++p) {
-            int dig = uxs::dig_v(*p);
-            if (dig < 0 && *p != '_') { break; }
+            unsigned dig = uxs::dig_v(*p);
+            if (dig >= base && *p != '_') { break; }
             uint64_t v_prev = v;
             v = base * v + dig;
             if (v < v_prev) { return {p, false}; }  // overflow

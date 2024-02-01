@@ -27,10 +27,10 @@ void defineConst(DaisyParserPass* pass, SymbolInfo* ss, SymbolLoc& loc) {
     const_def_node.setTypeDescriptor(std::move(std::get<ir::TypeDescriptor>(ss[1].val)));
     const_def_node.push_back(std::move(std::get<std::unique_ptr<ir::Node>>(ss[3].val)));
     if (const_def_node.getTypeDescriptor().isAuto()) {
-        logger::debug(const_def_node.getLoc()).format("defining constant `{}`", name);
+        logger::debug(const_def_node.getLoc()).println("defining constant `{}`", name);
     } else {
         logger::debug(const_def_node.getLoc())
-            .format("defining constant `{}` of type `{}`", name, const_def_node.getTypeDescriptor().getTypeString());
+            .println("defining constant `{}` of type `{}`", name, const_def_node.getTypeDescriptor().getTypeString());
     }
     pass->getCurrentScope().getNamespace().defineName(const_def_node);
 }
@@ -43,10 +43,10 @@ void defineVariable(DaisyParserPass* pass, SymbolInfo* ss, SymbolLoc& loc) {
     type_desc.setModifiers(std::get<ir::DataTypeModifiers>(ss[0].val));
     var_def_node.push_back(std::move(std::get<std::unique_ptr<ir::Node>>(ss[4].val)));
     if (var_def_node.getTypeDescriptor().isAuto()) {
-        logger::debug(var_def_node.getLoc()).format("defining variable `{}`", name);
+        logger::debug(var_def_node.getLoc()).println("defining variable `{}`", name);
     } else {
         logger::debug(var_def_node.getLoc())
-            .format("defining variable `{}` of type `{}`", name, var_def_node.getTypeDescriptor().getTypeString());
+            .println("defining variable `{}` of type `{}`", name, var_def_node.getTypeDescriptor().getTypeString());
     }
     pass->getCurrentScope().getNamespace().defineName(var_def_node);
 }
@@ -62,7 +62,7 @@ void makeTypeSpecifier(DaisyParserPass* pass, SymbolInfo* ss, SymbolLoc& loc) {
                 ss[0].val.emplace<ir::TypeDescriptor>(ir::DataTypeClass::kDefinedDataType, type_def_node);
                 return;
             } else {
-                logger::error(ss[1].loc).format("undeclared type `{}`", name);
+                logger::error(ss[1].loc).println("undeclared type `{}`", name);
             }
         }
         ss[0].val.emplace<ir::TypeDescriptor>();
@@ -74,7 +74,7 @@ void declareFunc(DaisyParserPass* pass, SymbolInfo* ss, SymbolLoc& loc) {
 
     auto& func_def_node = util::cast<ir::FuncDefNode&>(
         pass->getCurrentScope().push_back(std::move(std::get<std::unique_ptr<ir::Node>>(ss[1].val))));
-    logger::debug(ss[0].loc + ss[1].loc).format("function `{}` declaration", func_def_node.getProtoString());
+    logger::debug(ss[0].loc + ss[1].loc).println("function `{}` declaration", func_def_node.getProtoString());
 
     ir::FuncProtoCompareResult func_proto_compare_result = ir::FuncProtoCompareResult::kEqual;
     auto* existing_def_node = pass->getCurrentScope().getNamespace().findNode<ir::FuncDefNode>(
@@ -86,15 +86,15 @@ void declareFunc(DaisyParserPass* pass, SymbolInfo* ss, SymbolLoc& loc) {
         pass->getCurrentScope().getNamespace().addNode(func_def_node);
     } else if (func_proto_compare_result != ir::FuncProtoCompareResult::kEqual) {
         logger::error(func_def_node.getLoc())
-            .format("functions that differ only in their return type cannot be overloaded");
-        logger::note(existing_def_node->getLoc()).format("previous declaration is here");
+            .println("functions that differ only in their return type cannot be overloaded");
+        logger::note(existing_def_node->getLoc()).println("previous declaration is here");
     } else if (func_def_node.isDefined()) {
         if (!existing_def_node->isDefined()) {  // move definition to existing function declaration
             existing_def_node->push_back(func_def_node.extract(func_def_node.back()));
             existing_def_node->setDefined(func_def_node.getDefinitionLoc());
         } else {
-            logger::error(func_def_node.getLoc()).format("redefinition of `{}`", func_def_node.getName());
-            logger::note(existing_def_node->getDefinitionLoc()).format("previous definition is here");
+            logger::error(func_def_node.getLoc()).println("redefinition of `{}`", func_def_node.getName());
+            logger::note(existing_def_node->getDefinitionLoc()).println("previous definition is here");
         }
     }
 }
@@ -103,7 +103,7 @@ void defineFunc(DaisyParserPass* pass, SymbolInfo* ss, SymbolLoc& loc) {
     auto& func_def_node = util::cast<ir::FuncDefNode&>(*std::get<std::unique_ptr<ir::Node>>(ss[-2].val));
     func_def_node.push_back(std::move(std::get<std::unique_ptr<ir::Node>>(ss[-1].val)));
     func_def_node.setDefined(func_def_node.getLoc());
-    logger::debug(ss[-3].loc + ss[-2].loc).format("defining function `{}`", func_def_node.getProtoString());
+    logger::debug(ss[-3].loc + ss[-2].loc).println("defining function `{}`", func_def_node.getProtoString());
 }
 
 }  // namespace

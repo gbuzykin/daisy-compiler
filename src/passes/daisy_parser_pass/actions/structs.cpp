@@ -21,10 +21,10 @@ void defineField(DaisyParserPass* pass, SymbolInfo* ss, SymbolLoc& loc) {
     auto& type_desc = field_def_node.setTypeDescriptor(std::move(std::get<ir::TypeDescriptor>(ss[3].val)));
     type_desc.setModifiers(std::get<ir::DataTypeModifiers>(ss[0].val));
     if (field_def_node.getTypeDescriptor().isAuto()) {
-        logger::debug(field_def_node.getLoc()).format("defining field `{}`", name);
+        logger::debug(field_def_node.getLoc()).println("defining field `{}`", name);
     } else {
         logger::debug(field_def_node.getLoc())
-            .format("defining field `{}` of type `{}`", name, field_def_node.getTypeDescriptor().getTypeString());
+            .println("defining field `{}` of type `{}`", name, field_def_node.getTypeDescriptor().getTypeString());
     }
     pass->getCurrentScope().getNamespace().defineName(field_def_node);
 }

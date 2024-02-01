@@ -14,13 +14,13 @@ namespace {
 void parseDefineDirective(DaisyParserPass* pass, SymbolInfo& tkn) {
     int tt = pass->lex(tkn);  // Parse identifier
     if (tt != parser_detail::tt_id) {
-        logger::error(tkn.loc).format("expected macro identifier");
+        logger::error(tkn.loc).println("expected macro identifier");
         return;
     }
 
     const auto id = std::get<std::string_view>(tkn.val);
     if (pass->isKeyword(id)) {
-        logger::error(tkn.loc).format("keyword `{}` cannot be used as macro identifier", id);
+        logger::error(tkn.loc).println("keyword `{}` cannot be used as macro identifier", id);
         return;
     }
 
@@ -36,22 +36,22 @@ void parseDefineDirective(DaisyParserPass* pass, SymbolInfo& tkn) {
             if (tt = pass->lex(tkn); tt == parser_detail::tt_id) {
                 arg_id = std::get<std::string_view>(tkn.val);
                 if (pass->isKeyword(arg_id)) {  // is a keyword
-                    logger::error(tkn.loc).format("keyword `{}` cannot be used as macro argument identifier", arg_id);
+                    logger::error(tkn.loc).println("keyword `{}` cannot be used as macro argument identifier", arg_id);
                     return;
                 } else if (arg_id == kVaArgsId) {  // variadic argument identifier
-                    logger::error(tkn.loc).format("identifier `{}` is reserved for variadic argument", arg_id);
+                    logger::error(tkn.loc).println("identifier `{}` is reserved for variadic argument", arg_id);
                     return;
                 }
             } else if (tt == parser_detail::tt_ellipsis) {
                 arg_id = kVaArgsId, macro_def->is_variadic = true;
             } else {
-                logger::error(tkn.loc).format("expected macro argument identifier or `...`");
+                logger::error(tkn.loc).println("expected macro argument identifier or `...`");
                 return;
             }
             macro_def->formal_args.emplace(arg_id, std::make_pair(count++, tkn.loc));
             if ((tt = pass->lex(tkn)) == parser_detail::tt_ellipsis) {
                 if (macro_def->is_variadic) {
-                    logger::error(tkn.loc).format("expected `,`");
+                    logger::error(tkn.loc).println("expected `,`");
                     return;
                 }
                 macro_def->is_variadic = true;
@@ -60,10 +60,10 @@ void parseDefineDirective(DaisyParserPass* pass, SymbolInfo& tkn) {
             if (tt == ')') {
                 break;
             } else if (tt != ',') {
-                logger::error(tkn.loc).format("expected `)` or `,`");
+                logger::error(tkn.loc).println("expected `)` or `,`");
                 return;
             } else if (macro_def->is_variadic) {
-                logger::error(tkn.loc).format("expected `)`");
+                logger::error(tkn.loc).println("expected `)`");
                 return;
             }
         }
@@ -76,9 +76,9 @@ void parseDefineDirective(DaisyParserPass* pass, SymbolInfo& tkn) {
     auto& ctx = pass->getCompilationContext();
     if (auto [it, success] = ctx.macro_defs.try_emplace(id, std::move(macro_def)); !success) {
         if (it->second->type != MacroDefinition::Type::kUserDefined) {
-            logger::warning(tkn.loc).format("builtin macro `{}` redefinition", id);
+            logger::warning(tkn.loc).println("builtin macro `{}` redefinition", id);
         } else {
-            logger::warning(tkn.loc).format("macro `{}` redefinition", id);
+            logger::warning(tkn.loc).println("macro `{}` redefinition", id);
         }
         it->second = std::move(macro_def);
     }
@@ -87,7 +87,7 @@ void parseDefineDirective(DaisyParserPass* pass, SymbolInfo& tkn) {
 void parseUndefDirective(DaisyParserPass* pass, SymbolInfo& tkn) {
     int tt = pass->lex(tkn);  // Parse identifier
     if (tt != parser_detail::tt_id) {
-        logger::error(tkn.loc).format("expected macro identifier");
+        logger::error(tkn.loc).println("expected macro identifier");
         return;
     }
     auto& ctx = pass->getCompilationContext();
@@ -95,11 +95,11 @@ void parseUndefDirective(DaisyParserPass* pass, SymbolInfo& tkn) {
     auto it = ctx.macro_defs.find(id);
     if (it != ctx.macro_defs.end()) {
         if (it->second->type != MacroDefinition::Type::kUserDefined) {
-            logger::warning(tkn.loc).format("cannot undefine builtin macro `{}`", id);
+            logger::warning(tkn.loc).println("cannot undefine builtin macro `{}`", id);
         }
         ctx.macro_defs.erase(id);
     } else {
-        logger::warning(tkn.loc).format("macro `{}` is not defined", id);
+        logger::warning(tkn.loc).println("macro `{}` is not defined", id);
     }
     pass->ensureEndOfInput(tkn);
 }
@@ -230,7 +230,7 @@ void DaisyParserPass::expandMacro(const SymbolLoc& loc, const MacroDefinition& m
     auto& macro_exp = macro_exp_ctx->macro_expansion_info;
     macro_exp_ctx->macro_expansion = &macro_exp;
 
-    auto macro_details = [id, &macro_def]() { logger::note(macro_def.loc).format("macro `{}` defined here", id); };
+    auto macro_details = [id, &macro_def]() { logger::note(macro_def.loc).println("macro `{}` defined here", id); };
 
     const size_t formal_arg_count = macro_def.formal_args.empty() && macro_def.is_variadic ?
                                         1 :  // builtin variadic macros workaround
@@ -239,7 +239,7 @@ void DaisyParserPass::expandMacro(const SymbolLoc& loc, const MacroDefinition& m
         TextRange text = in_ctx.text;
         findMacroArgumentList(text);
         if (text.first == text.last || *text.first != '(') {
-            logger::error(loc).format("macro `{}` requires arguments", id);
+            logger::error(loc).println("macro `{}` requires arguments", id);
             macro_details();
             return;
         }
@@ -262,7 +262,7 @@ void DaisyParserPass::expandMacro(const SymbolLoc& loc, const MacroDefinition& m
         }
 
         if (text.first == text.last) {
-            logger::error(loc).format("unterminated argument list for macro `{}`", id);
+            logger::error(loc).println("unterminated argument list for macro `{}`", id);
             macro_details();
             return;
         }
@@ -277,15 +277,15 @@ void DaisyParserPass::expandMacro(const SymbolLoc& loc, const MacroDefinition& m
 
         if (macro_def.is_variadic) {
             if (args.size() < formal_arg_count - 1) {
-                logger::error(loc).format("variadic macro `{}` requires at least {} arguments, but {} provided", id,
-                                          formal_arg_count - 1, args.size());
+                logger::error(loc).println("variadic macro `{}` requires at least {} arguments, but {} provided", id,
+                                           formal_arg_count - 1, args.size());
                 macro_details();
                 return;
             }
             if (args.size() < formal_arg_count) { args.emplace_back(TextRange{text.first, text.first, text.pos}); }
         } else if (args.size() != formal_arg_count) {
-            logger::error(loc).format("macro `{}` requires {} arguments, but {} provided", id, formal_arg_count,
-                                      args.size());
+            logger::error(loc).println("macro `{}` requires {} arguments, but {} provided", id, formal_arg_count,
+                                       args.size());
             macro_details();
             return;
         }
@@ -294,12 +294,14 @@ void DaisyParserPass::expandMacro(const SymbolLoc& loc, const MacroDefinition& m
     if (macro_def.type >= MacroDefinition::Type::kBuiltIn) {
         auto impl_func = std::get<BuiltInMacroImpl>(
             g_builtin_macro_impl[macro_def.type - MacroDefinition::Type::kBuiltIn]);
-        if (!impl_func(this, macro_exp)) { logger::error(loc).format("macro `{}` cannot be used in this context", id); }
+        if (!impl_func(this, macro_exp)) {
+            logger::error(loc).println("macro `{}` cannot be used in this context", id);
+        }
         return;
     }
 
     if (checkMacroExpansionForRecursion(id)) {
-        logger::error(loc).format("recursive macro `{}` expansion", id);
+        logger::error(loc).println("recursive macro `{}` expansion", id);
         return;
     }
 
