@@ -13,13 +13,13 @@ inline std::string_view parseMessageDirective(DaisyParserPass* pass) {
 }
 
 DAISY_ADD_PREPROC_DIRECTIVE_PARSER(info, [](DaisyParserPass* pass, SymbolInfo& tkn) {
-    logger::info(tkn.loc).format("{}", parseMessageDirective(pass));
+    logger::info(tkn.loc).println("{}", parseMessageDirective(pass));
 });
 
 DAISY_ADD_PREPROC_DIRECTIVE_PARSER(warning, [](DaisyParserPass* pass, SymbolInfo& tkn) {
-    logger::warning(tkn.loc).format("{}", parseMessageDirective(pass));
+    logger::warning(tkn.loc).println("{}", parseMessageDirective(pass));
 });
 
 DAISY_ADD_PREPROC_DIRECTIVE_PARSER(error, [](DaisyParserPass* pass, SymbolInfo& tkn) {
-    logger::error(tkn.loc).format("{}", parseMessageDirective(pass));
+    logger::error(tkn.loc).println("{}", parseMessageDirective(pass));
 });

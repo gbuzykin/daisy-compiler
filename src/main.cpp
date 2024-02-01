@@ -49,31 +49,31 @@ int main(int argc, char** argv) {
         auto parse_result = cli->parse(argc, argv);
         if (show_help) {
             for (auto const* node = parse_result.node; node; node = node->get_parent()) {
-                if (node->get_type() == uxs::cli::node_type::kCommand) {
+                if (node->get_type() == uxs::cli::node_type::command) {
                     uxs::stdbuf::out.write(static_cast<const uxs::cli::basic_command<char>&>(*node).make_man_page(true));
                     break;
                 }
             }
             return 0;
         } else if (show_version) {
-            uxs::stdbuf::out.write(XSTR(VERSION)).endl();
+            uxs::println(uxs::stdbuf::out, "{}", XSTR(VERSION));
             return 0;
-        } else if (parse_result.status != uxs::cli::parsing_status::kOk) {
+        } else if (parse_result.status != uxs::cli::parsing_status::ok) {
             switch (parse_result.status) {
-                case uxs::cli::parsing_status::kUnknownOption: {
-                    logger::fatal().format("unknown command line option `{}`", argv[parse_result.arg_count]);
+                case uxs::cli::parsing_status::unknown_option: {
+                    logger::fatal().println("unknown command line option `{}`", argv[parse_result.arg_count]);
                 } break;
-                case uxs::cli::parsing_status::kInvalidValue: {
+                case uxs::cli::parsing_status::invalid_value: {
                     if (parse_result.arg_count < argc) {
-                        logger::fatal().format("invalid command line argument `{}`", argv[parse_result.arg_count]);
+                        logger::fatal().println("invalid command line argument `{}`", argv[parse_result.arg_count]);
                     } else {
-                        logger::fatal().format("expected command line argument after `{}`",
-                                               argv[parse_result.arg_count - 1]);
+                        logger::fatal().println("expected command line argument after `{}`",
+                                                argv[parse_result.arg_count - 1]);
                     }
                 } break;
-                case uxs::cli::parsing_status::kUnspecifiedValue: {
+                case uxs::cli::parsing_status::unspecified_value: {
                     if (input_file_names.empty()) {
-                        logger::fatal().format("no input files specified");
+                        logger::fatal().println("no input files specified");
                         return -1;
                     }
                 } break;
@@ -93,11 +93,11 @@ int main(int argc, char** argv) {
                 ctx->macro_defs[id] = std::move(macro_def);
             }
             PassResult result = PassManager::getInstance().run(*ctx);
-            logger::info(file_name).format("warnings {}, errors {}", ctx->warning_count, ctx->error_count);
+            logger::info(file_name).println("warnings {}, errors {}", ctx->warning_count, ctx->error_count);
             if (result != PassResult::kSuccess) { return -1; }
         }
 
         return 0;
-    } catch (const std::exception& e) { logger::fatal().format("exception caught: {}", e.what()); }
+    } catch (const std::exception& e) { logger::fatal().println("exception caught: {}", e.what()); }
     return -1;
 }

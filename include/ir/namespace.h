@@ -2,6 +2,7 @@
 
 #include "util/rtti.h"
 #include "uxs/algorithm.h"
+#include "uxs/iterator.h"
 
 #include <unordered_map>
 

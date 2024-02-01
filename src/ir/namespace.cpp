@@ -12,8 +12,8 @@ template<typename NamedNodeTy>
 std::pair<NamedNodeTy*, bool> defineName(ir::Namespace& nmspace, NamedNodeTy& named_node) {
     auto* existing_named_node = nmspace.findNode<NamedNodeTy>(named_node.getName());
     if (!existing_named_node) { return {&nmspace.addNode(named_node), true}; }
-    logger::error(named_node.getLoc()).format("redefinition of `{}`", named_node.getName());
-    logger::note(existing_named_node->getLoc()).format("previous definition is here");
+    logger::error(named_node.getLoc()).println("redefinition of `{}`", named_node.getName());
+    logger::note(existing_named_node->getLoc()).println("previous definition is here");
     return {existing_named_node, false};
 }
 

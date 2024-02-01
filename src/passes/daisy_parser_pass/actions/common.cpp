@@ -14,7 +14,7 @@ void resolveScope(DaisyParserPass* pass, SymbolInfo* ss, SymbolLoc& loc) {
             ss[0].val.emplace<ir::ScopeDescriptor>(ir::ScopeClass::kSpecified, *scope);
             return;
         } else {
-            logger::error(ss[1].loc).format("undefined namespace identifier `{}`", name);
+            logger::error(ss[1].loc).println("undefined namespace identifier `{}`", name);
         }
     }
     ss[0].val.emplace<ir::ScopeDescriptor>(ir::ScopeClass::kInvalid);
@@ -30,12 +30,12 @@ void beginNamespace(DaisyParserPass* pass, SymbolInfo* ss, SymbolLoc& loc) {
         if (!nmspace_node) {
             nmspace.addNode(new_nmspace_node);
         } else {
-            logger::error(ss[-2].loc).format("redefinition of `{}` as different kind of entity", name);
-            logger::note(nmspace_node->getLoc()).format("previous definition is here");
+            logger::error(ss[-2].loc).println("redefinition of `{}` as different kind of entity", name);
+            logger::note(nmspace_node->getLoc()).println("previous definition is here");
         }
         nmspace_node = &new_nmspace_node;
     } else {
-        logger::debug(ss[-1].loc).format("entering existing namespace `{}`", name);
+        logger::debug(ss[-1].loc).println("entering existing namespace `{}`", name);
     }
     pass->setCurrentScope(*nmspace_node);
 }

@@ -78,10 +78,6 @@ std::string_view typeString(MsgType type) {
     }
 }
 
-void printMessageImpl(MsgType type, std::string_view msg_hdr, std::string_view msg) {
-    uxs::println(uxs::stdbuf::log, "\033[1;37m{}{}{}", msg_hdr, typeString(type), msg);
-}
-
 void printMessageImpl(MsgType type, const SymbolLoc& loc, std::string_view msg) {
     const auto* file = loc.loc_ctx->file;
     assert(file);
@@ -104,13 +100,15 @@ void printMessageImpl(MsgType type, const SymbolLoc& loc, std::string_view msg) 
 
 }  // namespace
 
-void LoggerSimple::printMessage(std::string_view msg) {
-    if (getType() >= MsgType::kInfo + g_debug_level) { return; }
-    printMessageImpl(getType(), header_, msg);
+LoggerSimple& LoggerSimple::show() {
+    if (getType() >= MsgType::kInfo + g_debug_level) { return *this; }
+    uxs::println(uxs::stdbuf::log, "\033[1;37m{}{}{}", header_, typeString(getType()), getMessage());
+    clear();
+    return *this;
 }
 
-void LoggerExtended::printMessage(std::string_view msg) {
-    if (getType() >= MsgType::kInfo + g_debug_level) { return; }
+LoggerExtended& LoggerExtended::show() {
+    if (getType() >= MsgType::kInfo + g_debug_level) { return *this; }
 
     // Unwind location stack
     std::vector<const SymbolLoc*> loc_stack;
@@ -139,7 +137,7 @@ void LoggerExtended::printMessage(std::string_view msg) {
     }
 
     // Print main message
-    printMessageImpl(getType(), **it, msg);
+    printMessageImpl(getType(), **it, getMessage());
 
     if (print_ext_loc_info_) {
         // Print macro expansion sequence
@@ -151,4 +149,7 @@ void LoggerExtended::printMessage(std::string_view msg) {
             }
         }
     }
+
+    clear();
+    return *this;
 }

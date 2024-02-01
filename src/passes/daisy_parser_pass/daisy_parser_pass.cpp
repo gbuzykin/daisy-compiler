@@ -71,7 +71,7 @@ PassResult DaisyParserPass::run(CompilationContext& ctx) {
     // Create main source file input context
     const auto* src_file = pushInputFile(ctx.file_name, {});
     if (!src_file) {
-        logger::fatal().format("could not open input file `{}`", ctx.file_name);
+        logger::fatal().println("could not open input file `{}`", ctx.file_name);
         return PassResult::kFatalError;
     }
 
@@ -110,23 +110,23 @@ PassResult DaisyParserPass::run(CompilationContext& ctx) {
         } else if (tt != parser_detail::tt_end_of_file) {
             if (logger::g_debug_level >= 3) {
                 if (tt == parser_detail::tt_id) {
-                    logger::debug(la_tkn_.loc, true).format("id: {}", std::get<std::string_view>(la_tkn_.val));
+                    logger::debug(la_tkn_.loc, true).println("id: {}", std::get<std::string_view>(la_tkn_.val));
                 } else if (tt == parser_detail::tt_string_literal) {
                     logger::debug(la_tkn_.loc, true)
-                        .format("string: {}", uxs::make_quoted_string(std::get<std::string>(la_tkn_.val)));
+                        .println("string: {}", uxs::make_quoted_string(std::get<std::string>(la_tkn_.val)));
                 } else if (tt == parser_detail::tt_int_literal) {
                     if (std::get<ir::IntConst>(la_tkn_.val).isSigned()) {
                         logger::debug(la_tkn_.loc, true)
-                            .format("integer number: {}", std::get<ir::IntConst>(la_tkn_.val).getValue<int64_t>());
+                            .println("integer number: {}", std::get<ir::IntConst>(la_tkn_.val).getValue<int64_t>());
                     } else {
                         logger::debug(la_tkn_.loc, true)
-                            .format("integer number: {}", std::get<ir::IntConst>(la_tkn_.val).getValue<uint64_t>());
+                            .println("integer number: {}", std::get<ir::IntConst>(la_tkn_.val).getValue<uint64_t>());
                     }
                 } else if (tt == parser_detail::tt_float_literal) {
                     logger::debug(la_tkn_.loc, true)
-                        .format("float number: {}", std::get<ir::FloatConst>(la_tkn_.val).getValue<double>());
+                        .println("float number: {}", std::get<ir::FloatConst>(la_tkn_.val).getValue<double>());
                 } else {
-                    logger::debug(la_tkn_.loc, true).format("token");
+                    logger::debug(la_tkn_.loc, true).println("token");
                 }
             }
             symbol_stack.emplace_back(std::move(la_tkn_));
@@ -173,7 +173,7 @@ int DaisyParserPass::lex(SymbolInfo& tkn, bool* leading_ws) {
                 first = last;
             } else {  // Input buffer is over
                 if (lex_state_stack_.back() == lex_detail::sc_string) {
-                    logger::warning(tkn.loc).format("unterminated string literal");
+                    logger::warning(tkn.loc).println("unterminated string literal");
                     tkn.val = std::move(txt);
                     lex_state_stack_.back() = lex_detail::sc_initial;
                     return parser_detail::tt_string_literal;
@@ -183,7 +183,7 @@ int DaisyParserPass::lex(SymbolInfo& tkn, bool* leading_ws) {
                     return parser_detail::tt_end_of_input;
                 }
                 while (in_ctx->last_if_section_state != getIfSection()) {  // Remove unclosed if sections
-                    logger::warning(if_section_stack_.front().loc).format("`#if` without `#endif`");
+                    logger::warning(if_section_stack_.front().loc).println("`#if` without `#endif`");
                     popIfSection();
                 }
                 // Input context stack is empty - end of compilation unit
@@ -208,7 +208,7 @@ int DaisyParserPass::lex(SymbolInfo& tkn, bool* leading_ws) {
             case lex_detail::pat_escape_t: txt.push_back('\t'); break;
             case lex_detail::pat_escape_v: txt.push_back('\v'); break;
             case lex_detail::pat_escape_other: {
-                logger::warning(tkn.loc).format("unknown escape sequence");
+                logger::warning(tkn.loc).println("unknown escape sequence");
                 txt.push_back(lexeme[1]);
             } break;
             case lex_detail::pat_escape_hex: {
@@ -249,7 +249,7 @@ int DaisyParserPass::lex(SymbolInfo& tkn, bool* leading_ws) {
             case lex_detail::pat_string_seq: txt.append(lexeme, llen); break;
             case lex_detail::pat_string_ln_wrap: in_ctx->text.pos.nextLn(); break;  // Skip '\n'
             case lex_detail::pat_string_nl: {
-                logger::warning(SymbolLoc(tkn.loc.loc_ctx, tkn.loc.last)).format("line break in string literal");
+                logger::warning(SymbolLoc(tkn.loc.loc_ctx, tkn.loc.last)).println("line break in string literal");
                 txt.push_back('\n');
                 in_ctx->text.pos.nextLn();
             } break;
@@ -323,7 +323,7 @@ int DaisyParserPass::lex(SymbolInfo& tkn, bool* leading_ws) {
             } break;
             case lex_detail::pat_comment2: {  // Eat up comment `/* ... */`
                 bool is_terminated = skipCommentBlock(in_ctx->text);
-                if (!is_terminated) { logger::warning(tkn.loc).format("unterminated comment block"); }
+                if (!is_terminated) { logger::warning(tkn.loc).println("unterminated comment block"); }
                 tkn.loc.first = in_ctx->text.pos;
                 if (leading_ws) { *leading_ws = true; }
             } break;
@@ -376,11 +376,14 @@ const InputFileInfo* DaisyParserPass::pushInputFile(std::string_view file_path, 
         uxs::filebuf ifile(normal_path.c_str(), "r");
         if (!ifile) { return nullptr; }
 
+        auto pos = ifile.seek(0, uxs::seekdir::end);
+        if (pos == uxs::iobuf::traits_type::npos()) { return nullptr; }
+
         file_info = ctx_->input_files
                         .emplace(std::move(normal_path), std::make_unique<InputFileInfo>(ctx_, std::string(file_path)))
                         .first->second.get();
 
-        size_t file_sz = static_cast<size_t>(ifile.seek(0, uxs::seekdir::kEnd));
+        size_t file_sz = static_cast<size_t>(pos);
         file_info->text = std::make_unique<char[]>(file_sz);
         ifile.seek(0);
         size_t n_read = ifile.read(uxs::as_span(file_info->text.get(), file_sz));
@@ -410,7 +413,7 @@ bool DaisyParserPass::isKeyword(std::string_view id) const { return g_keywords.f
 
 void DaisyParserPass::ensureEndOfInput(SymbolInfo& tkn) {
     if (lex(tkn) != parser_detail::tt_end_of_input) {
-        logger::warning(tkn.loc).format("extra tokens at end of preprocessing directive");
+        logger::warning(tkn.loc).println("extra tokens at end of preprocessing directive");
     }
 }
 
@@ -436,10 +439,10 @@ void DaisyParserPass::parsePreprocessorDirective() {
             if (it != preproc_directive_parsers_.end()) {
                 if (!is_text_disabled || it->second->parse_disabled_text) { it->second->func(this, tkn); }
             } else if (!is_text_disabled) {
-                logger::error(tkn.loc).format("unknown preprocessing directive");
+                logger::error(tkn.loc).println("unknown preprocessing directive");
             }
         } else if (!is_text_disabled) {
-            logger::error(tkn.loc).format("expected preprocessing directive identifier");
+            logger::error(tkn.loc).println("expected preprocessing directive identifier");
         }
 
         if (!!(in_ctx.flags & InputContext::Flags::kSkipFile)) { text.first = text.last; }
@@ -462,5 +465,5 @@ void daisy::logSyntaxError(int tt, const SymbolLoc& loc) {
         case parser_detail::tt_end_of_input: msg = "expected token in expression"; break;
         default: msg = "unexpected token"; break;
     }
-    logger::error(loc).format(uxs::make_runtime_string(msg));
+    logger::error(loc).println(uxs::make_runtime_string(msg));
 }

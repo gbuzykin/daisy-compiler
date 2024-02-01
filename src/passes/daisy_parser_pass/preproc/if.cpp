@@ -23,19 +23,19 @@ bool evalCondition(DaisyParserPass* pass, SymbolInfo& tkn) {
 
     auto check_integer_type = [](const auto& tkn) {
         if (std::holds_alternative<ir::IntConst>(tkn.val)) { return true; }
-        logger::error(tkn.loc).format("expected integer expression");
+        logger::error(tkn.loc).println("expected integer expression");
         return false;
     };
 
     auto check_non_zero = [](const auto& tkn) {
         if (!std::get<ir::IntConst>(tkn.val).isZero()) { return true; }
-        logger::error(tkn.loc).format("integer division by zero");
+        logger::error(tkn.loc).println("integer division by zero");
         return false;
     };
 
     auto check_sign_mismatch = [](const auto* ss) {
         if (std::get<ir::IntConst>(ss[0].val).isSigned() != std::get<ir::IntConst>(ss[2].val).isSigned()) {
-            logger::warning(ss[1].loc).format("signed/unsigned mismatch");
+            logger::warning(ss[1].loc).println("signed/unsigned mismatch");
         }
     };
 
@@ -128,7 +128,7 @@ bool evalCondition(DaisyParserPass* pass, SymbolInfo& tkn) {
                             const auto& ctx = pass->getCompilationContext();
                             ss[0].val = ctx.macro_defs.find(macro_id) != ctx.macro_defs.end();
                         } else {
-                            logger::error(ss[0].loc).format("unknown preprocessing operator");
+                            logger::error(ss[0].loc).println("unknown preprocessing operator");
                             return true;
                         }
                     } break;
@@ -152,7 +152,7 @@ bool evalCondition(DaisyParserPass* pass, SymbolInfo& tkn) {
 bool evalIsDefined(DaisyParserPass* pass, SymbolInfo& tkn) {
     int tt = pass->lex(tkn);
     if (tt != parser_detail::tt_id) {
-        logger::error(tkn.loc).format("expected macro identifier");
+        logger::error(tkn.loc).println("expected macro identifier");
         return true;
     }
 
@@ -183,11 +183,11 @@ void parseElifDirective(DaisyParserPass* pass, SymbolInfo& tkn,
                         bool (*eval_condition)(DaisyParserPass* pass, SymbolInfo& tkn)) {
     auto* if_section = pass->getIfSection();
     if (!if_section) {
-        logger::error(tkn.loc).format("`#elif` without `#if`");
+        logger::error(tkn.loc).println("`#elif` without `#if`");
         return;
     }
 
-    if (if_section->has_else_section) { logger::error(tkn.loc).format("`#elif` after `#else`"); }
+    if (if_section->has_else_section) { logger::error(tkn.loc).println("`#elif` after `#else`"); }
 
     if (if_section->section_disable_counter > 1) { return; }
 
@@ -202,11 +202,11 @@ void parseElifDirective(DaisyParserPass* pass, SymbolInfo& tkn,
 void parseElseDirective(DaisyParserPass* pass, SymbolInfo& tkn) {
     auto* if_section = pass->getIfSection();
     if (!if_section) {
-        logger::error(tkn.loc).format("`#else` without `#if`");
+        logger::error(tkn.loc).println("`#else` without `#if`");
         return;
     }
 
-    if (if_section->has_else_section) { logger::error(tkn.loc).format("multiple `#else` section"); }
+    if (if_section->has_else_section) { logger::error(tkn.loc).println("multiple `#else` section"); }
 
     if (if_section->section_disable_counter > 1) { return; }
 
@@ -223,7 +223,7 @@ void parseElseDirective(DaisyParserPass* pass, SymbolInfo& tkn) {
 void parseEndifDirective(DaisyParserPass* pass, SymbolInfo& tkn) {
     auto* if_section = pass->getIfSection();
     if (!if_section) {
-        logger::error(tkn.loc).format("`#endif` without `#if`");
+        logger::error(tkn.loc).println("`#endif` without `#if`");
         return;
     }
 

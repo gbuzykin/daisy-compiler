@@ -11,7 +11,7 @@ namespace {
 void parseIncludeDirective(DaisyParserPass* pass, SymbolInfo& tkn) {
     int tt = pass->lex(tkn);  // Parse reference file path
     if (tt != parser_detail::tt_string_literal) {
-        logger::error(tkn.loc).format("expected file name");
+        logger::error(tkn.loc).println("expected file name");
         return;
     }
 
@@ -32,7 +32,7 @@ void parseIncludeDirective(DaisyParserPass* pass, SymbolInfo& tkn) {
         path = *include_path_it++;
     }
 
-    logger::error(expansion_loc).format("could not open input file `{}`", file_name);
+    logger::error(expansion_loc).println("could not open input file `{}`", file_name);
 }
 
 }  // namespace

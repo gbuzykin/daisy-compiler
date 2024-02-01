@@ -17,7 +17,7 @@ using namespace ir;
         default: assert(false);
     }
     if (!success) {
-        logger::error(loc).format("integer literal is too large to be represented in any integer type");
+        logger::error(loc).println("integer literal is too large to be represented in any integer type");
         return {};
     }
 
@@ -44,7 +44,7 @@ using namespace ir;
             } else if (v <= static_cast<uint64_t>(std::numeric_limits<int64_t>::max())) {
                 return {IntType::i64, v};
             }
-            logger::error(loc).format("integer literal is too large to be represented in a signed integer type");
+            logger::error(loc).println("integer literal is too large to be represented in a signed integer type");
             return {};
         } else if (v <= static_cast<uint64_t>(std::numeric_limits<uint32_t>::max())) {
             return {IntType::u32, v};
@@ -91,8 +91,8 @@ using namespace ir;
         } break;
     }
 
-    logger::error(loc).format("integer literal is too large to be represented in `{}` type",
-                              kIntTypeString[static_cast<unsigned>(type)]);
+    logger::error(loc).println("integer literal is too large to be represented in `{}` type",
+                               kIntTypeString[static_cast<unsigned>(type)]);
     return {};
 }
 
