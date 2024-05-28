@@ -3,7 +3,6 @@
 #include "logger.h"
 #include "text_utils.h"
 #include "uxs/io/filebuf.h"
-#include "uxs/stringalg.h"
 
 #include <filesystem>
 
@@ -112,8 +111,7 @@ PassResult DaisyParserPass::run(CompilationContext& ctx) {
                 if (tt == parser_detail::tt_id) {
                     logger::debug(la_tkn_.loc, true).println("id: {}", std::get<std::string_view>(la_tkn_.val));
                 } else if (tt == parser_detail::tt_string_literal) {
-                    logger::debug(la_tkn_.loc, true)
-                        .println("string: {}", uxs::make_quoted_string(std::get<std::string>(la_tkn_.val)));
+                    logger::debug(la_tkn_.loc, true).println("string: {:?}", std::get<std::string>(la_tkn_.val));
                 } else if (tt == parser_detail::tt_int_literal) {
                     if (std::get<ir::IntConst>(la_tkn_.val).isSigned()) {
                         logger::debug(la_tkn_.loc, true)
@@ -465,5 +463,5 @@ void daisy::logSyntaxError(int tt, const SymbolLoc& loc) {
         case parser_detail::tt_end_of_input: msg = "expected token in expression"; break;
         default: msg = "unexpected token"; break;
     }
-    logger::error(loc).println(uxs::make_runtime_string(msg));
+    logger::error(loc).println("{}", msg);
 }

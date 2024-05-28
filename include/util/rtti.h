@@ -36,8 +36,8 @@ constexpr const char* trim_file_path(const char* file_name) {
     return file_name;
 }
 constexpr uint64_t compose_type_id(const char* type_name, const char* file_name, uint32_t n_line) {
-    return (static_cast<uint64_t>(uxs::crc32::calc(trim_file_path(file_name)) ^ n_line) << 32) |
-           uxs::crc32::calc(type_name);
+    return (static_cast<uint64_t>(uxs::crc32_calc{}(trim_file_path(file_name)) ^ n_line) << 32) |
+           uxs::crc32_calc{}(type_name);
 }
 template<typename Ty, typename = std::void_t<typename Ty::super_class_t>>
 constexpr const type_info_desc* get_super_type_desc() {

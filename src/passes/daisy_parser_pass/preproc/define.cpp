@@ -3,7 +3,6 @@
 #include "ctx/ctx.h"
 #include "logger.h"
 #include "uxs/algorithm.h"
-#include "uxs/stringalg.h"
 
 using namespace daisy;
 
@@ -117,7 +116,7 @@ bool builtinMacroLine(DaisyParserPass* pass, const MacroExpansion& macro_exp) {
 
 bool builtinMacroFile(DaisyParserPass* pass, const MacroExpansion& macro_exp) {
     const auto* loc = findMacroExpansionOrigin(&macro_exp.loc);
-    pass->pushStringInputContext(uxs::make_quoted_string(loc->loc_ctx->file ? loc->loc_ctx->file->file_name : ""),
+    pass->pushStringInputContext(uxs::format("{:?}", loc->loc_ctx->file ? loc->loc_ctx->file->file_name : ""),
                                  macro_exp);
     return true;
 }
@@ -160,8 +159,7 @@ std::string stringizeMacro(DaisyParserPass* pass, const MacroExpansion& macro_ex
             if (!remove_ws && leading_ws) { text.push_back(' '); }
             remove_ws = false;
             if (tt == parser_detail::tt_string_literal) {
-                uxs::make_quoted_string(static_cast<std::string_view>(std::get<std::string>(tkn.val)),
-                                        std::back_inserter(text));
+                uxs::basic_format(text, "{:?}", std::get<std::string>(tkn.val));
             } else {
                 const auto& curr_ctx = pass->getInputContext();
                 assert(tkn.loc.first.ln == tkn.loc.last.ln && tkn.loc.first.col <= tkn.loc.last.col);

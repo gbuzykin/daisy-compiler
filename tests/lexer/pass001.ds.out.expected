@@ -46,7 +46,7 @@
 ./lexer/pass001.ds:6:11: debug: string: "this is a string"
  6 | const s = "this is a string"
    |           ^~~~~~~~~~~~~~~~~~
-./lexer/pass001.ds:7:2: debug: string: "escape sequence test:\a\b\f\r\n\t\vT@"
+./lexer/pass001.ds:7:2: debug: string: "escape sequence test:\u{7}\u{8}\u{c}\r\n\t\u{b}T@"
  7 |     "escape sequence test:\a\b\f\r\n\t\v\x54\100"
    |     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ./lexer/pass001.ds:8:2: debug: string: "this is a wrapped                  string"

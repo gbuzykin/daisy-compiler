@@ -26,7 +26,7 @@ std::string ir::TypeDescriptor::getTypeString() const {
             assert(def_);
             s += def_->getGlobalName();
         } break;
-        default: UNREACHABLE_CODE;
+        default: UXS_UNREACHABLE_CODE;
     }
     return s;
 }
