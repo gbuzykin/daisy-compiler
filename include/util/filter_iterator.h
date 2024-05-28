@@ -33,7 +33,7 @@ class filter_iterator
     }
 
     bool is_equal_to(const filter_iterator& it) const noexcept {
-        iterator_assert(end_ == it.end_);
+        uxs_iterator_assert(end_ == it.end_);
         return curr_ == it.curr_;
     }
 

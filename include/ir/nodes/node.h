@@ -92,7 +92,7 @@ class Node : public util::rtti_mixin<Node> {
 
     std::unique_ptr<Node> extract(Node& node) {
         node.parent_ = nullptr;
-        return children_.extract(children_.to_iterator(node)).second;
+        return children_.extract(ChildListType::to_iterator(&node)).first;
     }
 };
 
