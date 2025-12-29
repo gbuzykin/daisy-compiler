@@ -1,6 +1,6 @@
 #include "pass_manager.h"
 
-#include "uxs/algorithm.h"
+#include <uxs/algorithm.h>
 
 using namespace daisy;
 

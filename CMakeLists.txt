@@ -1,70 +1,140 @@
-cmake_minimum_required(VERSION 3.12)
-project(daisy-compiler)
+cmake_minimum_required(VERSION 3.21)
 
-set(CMAKE_CXX_STANDARD 20)
+file(READ VERSION VERSION)
+if(VERSION STREQUAL "")
+  message(FATAL_ERROR "Failed to detect version")
+else()
+  message("Build version ${VERSION}")
+endif()
+
+project(
+  daisy-compiler
+  VERSION ${VERSION}
+  DESCRIPTION "An experimental object-oriented language compiler"
+  LANGUAGES CXX)
+
+include(ExternalProject)
+
+option(USE_SANITIZERS_FOR_DEBUG "Use Sanitizers for Debug build" ON)
+option(OPTION_EXPORT_COMPILE_DEFS_AND_INCLUDE_DIRS
+       "Export compile definitions and include directories" OFF)
+
+if(NOT CMAKE_CXX_STANDARD)
+  set(CMAKE_CXX_STANDARD 20)
+endif()
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
-set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -D_DEBUG_REDUCED_BUFFERS")
-if(MSVC)
-  if(${MSVC_VERSION} GREATER_EQUAL "1920")
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /Zc:__cplusplus")
-  endif()
-else()
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D__STRICT_ANSI__ -fno-rtti -Wall -pedantic")
-  set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -D_ITERATOR_DEBUG_LEVEL=2 -fsanitize=address")
-  if(CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-gnu-zero-variadic-macro-arguments")
-    set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -fstandalone-debug")
-  endif()
-  set(CMAKE_EXE_LINKER_FLAGS_DEBUG "${CMAKE_EXE_LINKER_FLAGS_DEBUG} -fsanitize=address")
+
+message("Using C++${CMAKE_CXX_STANDARD} standard")
+
+set(CMAKE_CXX_VISIBILITY_PRESET hidden)
+set(CMAKE_VISIBILITY_INLINES_HIDDEN 1)
+
+if(UNIX)
+  set(CMAKE_SKIP_RPATH OFF)
+  set(CMAKE_BUILD_RPATH_USE_ORIGIN ON)
+  set(CMAKE_INSTALL_RPATH "$ORIGIN:$ORIGIN/../lib")
 endif()
 
-file(READ "VERSION" VERSION)
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DVERSION=${VERSION}")
+foreach(
+  var_name
+  CMAKE_C_COMPILER
+  CMAKE_C_FLAGS
+  CMAKE_CXX_COMPILER
+  CMAKE_CXX_STANDARD
+  CMAKE_CXX_FLAGS
+  CMAKE_SHARED_LINKER_FLAGS
+  CMAKE_BUILD_TYPE)
+  if(DEFINED ${var_name})
+    list(APPEND EXT_PROJECT_CMAKE_ARGS "-D${var_name}=${${var_name}}")
+  endif()
+endforeach()
 
-###############################################################################
-## file globbing ##############################################################
-###############################################################################
+get_property(IS_MULTI_CONFIG GLOBAL PROPERTY GENERATOR_IS_MULTI_CONFIG)
+set(CONFIG_SUBDIR $<$<BOOL:${IS_MULTI_CONFIG}>:$<CONFIG>>)
 
-# these instructions search the directory tree when cmake is
-# invoked and put all files that match the pattern in the variables
-# `sources` and `data`
+# ##############################################################################
+# Prepare `uxs` library
+
+set(UXS_INSTALL_DIR ${CMAKE_CURRENT_BINARY_DIR}/uxs/${CONFIG_SUBDIR})
+set(UXS_INCLUDE_DIR ${UXS_INSTALL_DIR}/include)
+set(UXS_LIBRARY_NAME $<IF:$<BOOL:${WIN32}>,uxs.lib,libuxs.so>)
+set(UXS_LIBRARY ${UXS_INSTALL_DIR}/lib/${UXS_LIBRARY_NAME})
+ExternalProject_Add(
+  uxs
+  SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/uxs
+  PREFIX ${CMAKE_CURRENT_BINARY_DIR}/uxs
+  BUILD_BYPRODUCTS ${UXS_LIBRARY}
+  CMAKE_CACHE_ARGS -DCMAKE_INSTALL_PREFIX:PATH=${UXS_INSTALL_DIR}
+  CMAKE_ARGS -DUSE_ZLIB=Off #
+             -DUSE_LIBZIP=Off #
+             -DUSE_SANITIZERS_FOR_DEBUG=${USE_SANITIZERS_FOR_DEBUG} #
+             ${EXT_PROJECT_CMAKE_ARGS})
+
 if(WIN32)
-  set(uxs_platform_dir    uxs/platform/win)
+  install(
+    DIRECTORY ${UXS_INSTALL_DIR}/bin
+    DESTINATION .
+    COMPONENT binary)
 elseif(UNIX)
-  set(uxs_platform_dir    uxs/platform/posix)
+  install(
+    DIRECTORY ${UXS_INSTALL_DIR}/lib
+    DESTINATION .
+    COMPONENT library)
 endif()
-file(GLOB_RECURSE includes   include/*.h)
-file(GLOB_RECURSE sources    src/*.h;src/*.cpp)
-file(GLOB_RECURSE uxs_includes    uxs/include/*.h)
-file(GLOB_RECURSE uxs_sources     uxs/src/*.h;uxs/src/*.cpp)
-file(GLOB_RECURSE uxs_platform_sources    ${uxs_platform_dir}/src/*.h;${uxs_platform_dir}/src/*.cpp)
-# you can use set(sources src/main.cpp) etc if you don't want to
-# use globing to find files automatically
 
-###############################################################################
-## target definitions #########################################################
-###############################################################################
+# ##############################################################################
+# Compilation flags
 
-# add the data to the target, so it becomes visible in some IDE
-add_executable(daisy-compiler
-  .clang-format
-  ${uxs_includes}
-  ${uxs_sources}
-  ${uxs_platform_sources}
-  ${includes}
-  ${sources}
-)
-add_executable(run_tests
-  .clang-format
-  tests/run_tests.cpp
-)
-
-# link with these libraries
 if(MSVC)
+  add_compile_options(/Zc:__cplusplus /utf-8)
 else()
-  target_link_libraries(daisy-compiler stdc++ m stdc++fs)
-  target_link_libraries(run_tests stdc++ stdc++fs)
+  add_compile_options(-Wall -Wextra -pedantic)
+  add_compile_options(-Wno-missing-field-initializers)
+  add_compile_options(-Wno-gnu-zero-variadic-macro-arguments)
+  if(CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
+    add_compile_options($<$<CONFIG:Debug>:-fstandalone-debug>)
+  endif()
 endif()
 
-# this lets me include files relative to the root src dir with a <> pair
-target_include_directories(daisy-compiler PUBLIC uxs/include include)
+if(USE_SANITIZERS_FOR_DEBUG)
+  message("Using sanitizers for Debug build")
+  if(MSVC)
+    add_compile_options($<$<CONFIG:Debug>:/fsanitize=address>)
+  else()
+    add_compile_options($<$<CONFIG:Debug>:-fsanitize=address,undefined,leak>)
+    add_link_options($<$<CONFIG:Debug>:-fsanitize=address,undefined,leak>)
+    if(CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
+      add_link_options($<$<CONFIG:Debug>:-shared-libsan>)
+    endif()
+  endif()
+endif()
+
+# ##############################################################################
+# Add `daisy-compiler` build target
+
+file(GLOB_RECURSE headers include/*.h)
+file(GLOB_RECURSE sources src/*.h;src/*.cpp)
+
+add_executable(daisy-compiler .clang-format ${headers} ${sources})
+
+add_dependencies(daisy-compiler uxs)
+
+target_compile_definitions(daisy-compiler PRIVATE VERSION=${VERSION})
+target_include_directories(daisy-compiler PRIVATE include ${UXS_INCLUDE_DIR})
+target_link_libraries(daisy-compiler PRIVATE ${UXS_LIBRARY})
+
+install(TARGETS daisy-compiler RUNTIME DESTINATION bin COMPONENT binary)
+
+# ##############################################################################
+# Add `run_tests` build target
+
+add_executable(run_tests .clang-format tests/run_tests.cpp)
+
+install(TARGETS run_tests RUNTIME DESTINATION bin COMPONENT binary)
+
+# ##############################################################################
+# Auxiliary
+
+include("uxs/cmake/uxs/macros.cmake")
+add_compile_defs_and_include_dirs_targets(daisy-compiler
+                                          ${CMAKE_CURRENT_SOURCE_DIR})

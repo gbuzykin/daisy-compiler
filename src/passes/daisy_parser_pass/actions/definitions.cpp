@@ -20,7 +20,7 @@ std::unordered_map<std::string_view, ir::DataTypeClass> g_built_in_types = {
     {"double", ir::DataTypeClass::kFloat64},
 };
 
-void defineConst(DaisyParserPass* pass, SymbolInfo* ss, SymbolLoc& loc) {
+void defineConst(DaisyParserPass* pass, SymbolInfo* ss, SymbolLoc& /*loc*/) {
     const auto name = std::get<std::string_view>(ss[0].val);
     auto& const_def_node = pass->getCurrentScope().push_back(
         std::make_unique<ir::ConstDefNode>(std::string(name), ss[0].loc));
@@ -35,7 +35,7 @@ void defineConst(DaisyParserPass* pass, SymbolInfo* ss, SymbolLoc& loc) {
     pass->getCurrentScope().getNamespace().defineName(const_def_node);
 }
 
-void defineVariable(DaisyParserPass* pass, SymbolInfo* ss, SymbolLoc& loc) {
+void defineVariable(DaisyParserPass* pass, SymbolInfo* ss, SymbolLoc& /*loc*/) {
     const auto name = std::get<std::string_view>(ss[1].val);
     auto& var_def_node = pass->getCurrentScope().push_back(
         std::make_unique<ir::VarDefNode>(std::string(name), ss[1].loc));
@@ -51,7 +51,7 @@ void defineVariable(DaisyParserPass* pass, SymbolInfo* ss, SymbolLoc& loc) {
     pass->getCurrentScope().getNamespace().defineName(var_def_node);
 }
 
-void makeTypeSpecifier(DaisyParserPass* pass, SymbolInfo* ss, SymbolLoc& loc) {
+void makeTypeSpecifier(DaisyParserPass* /*pass*/, SymbolInfo* ss, SymbolLoc& /*loc*/) {
     const auto name = std::get<std::string_view>(ss[1].val);
     if (auto it = g_built_in_types.find(name); it != g_built_in_types.end()) {
         ss[0].val.emplace<ir::TypeDescriptor>(it->second);
@@ -69,7 +69,7 @@ void makeTypeSpecifier(DaisyParserPass* pass, SymbolInfo* ss, SymbolLoc& loc) {
     }
 }
 
-void declareFunc(DaisyParserPass* pass, SymbolInfo* ss, SymbolLoc& loc) {
+void declareFunc(DaisyParserPass* pass, SymbolInfo* ss, SymbolLoc& /*loc*/) {
     pass->popCurrentScope();
 
     auto& func_def_node = util::cast<ir::FuncDefNode&>(
@@ -99,7 +99,7 @@ void declareFunc(DaisyParserPass* pass, SymbolInfo* ss, SymbolLoc& loc) {
     }
 }
 
-void defineFunc(DaisyParserPass* pass, SymbolInfo* ss, SymbolLoc& loc) {
+void defineFunc(DaisyParserPass* /*pass*/, SymbolInfo* ss, SymbolLoc& /*loc*/) {
     auto& func_def_node = util::cast<ir::FuncDefNode&>(*std::get<std::unique_ptr<ir::Node>>(ss[-2].val));
     func_def_node.push_back(std::move(std::get<std::unique_ptr<ir::Node>>(ss[-1].val)));
     func_def_node.setDefined(func_def_node.getLoc());
@@ -114,52 +114,56 @@ DAISY_ADD_REDUCE_ACTION_HANDLER(act_make_type_specifier, makeTypeSpecifier);
 DAISY_ADD_REDUCE_ACTION_HANDLER(act_declare_func, declareFunc);
 DAISY_ADD_REDUCE_ACTION_HANDLER(act_define_func, defineFunc);
 
-DAISY_ADD_REDUCE_ACTION_HANDLER(act_set_ret_type, [](DaisyParserPass* pass, SymbolInfo* ss, SymbolLoc& loc) {
+DAISY_ADD_REDUCE_ACTION_HANDLER(act_set_ret_type, [](DaisyParserPass* /*pass*/, SymbolInfo* ss, SymbolLoc& /*loc*/) {
     auto& func_def_node = util::cast<ir::FuncDefNode&>(*std::get<std::unique_ptr<ir::Node>>(ss[0].val));
     func_def_node.setTypeDescriptor(std::move(std::get<ir::TypeDescriptor>(ss[5].val)));
 });
 
-DAISY_ADD_REDUCE_ACTION_HANDLER(act_add_func_formal_arg, [](DaisyParserPass* pass, SymbolInfo* ss, SymbolLoc& loc) {
+DAISY_ADD_REDUCE_ACTION_HANDLER(act_add_func_formal_arg, [](DaisyParserPass* pass, SymbolInfo* ss, SymbolLoc& /*loc*/) {
     auto& formal_arg_def = pass->getCurrentScope().push_back(
         std::make_unique<ir::DefNode>(std::string(std::get<std::string_view>(ss[1].val)), ss[1].loc));
     auto& type_desc = formal_arg_def.setTypeDescriptor(std::get<ir::TypeDescriptor>(ss[3].val));
     type_desc.setModifiers(std::get<ir::DataTypeModifiers>(ss[0].val));
 });
 
-DAISY_ADD_REDUCE_ACTION_HANDLER(act_begin_func_decl, [](DaisyParserPass* pass, SymbolInfo* ss, SymbolLoc& loc) {
+DAISY_ADD_REDUCE_ACTION_HANDLER(act_begin_func_decl, [](DaisyParserPass* pass, SymbolInfo* ss, SymbolLoc& /*loc*/) {
     pass->setCurrentScope(*ss[-2].val.emplace<std::unique_ptr<ir::Node>>(std::make_unique<ir::FuncDefNode>(
         std::string(std::get<std::string_view>(ss[-2].val)), pass->getCurrentScope(), ss[-2].loc)));
 });
 
 DAISY_ADD_REDUCE_ACTION_HANDLER(act_definition_type_specifier,
-                                [](DaisyParserPass* pass, SymbolInfo* ss, SymbolLoc& loc) {
+                                [](DaisyParserPass* /*pass*/, SymbolInfo* ss, SymbolLoc& /*loc*/) {
                                     ss[0].val = std::move(std::get<ir::TypeDescriptor>(ss[1].val));
                                 });
 
-DAISY_ADD_REDUCE_ACTION_HANDLER(act_no_type_specifier, [](DaisyParserPass* pass, SymbolInfo* ss, SymbolLoc& loc) {
+DAISY_ADD_REDUCE_ACTION_HANDLER(act_no_type_specifier, [](DaisyParserPass* /*pass*/, SymbolInfo* ss, SymbolLoc& loc) {
     ss[0].val.emplace<ir::TypeDescriptor>();
     loc = ss[-1].loc;
 });
 
-DAISY_ADD_REDUCE_ACTION_HANDLER(act_no_type_modifier, [](DaisyParserPass* pass, SymbolInfo* ss, SymbolLoc& loc) {
+DAISY_ADD_REDUCE_ACTION_HANDLER(act_no_type_modifier, [](DaisyParserPass* /*pass*/, SymbolInfo* ss, SymbolLoc& /*loc*/) {
     ss[0].val = ir::DataTypeModifiers::kNone;
 });
-DAISY_ADD_REDUCE_ACTION_HANDLER(act_mutable_type_modifier, [](DaisyParserPass* pass, SymbolInfo* ss, SymbolLoc& loc) {
-    ss[0].val = ir::DataTypeModifiers::kMutable;
-});
-DAISY_ADD_REDUCE_ACTION_HANDLER(act_reference_type_modifier, [](DaisyParserPass* pass, SymbolInfo* ss, SymbolLoc& loc) {
-    ss[0].val = ir::DataTypeModifiers::kReference;
-});
+DAISY_ADD_REDUCE_ACTION_HANDLER(act_mutable_type_modifier,
+                                [](DaisyParserPass* /*pass*/, SymbolInfo* ss, SymbolLoc& /*loc*/) {
+                                    ss[0].val = ir::DataTypeModifiers::kMutable;
+                                });
+DAISY_ADD_REDUCE_ACTION_HANDLER(act_reference_type_modifier,
+                                [](DaisyParserPass* /*pass*/, SymbolInfo* ss, SymbolLoc& /*loc*/) {
+                                    ss[0].val = ir::DataTypeModifiers::kReference;
+                                });
 DAISY_ADD_REDUCE_ACTION_HANDLER(act_mutable_reference_type_modifier,
-                                [](DaisyParserPass* pass, SymbolInfo* ss, SymbolLoc& loc) {
+                                [](DaisyParserPass* /*pass*/, SymbolInfo* ss, SymbolLoc& /*loc*/) {
                                     ss[0].val = ir::DataTypeModifiers::kMutable | ir::DataTypeModifiers::kReference;
                                 });
 
-DAISY_ADD_REDUCE_ACTION_HANDLER(act_ret_type_specifier, [](DaisyParserPass* pass, SymbolInfo* ss, SymbolLoc& loc) {
+DAISY_ADD_REDUCE_ACTION_HANDLER(act_ret_type_specifier, [](DaisyParserPass* /*pass*/, SymbolInfo* ss,
+                                                           SymbolLoc& /*loc*/) {
     auto& type_desc = ss[0].val.emplace<ir::TypeDescriptor>(std::move(std::get<ir::TypeDescriptor>(ss[2].val)));
     type_desc.setModifiers(std::get<ir::DataTypeModifiers>(ss[1].val));
 });
 
-DAISY_ADD_REDUCE_ACTION_HANDLER(act_ret_type_modifier, [](DaisyParserPass* pass, SymbolInfo* ss, SymbolLoc& loc) {
+DAISY_ADD_REDUCE_ACTION_HANDLER(act_ret_type_modifier, [](DaisyParserPass* /*pass*/, SymbolInfo* ss,
+                                                          SymbolLoc& /*loc*/) {
     ss[0].val.emplace<ir::TypeDescriptor>().setModifiers(std::get<ir::DataTypeModifiers>(ss[1].val));
 });

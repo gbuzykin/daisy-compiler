@@ -1,8 +1,12 @@
 #include "ctx/ctx.h"
 #include "logger.h"
 #include "pass_manager.h"
-#include "uxs/algorithm.h"
+
 #include "uxs/cli/parser.h"
+
+#include <uxs/algorithm.h>
+
+#include <exception>
 
 #define XSTR(s) STR(s)
 #define STR(s)  #s
@@ -15,6 +19,7 @@ int main(int argc, char** argv) {
         std::vector<std::string> input_file_names;
         std::vector<std::string_view> include_paths;
         std::vector<std::pair<std::string_view, std::string_view>> macro_defs;
+
         auto add_definition = [&macro_defs](std::string_view def) {
             if (!uxs::is_alpha(def[0]) && def[0] != '_') { return false; }
             std::string_view val;
@@ -29,6 +34,7 @@ int main(int argc, char** argv) {
             macro_defs.emplace_back(std::make_pair(def, val));
             return true;
         };
+
         auto cli = uxs::cli::command(argv[0])
                    << uxs::cli::overview("the Daisy compiler") << uxs::cli::values("filename...", input_file_names)
                    << (uxs::cli::option({"-I"}) &
@@ -48,34 +54,26 @@ int main(int argc, char** argv) {
 
         auto parse_result = cli->parse(argc, argv);
         if (show_help) {
-            for (auto const* node = parse_result.node; node; node = node->get_parent()) {
-                if (node->get_type() == uxs::cli::node_type::command) {
-                    uxs::stdbuf::out.write(static_cast<const uxs::cli::basic_command<char>&>(*node).make_man_page(true));
-                    break;
-                }
-            }
+            uxs::stdbuf::out().write(parse_result.node->get_command()->make_man_page(uxs::cli::text_coloring::colored));
             return 0;
         } else if (show_version) {
-            uxs::println(uxs::stdbuf::out, "{}", XSTR(VERSION));
+            uxs::println(uxs::stdbuf::out(), "{}", XSTR(VERSION));
             return 0;
         } else if (parse_result.status != uxs::cli::parsing_status::ok) {
             switch (parse_result.status) {
                 case uxs::cli::parsing_status::unknown_option: {
-                    logger::fatal().println("unknown command line option `{}`", argv[parse_result.arg_count]);
+                    logger::fatal().println("unknown command line option `{}`", argv[parse_result.argc_parsed]);
                 } break;
                 case uxs::cli::parsing_status::invalid_value: {
-                    if (parse_result.arg_count < argc) {
-                        logger::fatal().println("invalid command line argument `{}`", argv[parse_result.arg_count]);
+                    if (parse_result.argc_parsed < argc) {
+                        logger::fatal().println("invalid command line argument `{}`", argv[parse_result.argc_parsed]);
                     } else {
                         logger::fatal().println("expected command line argument after `{}`",
-                                                argv[parse_result.arg_count - 1]);
+                                                argv[parse_result.argc_parsed - 1]);
                     }
                 } break;
                 case uxs::cli::parsing_status::unspecified_value: {
-                    if (input_file_names.empty()) {
-                        logger::fatal().println("no input files specified");
-                        return -1;
-                    }
+                    if (input_file_names.empty()) { logger::fatal().println("no input files specified"); }
                 } break;
                 default: break;
             }

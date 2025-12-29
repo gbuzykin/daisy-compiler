@@ -1,6 +1,6 @@
 #pragma once
 
-#include <string>
+#include <string_view>
 #include <vector>
 
 #define DAISY_ADD_PASS(pass_type) static daisy::pass_type g_pass_##pass_type

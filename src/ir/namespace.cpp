@@ -1,5 +1,3 @@
-#include "ir/namespace.h"
-
 #include "ir/nodes/def_node.h"
 #include "ir/nodes/named_scope_node.h"
 #include "logger.h"

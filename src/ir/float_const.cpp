@@ -1,11 +1,11 @@
 #include "ir/float_const.h"
 
-#include "logger.h"
+#include "uxs/string_cvt.h"
 
 using namespace daisy;
 using namespace ir;
 
-/*static*/ FloatConst FloatConst::fromString(const SymbolLoc& loc, std::string_view s) {
+/*static*/ FloatConst FloatConst::fromString(const SymbolLoc& /*loc*/, std::string_view s) {
     if (s.back() == 'f' || (s.size() > 3 && s[s.size() - 3] == 'f' && s[s.size() - 2] == '3')) {
         return FloatConst(uxs::from_string<float>(s));
     }

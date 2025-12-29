@@ -1,7 +1,7 @@
-#include "ir/nodes/named_node.h"
-
 #include "ir/nodes/named_scope_node.h"
 #include "ir/nodes/root_node.h"
+
+#include <vector>
 
 using namespace daisy;
 

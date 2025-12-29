@@ -1,6 +1,6 @@
 #pragma once
 
-#include "uxs/utility.h"
+#include <uxs/utility.h>
 
 #include <string>
 
@@ -26,7 +26,7 @@ enum class DataTypeClass : unsigned {
 };
 
 enum class DataTypeModifiers : unsigned { kNone = 0, kMutable = 1, kReference = 2 };
-UXS_IMPLEMENT_BITWISE_OPS_FOR_ENUM(DataTypeModifiers, unsigned);
+UXS_IMPLEMENT_BITWISE_OPS_FOR_ENUM(DataTypeModifiers);
 
 class TypeDescriptor {
  public:

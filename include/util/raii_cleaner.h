@@ -1,6 +1,8 @@
 #pragma once
 
+#include <cstddef>
 #include <tuple>
+#include <utility>
 
 namespace util {
 template<typename FnTy>
@@ -23,7 +25,7 @@ class raii_cleaner<std::tuple<Ts&...>> {
  private:
     std::tuple<Ts&...> v_;
 
-    template<size_t... Is>
+    template<std::size_t... Is>
     void clean_impl(std::index_sequence<Is...>) {
         (std::get<Is>(v_).clear(), ...);
     }

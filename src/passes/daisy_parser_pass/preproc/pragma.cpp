@@ -5,7 +5,7 @@ using namespace daisy;
 
 namespace {
 
-void pragmaOnce(DaisyParserPass* pass, SymbolInfo& tkn) {
+void pragmaOnce(DaisyParserPass* pass, SymbolInfo& /*tkn*/) {
     auto& in_ctx = pass->getInputContext();
     assert(in_ctx.loc_ctx->file);
     if (!!(in_ctx.loc_ctx->file->flags & InputFileInfo::Flags::kOnce)) {

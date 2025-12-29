@@ -72,7 +72,7 @@ int main(int argc, char** argv) {
         if (!getTestList(".", subdir_list, test_lst)) { return -1; }
 
         unsigned busy_cnt = 0;
-        size_t total_test_count = test_lst.size(), passed_test_count = 0;
+        std::size_t total_test_count = test_lst.size(), passed_test_count = 0;
         for (const auto& path : test_lst) {
             std::string opts;
             if (std::ifstream fopts((std::filesystem::path(path).remove_filename() / "opts.conf").string()); fopts) {
