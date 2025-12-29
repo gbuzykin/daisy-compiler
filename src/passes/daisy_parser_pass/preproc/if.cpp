@@ -1,5 +1,4 @@
 #include "../daisy_parser_pass.h"
-#include "ctx/ctx.h"
 #include "logger.h"
 
 using namespace daisy;
@@ -42,14 +41,16 @@ bool evalCondition(DaisyParserPass* pass, SymbolInfo& tkn) {
     int tt = pass->lex(tkn);
     parser_state_stack.push_back(parser_detail::sc_preproc_condition);  // Push initial state
     while (true) {
-        int* prev_parser_state_stack_top = parser_state_stack.curr();
         parser_state_stack.reserve(1);
-        int act = DaisyParserPass::parse(tt, parser_state_stack.data(), parser_state_stack.p_curr(), 0);
+        auto* parser_state_stack_top = parser_state_stack.endp();
+        auto* prev_parser_state_stack_top = parser_state_stack_top;
+        int act = DaisyParserPass::parse(tt, parser_state_stack.data(), &parser_state_stack_top, 0);
+        parser_state_stack.setsize(parser_state_stack_top - parser_state_stack.data());
         if (act < 0) {
             logSyntaxError(tt, tkn.loc);
             return true;
         } else if (act != parser_detail::predef_act_shift) {
-            unsigned rlen = static_cast<unsigned>(1 + prev_parser_state_stack_top - parser_state_stack.curr());
+            unsigned rlen = static_cast<unsigned>(1 + prev_parser_state_stack_top - parser_state_stack_top);
             if (rlen == 0) { symbol_stack.emplace_back().loc = tkn.loc, ++rlen; }  // Empty production workaround
             auto* ss = &*(symbol_stack.end() - rlen);
             if (act == parser_detail::act_preproc_op_u_minus || act == parser_detail::act_preproc_op_u_plus ||

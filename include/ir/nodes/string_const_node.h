@@ -2,8 +2,6 @@
 
 #include "ir/nodes/eval_node.h"
 
-#include <string>
-
 namespace daisy {
 namespace ir {
 

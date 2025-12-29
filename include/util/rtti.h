@@ -1,15 +1,16 @@
-﻿#pragma once
+#pragma once
 
 #include "uxs/crc32.h"
 
 #include <stdexcept>
+#include <type_traits>
 #include <utility>
 
 #define RTTI_DECLARE_TYPE_INFO(ty) \
     template<> \
     struct util::type_info<ty> { \
         static constexpr const char* kName = #ty; \
-        static constexpr uint64_t kId = util::detail::compose_type_id(kName, __FILE__, __LINE__); \
+        static constexpr std::uint64_t kId = util::detail::compose_type_id(kName, __FILE__, __LINE__); \
         static util::type_info_desc desc; \
     }
 #define RTTI_IMPLEMENT_TYPE_INFO(ty) \
@@ -23,7 +24,7 @@ template<typename Ty>
 struct type_info;
 
 struct type_info_desc {
-    uint64_t type_id;
+    std::uint64_t type_id;
     const char* name;
     const type_info_desc* super_desc;
 };
@@ -35,8 +36,8 @@ constexpr const char* trim_file_path(const char* file_name) {
     }
     return file_name;
 }
-constexpr uint64_t compose_type_id(const char* type_name, const char* file_name, uint32_t n_line) {
-    return (static_cast<uint64_t>(uxs::crc32_calc{}(trim_file_path(file_name)) ^ n_line) << 32) |
+constexpr std::uint64_t compose_type_id(const char* type_name, const char* file_name, std::uint32_t n_line) {
+    return (static_cast<std::uint64_t>(uxs::crc32_calc{}(trim_file_path(file_name)) ^ n_line) << 32) |
            uxs::crc32_calc{}(type_name);
 }
 template<typename Ty, typename = std::void_t<typename Ty::super_class_t>>
@@ -54,7 +55,7 @@ class rtti_mixin : public SuperTy {
  public:
     using rtti_mixin_t = rtti_mixin;
     using super_class_t = SuperTy;
-    const type_info_desc* get_rtti_type_info() const noexcept override { return &type_info<Ty>::desc; };
+    const type_info_desc* get_rtti_type_info() const noexcept override { return &type_info<Ty>::desc; }
     template<typename... Args>
     explicit rtti_mixin(Args&&... args) : SuperTy(std::forward<Args>(args)...) {}
 };
@@ -63,7 +64,7 @@ template<typename Ty>
 class rtti_mixin<Ty, void> {
  public:
     using rtti_mixin_t = rtti_mixin;
-    virtual const type_info_desc* get_rtti_type_info() const noexcept { return &type_info<Ty>::desc; };
+    virtual const type_info_desc* get_rtti_type_info() const noexcept { return &type_info<Ty>::desc; }
     virtual ~rtti_mixin() = default;
 };
 

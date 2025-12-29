@@ -2,6 +2,7 @@
 
 #include "logger.h"
 #include "text_utils.h"
+
 #include "uxs/io/filebuf.h"
 
 #include <filesystem>
@@ -80,11 +81,13 @@ PassResult DaisyParserPass::run(CompilationContext& ctx) {
     int tt = lex(la_tkn_);
     parser_state_stack.push_back(parser_detail::sc_initial);  // Push initial state
     while (true) {
-        int* prev_parser_state_stack_top = parser_state_stack.curr();
         parser_state_stack.reserve(1);
-        int act = parse(tt, parser_state_stack.data(), parser_state_stack.p_curr(), 0);
+        auto* parser_state_stack_top = parser_state_stack.endp();
+        auto* prev_parser_state_stack_top = parser_state_stack_top;
+        int act = parse(tt, parser_state_stack.data(), &parser_state_stack_top, 0);
+        parser_state_stack.setsize(parser_state_stack_top - parser_state_stack.data());
         if (act != parser_detail::predef_act_shift) {
-            unsigned rlen = static_cast<unsigned>(1 + prev_parser_state_stack_top - parser_state_stack.curr());
+            unsigned rlen = static_cast<unsigned>(1 + prev_parser_state_stack_top - parser_state_stack_top);
             if (act < 0) {  // Syntax error
                 // Successfully accept 3 tokens before the next error logging
                 const int kAcceptToRestore = 3;
@@ -115,10 +118,11 @@ PassResult DaisyParserPass::run(CompilationContext& ctx) {
                 } else if (tt == parser_detail::tt_int_literal) {
                     if (std::get<ir::IntConst>(la_tkn_.val).isSigned()) {
                         logger::debug(la_tkn_.loc, true)
-                            .println("integer number: {}", std::get<ir::IntConst>(la_tkn_.val).getValue<int64_t>());
+                            .println("integer number: {}", std::get<ir::IntConst>(la_tkn_.val).getValue<std::int64_t>());
                     } else {
                         logger::debug(la_tkn_.loc, true)
-                            .println("integer number: {}", std::get<ir::IntConst>(la_tkn_.val).getValue<uint64_t>());
+                            .println("integer number: {}",
+                                     std::get<ir::IntConst>(la_tkn_.val).getValue<std::uint64_t>());
                     }
                 } else if (tt == parser_detail::tt_float_literal) {
                     logger::debug(la_tkn_.loc, true)
@@ -152,17 +156,20 @@ int DaisyParserPass::lex(SymbolInfo& tkn, bool* leading_ws) {
 
     while (true) {
         int pat = 0;
-        unsigned llen = 0;
-        const char *first = in_ctx->text.first, *lexeme = first;
+        std::size_t llen = 0;
+        const char* first = in_ctx->text.first;
+        const char* lexeme = first;
         while (true) {
             int lex_flags = at_beginning_of_line_;
             const char* last = in_ctx->text.last;
-            if (lex_state_stack_.avail() < static_cast<size_t>(last - first)) {
+            if (lex_state_stack_.avail() < static_cast<std::size_t>(last - first)) {
                 last = first + lex_state_stack_.avail();
                 lex_flags |= lex_detail::flag_has_more;
             }
             assert(first <= last);
-            pat = lex_detail::lex(first, last, lex_state_stack_.p_curr(), &llen, lex_flags);
+            auto* sptr = lex_state_stack_.endp();
+            pat = lex_detail::lex(first, last, &sptr, &llen, lex_flags);
+            lex_state_stack_.setsize(sptr - lex_state_stack_.data());
             if (pat >= lex_detail::predef_pat_default) {
                 break;
             } else if (lex_flags & lex_detail::flag_has_more) {
@@ -381,10 +388,10 @@ const InputFileInfo* DaisyParserPass::pushInputFile(std::string_view file_path, 
                         .emplace(std::move(normal_path), std::make_unique<InputFileInfo>(ctx_, std::string(file_path)))
                         .first->second.get();
 
-        size_t file_sz = static_cast<size_t>(pos);
+        std::size_t file_sz = static_cast<std::size_t>(pos);
         file_info->text = std::make_unique<char[]>(file_sz);
         ifile.seek(0);
-        size_t n_read = ifile.read(uxs::as_span(file_info->text.get(), file_sz));
+        std::size_t n_read = ifile.read(std::span(file_info->text.get(), file_sz));
 
         auto get_next_line = [](const char* text, const char* boundary) {
             return std::string_view(text,

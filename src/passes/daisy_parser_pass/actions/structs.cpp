@@ -7,14 +7,14 @@ using namespace daisy;
 
 namespace {
 
-void beginStructDef(DaisyParserPass* pass, SymbolInfo* ss, SymbolLoc& loc) {
+void beginStructDef(DaisyParserPass* pass, SymbolInfo* ss, SymbolLoc& /*loc*/) {
     auto& struct_def_node = pass->getCurrentScope().push_back(std::make_unique<ir::StructDefNode>(
         std::string(std::get<std::string_view>(ss[-2].val)), pass->getCurrentScope(), ss[-2].loc));
     pass->getCurrentScope().getNamespace().defineName(struct_def_node);
     pass->setCurrentScope(struct_def_node);
 }
 
-void defineField(DaisyParserPass* pass, SymbolInfo* ss, SymbolLoc& loc) {
+void defineField(DaisyParserPass* pass, SymbolInfo* ss, SymbolLoc& /*loc*/) {
     const auto name = std::get<std::string_view>(ss[1].val);
     auto& field_def_node = pass->getCurrentScope().push_back(
         std::make_unique<ir::VarDefNode>(std::string(name), ss[1].loc));

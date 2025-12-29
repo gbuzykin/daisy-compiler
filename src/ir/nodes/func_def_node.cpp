@@ -1,7 +1,9 @@
 #include "ir/nodes/func_def_node.h"
 
 #include "util/filter_iterator.h"
-#include "uxs/zip_iterator.h"
+
+#include <uxs/algorithm.h>
+#include <uxs/zip_iterator.h>
 
 using namespace daisy;
 

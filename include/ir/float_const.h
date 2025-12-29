@@ -1,9 +1,8 @@
 #pragma once
 
 #include "common/symbol_loc.h"
-#include "uxs/chars.h"
 
-#include <string>
+#include <string_view>
 
 namespace daisy {
 namespace ir {

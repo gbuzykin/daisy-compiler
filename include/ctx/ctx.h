@@ -1,13 +1,9 @@
 #pragma once
 
-#include "common/symbol_loc.h"
 #include "ir/nodes/root_node.h"
-#include "uxs/utility.h"
 
 #include <forward_list>
-#include <memory>
 #include <string>
-#include <unordered_map>
 #include <vector>
 
 namespace daisy {
@@ -20,12 +16,12 @@ struct InputFileInfo {
     TextRange getText() const { return TextRange{text.get(), text.get() + text_size, TextPos{1, 1}}; }
     const CompilationContext* compilation_ctx;
     std::string file_name;
-    size_t text_size = 0;
+    std::size_t text_size = 0;
     std::vector<std::string_view> text_lines;
     std::unique_ptr<char[]> text;
     mutable Flags flags = Flags::kNone;
 };
-UXS_IMPLEMENT_BITWISE_OPS_FOR_ENUM(InputFileInfo::Flags, unsigned);
+UXS_IMPLEMENT_BITWISE_OPS_FOR_ENUM(InputFileInfo::Flags);
 
 struct MacroDefinition {
     enum class Type : unsigned { kUserDefined = 0, kBuiltIn };

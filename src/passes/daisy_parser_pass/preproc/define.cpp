@@ -1,8 +1,6 @@
 #include "../daisy_parser_pass.h"
 #include "../text_utils.h"
-#include "ctx/ctx.h"
 #include "logger.h"
-#include "uxs/algorithm.h"
 
 using namespace daisy;
 
@@ -230,9 +228,9 @@ void DaisyParserPass::expandMacro(const SymbolLoc& loc, const MacroDefinition& m
 
     auto macro_details = [id, &macro_def]() { logger::note(macro_def.loc).println("macro `{}` defined here", id); };
 
-    const size_t formal_arg_count = macro_def.formal_args.empty() && macro_def.is_variadic ?
-                                        1 :  // builtin variadic macros workaround
-                                        macro_def.formal_args.size();
+    const std::size_t formal_arg_count = macro_def.formal_args.empty() && macro_def.is_variadic ?
+                                             1 :  // builtin variadic macros workaround
+                                             macro_def.formal_args.size();
     if (formal_arg_count) {
         TextRange text = in_ctx.text;
         findMacroArgumentList(text);

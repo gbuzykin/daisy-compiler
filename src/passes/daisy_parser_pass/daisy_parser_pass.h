@@ -1,15 +1,14 @@
 #pragma once
 
-#include "common/const_defs.h"
 #include "ctx/ctx.h"
 #include "ir/float_const.h"
 #include "ir/int_const.h"
 #include "ir/scope_descriptor.h"
 #include "ir/type_descriptor.h"
 #include "pass_manager.h"
-#include "uxs/stringcvt.h"
 
-#include <array>
+#include <uxs/string_cvt.h>
+
 #include <variant>
 
 #define DAISY_ADD_REDUCE_ACTION_HANDLER(act_id, fn) \
@@ -63,7 +62,7 @@ struct InputContext {
     MacroExpansion* macro_expansion = nullptr;
     const IfSectionState* last_if_section_state = nullptr;
 };
-UXS_IMPLEMENT_BITWISE_OPS_FOR_ENUM(InputContext::Flags, unsigned);
+UXS_IMPLEMENT_BITWISE_OPS_FOR_ENUM(InputContext::Flags);
 
 struct MacroExpansion {
     const MacroDefinition* macro_def;
@@ -170,8 +169,8 @@ class DaisyParserPass : public Pass {
 
  private:
     struct TextBuffer {
-        explicit TextBuffer(size_t sz) : text(std::make_unique<char[]>(sz)), text_last(text.get() + sz) {}
-        size_t getSize() const { return text_last - text.get(); }
+        explicit TextBuffer(std::size_t sz) : text(std::make_unique<char[]>(sz)), text_last(text.get() + sz) {}
+        std::size_t getSize() const { return text_last - text.get(); }
         std::unique_ptr<char[]> text;
         char* text_last;
     };
