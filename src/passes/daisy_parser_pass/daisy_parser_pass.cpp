@@ -3,7 +3,9 @@
 #include "logger.h"
 #include "text_utils.h"
 
-#include "uxs/io/filebuf.h"
+#include <uxs/io/filebuf.h>
+#include <uxs/io/iobuf.h>
+#include <uxs/io/iostate.h>
 
 #include <filesystem>
 

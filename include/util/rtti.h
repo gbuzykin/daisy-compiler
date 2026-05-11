@@ -1,7 +1,8 @@
 #pragma once
 
-#include "uxs/crc32.h"
+#include <uxs/crc32.h>
 
+#include <cstdint>
 #include <stdexcept>
 #include <type_traits>
 #include <utility>

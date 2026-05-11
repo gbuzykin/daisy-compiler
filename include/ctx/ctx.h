@@ -2,6 +2,8 @@
 
 #include "ir/nodes/root_node.h"
 
+#include <uxs/utility.h>
+
 #include <forward_list>
 #include <string>
 #include <vector>

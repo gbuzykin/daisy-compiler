@@ -4,6 +4,7 @@
 
 #include <uxs/iterator.h>
 
+#include <cstddef>
 #include <string_view>
 #include <unordered_map>
 
