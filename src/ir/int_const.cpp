@@ -2,6 +2,8 @@
 
 #include "logger.h"
 
+#include <tuple>
+
 using namespace daisy;
 using namespace ir;
 
@@ -109,6 +111,7 @@ using namespace ir;
         case IntType::u32: return {type, v & 0xffffffff};
         case IntType::i64:
         case IntType::u64: return {type, v};
+        default: return {};
     }
 }
 

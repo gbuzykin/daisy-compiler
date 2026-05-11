@@ -4,6 +4,8 @@
 
 #include <uxs/iterator.h>
 
+#include <iterator>
+
 namespace util {
 
 template<typename Iter, typename ValTy,

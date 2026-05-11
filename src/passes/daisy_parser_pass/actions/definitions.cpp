@@ -1,9 +1,10 @@
+#include "logger.h"
+
 #include "../daisy_parser_pass.h"
 #include "ir/nodes/const_def_node.h"
 #include "ir/nodes/func_def_node.h"
 #include "ir/nodes/type_def_node.h"
 #include "ir/nodes/var_def_node.h"
-#include "logger.h"
 
 using namespace daisy;
 

@@ -3,9 +3,11 @@
 #include "common/symbol_loc.h"
 
 #include <uxs/chars.h>
+#include <uxs/utility.h>
 
 #include <algorithm>
 #include <array>
+#include <cstdint>
 #include <string_view>
 
 namespace daisy {

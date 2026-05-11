@@ -1,6 +1,7 @@
+#include "logger.h"
+
 #include "../daisy_parser_pass.h"
 #include "../text_utils.h"
-#include "logger.h"
 
 using namespace daisy;
 

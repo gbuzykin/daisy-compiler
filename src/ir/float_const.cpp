@@ -1,6 +1,8 @@
 #include "ir/float_const.h"
 
-#include "uxs/string_cvt.h"
+#include <uxs/string_cvt.h>
+
+#include <cassert>
 
 using namespace daisy;
 using namespace ir;
