@@ -11,15 +11,15 @@ namespace util {
 template<typename Iter, typename ValTy,
          typename = std::void_t<typename std::remove_reference_t<decltype(*std::declval<Iter>())>::rtti_mixin_t>>
 class filter_iterator
-    : public uxs::iterator_facade<filter_iterator<Iter, ValTy>, ValTy, std::forward_iterator_tag, ValTy&, ValTy*,
-                                  typename std::iterator_traits<Iter>::difference_type> {
+    : public est::input_iterator_facade<filter_iterator<Iter, ValTy>, ValTy, std::forward_iterator_tag, ValTy&, ValTy*,
+                                        typename std::iterator_traits<Iter>::difference_type> {
     static_assert(detail::has_relation_v<std::remove_cv_t<typename std::iterator_traits<Iter>::value_type>,
                                          std::remove_cv_t<ValTy>>,
                   "incomplete or incompatible types");
 
  private:
-    using super = uxs::iterator_facade<filter_iterator<Iter, ValTy>, ValTy, std::forward_iterator_tag, ValTy&, ValTy*,
-                                       typename std::iterator_traits<Iter>::difference_type>;
+    using super = est::input_iterator_facade<filter_iterator<Iter, ValTy>, ValTy, std::forward_iterator_tag, ValTy&,
+                                             ValTy*, typename std::iterator_traits<Iter>::difference_type>;
 
  public:
     using iterator_type = Iter;
@@ -54,17 +54,17 @@ filter_iterator<Iter, ValTy> make_filter_iterator(Iter from, Iter to) noexcept {
 }
 
 template<typename ValTy, typename Iter>
-uxs::iterator_range<filter_iterator<Iter, ValTy>> make_filter_range(Iter from, Iter to) noexcept {
+est::iterator_range<filter_iterator<Iter, ValTy>> make_filter_range(Iter from, Iter to) noexcept {
     return {filter_iterator<Iter, ValTy>(from, to), filter_iterator<Iter, ValTy>(to, to)};
 }
 
 template<typename ValTy, typename Iter>
-uxs::iterator_range<filter_iterator<Iter, ValTy>> make_filter_range(const std::pair<Iter, Iter>& p) noexcept {
+est::iterator_range<filter_iterator<Iter, ValTy>> make_filter_range(const std::pair<Iter, Iter>& p) noexcept {
     return {filter_iterator<Iter, ValTy>(p.first, p.second), filter_iterator<Iter, ValTy>(p.second, p.second)};
 }
 
 template<typename ValTy, typename Range>
-auto make_filter_range(Range&& r) noexcept -> uxs::iterator_range<filter_iterator<decltype(std::end(r)), ValTy>> {
+auto make_filter_range(Range&& r) noexcept -> est::iterator_range<filter_iterator<decltype(std::end(r)), ValTy>> {
     return {filter_iterator<decltype(std::end(r)), ValTy>(std::begin(r), std::end(r)),
             filter_iterator<decltype(std::end(r)), ValTy>(std::end(r), std::end(r))};
 }

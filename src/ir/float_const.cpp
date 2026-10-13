@@ -1,8 +1,6 @@
 #include "ir/float_const.h"
 
-#include <uxs/string_cvt.h>
-
-#include <cassert>
+#include <uxs/string_conv.h>  // NOLINT
 
 using namespace daisy;
 using namespace ir;

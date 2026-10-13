@@ -3,8 +3,6 @@
 #include "../daisy_parser_pass.h"
 #include "../text_utils.h"
 
-#include <tuple>
-
 using namespace daisy;
 
 constexpr std::string_view kVaArgsId = "__va_args__";
@@ -160,7 +158,7 @@ std::string stringizeMacro(DaisyParserPass* pass, const MacroExpansion& macro_ex
             if (!remove_ws && leading_ws) { text.push_back(' '); }
             remove_ws = false;
             if (tt == parser_detail::tt_string_literal) {
-                uxs::basic_format(text, "{:?}", std::get<std::string>(tkn.val));
+                uxs::format_append(text, "{:?}", std::get<std::string>(tkn.val));
             } else {
                 const auto& curr_ctx = pass->getInputContext();
                 assert(tkn.loc.first.ln == tkn.loc.last.ln && tkn.loc.first.col <= tkn.loc.last.col);

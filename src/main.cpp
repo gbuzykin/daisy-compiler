@@ -3,7 +3,6 @@
 
 #include "ctx/ctx.h"
 
-#include <uxs/algorithm.h>
 #include <uxs/cli/parser.h>
 
 #include <exception>
@@ -21,7 +20,7 @@ int main(int argc, char** argv) {
         std::vector<std::pair<std::string_view, std::string_view>> macro_defs;
 
         auto add_definition = [&macro_defs](std::string_view def) {
-            if (!uxs::is_alpha(def[0]) && def[0] != '_') { return false; }
+            if (!uxs::is_alpha{}(def[0]) && def[0] != '_') { return false; }
             std::string_view val;
             auto pos = def.find('=');
             if (pos != std::string::npos) {
@@ -30,7 +29,9 @@ int main(int argc, char** argv) {
             } else {
                 val = "1";
             }
-            if (!uxs::all_of(def.substr(1), [](char ch) { return uxs::is_alnum(ch) || ch == '_'; })) { return false; }
+            if (!std::ranges::all_of(def.substr(1), [](char ch) { return uxs::is_alnum{}(ch) || ch == '_'; })) {
+                return false;
+            }
             macro_defs.emplace_back(std::make_pair(def, val));
             return true;
         };

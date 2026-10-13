@@ -46,7 +46,7 @@ class Namespace {
 
     template<typename Ty>
     const Ty* findNode(std::string_view name) const {
-        for (const auto& item : uxs::make_range(name_table_.equal_range(name))) {
+        for (const auto& item : est::make_range(name_table_.equal_range(name))) {
             if (const auto* obj = util::cast<const Ty*>(item.second); obj) { return obj; }
         }
         return nullptr;
@@ -59,7 +59,7 @@ class Namespace {
 
     template<typename Ty, typename Pred>
     const Ty* findNode(std::string_view name, Pred p) const {
-        for (const auto& item : uxs::make_range(name_table_.equal_range(name))) {
+        for (const auto& item : est::make_range(name_table_.equal_range(name))) {
             if (const auto* obj = util::cast<const Ty*>(item.second); obj && p(*obj)) { return obj; }
         }
         return nullptr;

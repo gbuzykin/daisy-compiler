@@ -7,7 +7,7 @@ using namespace daisy;
 namespace {
 
 bool evalCondition(DaisyParserPass* pass, SymbolInfo& tkn) {
-    uxs::inline_basic_dynbuffer<int, 1> parser_state_stack;
+    uxs::basic_dynbuffer<int> parser_state_stack;
     std::vector<SymbolInfo> symbol_stack;
 
     parser_state_stack.reserve(256);
@@ -42,7 +42,7 @@ bool evalCondition(DaisyParserPass* pass, SymbolInfo& tkn) {
     int tt = pass->lex(tkn);
     parser_state_stack.push_back(parser_detail::sc_preproc_condition);  // Push initial state
     while (true) {
-        parser_state_stack.reserve(1);
+        parser_state_stack.reserve(parser_state_stack.size() + 1);
         auto* parser_state_stack_top = parser_state_stack.endp();
         auto* prev_parser_state_stack_top = parser_state_stack_top;
         int act = DaisyParserPass::parse(tt, parser_state_stack.data(), &parser_state_stack_top, 0);
