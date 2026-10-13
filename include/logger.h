@@ -3,6 +3,9 @@
 #include "common/symbol_loc.h"
 
 #include <uxs/format.h>  // NOLINT
+#include <uxs/membuffer.h>
+
+#include <string_view>
 
 namespace daisy {
 
@@ -29,7 +32,7 @@ class Logger {
     template<typename... Args>
     LoggerTy& println(uxs::format_string<Args...> fmt, const Args&... args) {
         if (type_ >= MsgType::kInfo + g_debug_level) { return static_cast<LoggerTy&>(*this); }
-        uxs::basic_vformat<uxs::membuffer>(buf_, fmt.get(), uxs::make_format_args(args...));
+        uxs::vformat_append<uxs::membuffer>(buf_, fmt.get(), uxs::format_args::make(args...));
         return static_cast<LoggerTy&>(*this).show();
     }
 

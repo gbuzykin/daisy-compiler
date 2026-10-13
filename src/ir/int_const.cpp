@@ -2,6 +2,8 @@
 
 #include "logger.h"
 
+#include <cassert>
+#include <limits>
 #include <tuple>
 
 using namespace daisy;

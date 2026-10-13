@@ -2,11 +2,7 @@
 
 #include "common/symbol_loc.h"
 #include "ir/namespace.h"
-
-#include <uxs/intrusive/list.h>
-
-#include <cassert>
-#include <memory>
+#include "util/intrusive_list.h"
 
 namespace daisy {
 namespace ir {

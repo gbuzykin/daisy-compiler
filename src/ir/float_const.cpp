@@ -1,6 +1,7 @@
 #include "ir/float_const.h"
 
-#include <uxs/string_cvt.h>
+#include <uxs/string_conv.h>  // NOLINT
+#include <uxs/string_conv_common.h>
 
 #include <cassert>
 

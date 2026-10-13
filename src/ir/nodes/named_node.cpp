@@ -20,7 +20,7 @@ std::string ir::NamedNode::getGlobalName() const {
     if (!util::is_kind_of<RootNode>(parent)) { return name_; }
 
     std::string global_name;
-    for (const auto& scope : uxs::make_reverse_range(path)) {
+    for (const auto& scope : est::make_reverse_range(path)) {
         global_name += scope->getName();
         global_name += "::";
     }

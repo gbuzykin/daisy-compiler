@@ -29,8 +29,8 @@ std::string ir::FuncDefNode::getProtoString() const {
 
 ir::FuncProtoCompareResult ir::FuncDefNode::compareProto(const FuncDefNode& other_proto) const {
     bool arg_type_diff = false;
-    auto it = uxs::for_loop(
-        uxs::zip(util::make_filter_range<const DefNode>(*this), util::make_filter_range<const DefNode>(other_proto)),
+    auto it = uxs::loop_for(
+        est::zip(util::make_filter_range<const DefNode>(*this), util::make_filter_range<const DefNode>(other_proto)),
         [&arg_type_diff](const auto& pair) {
             arg_type_diff = arg_type_diff ||
                             std::get<0>(pair).getTypeDescriptor() != std::get<1>(pair).getTypeDescriptor();

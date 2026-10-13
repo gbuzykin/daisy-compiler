@@ -78,7 +78,7 @@ class IntConst {
     template<unsigned base>
     static std::pair<const char*, bool> accumValue(const char* p, const char* p_end, std::uint64_t& v) {
         for (; p != p_end; ++p) {
-            unsigned dig = uxs::dig_v(*p);
+            unsigned dig = uxs::dig_v{}(*p);
             if (dig >= base && *p != '_') { break; }
             std::uint64_t v_prev = v;
             v = base * v + dig;

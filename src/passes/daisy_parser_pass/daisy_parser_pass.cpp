@@ -8,6 +8,7 @@
 #include <uxs/io/iostate.h>
 
 #include <filesystem>
+#include <span>
 
 namespace lex_detail {
 #include "lex_analyzer.inl"
@@ -56,7 +57,7 @@ void DaisyParserPass::cleanup() {
 }
 
 PassResult DaisyParserPass::run(CompilationContext& ctx) {
-    uxs::inline_basic_dynbuffer<int, 1> parser_state_stack;
+    uxs::basic_dynbuffer<int> parser_state_stack;
     std::vector<SymbolInfo> symbol_stack;
 
     ctx_ = &ctx;
@@ -83,7 +84,7 @@ PassResult DaisyParserPass::run(CompilationContext& ctx) {
     int tt = lex(la_tkn_);
     parser_state_stack.push_back(parser_detail::sc_initial);  // Push initial state
     while (true) {
-        parser_state_stack.reserve(1);
+        parser_state_stack.reserve(parser_state_stack.size() + 1);
         auto* parser_state_stack_top = parser_state_stack.endp();
         auto* prev_parser_state_stack_top = parser_state_stack_top;
         int act = parse(tt, parser_state_stack.data(), &parser_state_stack_top, 0);
@@ -176,7 +177,7 @@ int DaisyParserPass::lex(SymbolInfo& tkn, bool* leading_ws) {
                 break;
             } else if (lex_flags & lex_detail::flag_has_more) {
                 // enlarge state stack and continue analysis
-                lex_state_stack_.reserve(llen);
+                lex_state_stack_.reserve(lex_state_stack_.size() + llen);
                 first = last;
             } else {  // Input buffer is over
                 if (lex_state_stack_.back() == lex_detail::sc_string) {
@@ -219,14 +220,14 @@ int DaisyParserPass::lex(SymbolInfo& tkn, bool* leading_ws) {
                 txt.push_back(lexeme[1]);
             } break;
             case lex_detail::pat_escape_hex: {
-                char escape = uxs::dig_v(lexeme[2]);
-                if (llen > 3) { escape = (escape << 4) + uxs::dig_v(lexeme[3]); }
+                char escape = uxs::dig_v{}(lexeme[2]);
+                if (llen > 3) { escape = (escape << 4) + uxs::dig_v{}(lexeme[3]); }
                 txt.push_back(escape);
             } break;
             case lex_detail::pat_escape_oct: {
-                char escape = uxs::dig_v(lexeme[1]);
-                if (llen > 2) { escape = (escape << 3) + uxs::dig_v(lexeme[2]); }
-                if (llen > 3) { escape = (escape << 3) + uxs::dig_v(lexeme[3]); }
+                char escape = uxs::dig_v{}(lexeme[1]);
+                if (llen > 2) { escape = (escape << 3) + uxs::dig_v{}(lexeme[2]); }
+                if (llen > 3) { escape = (escape << 3) + uxs::dig_v{}(lexeme[3]); }
                 txt.push_back(escape);
             } break;
 
