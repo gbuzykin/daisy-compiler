@@ -15,11 +15,16 @@ using namespace daisy;
 int main(int argc, char** argv) {
     try {
         bool show_help = false, show_version = false;
-        std::vector<std::string> input_file_names;
-        std::vector<std::string_view> include_paths;
+        std::vector<std::filesystem::path> input_file_paths;
+        std::vector<std::filesystem::path> include_dirs;
         std::vector<std::pair<std::string_view, std::string_view>> macro_defs;
 
-        auto add_definition = [&macro_defs](std::string_view def) {
+        const auto string_to_path = [](const auto& sval, auto& v) {
+            v = uxs::utf_native_path_adapter{}(sval);
+            return true;
+        };
+
+        const auto add_definition = [](auto def, auto& v) {
             if (!uxs::is_alpha{}(def[0]) && def[0] != '_') { return false; }
             std::string_view val;
             auto pos = def.find('=');
@@ -32,21 +37,16 @@ int main(int argc, char** argv) {
             if (!std::ranges::all_of(def.substr(1), [](char ch) { return uxs::is_alnum{}(ch) || ch == '_'; })) {
                 return false;
             }
-            macro_defs.emplace_back(std::make_pair(def, val));
+            v = std::make_pair(def, val);
             return true;
         };
 
         auto cli = uxs::cli::command(argv[0])
-                   << uxs::cli::overview("the Daisy compiler") << uxs::cli::values("filename...", input_file_names)
-                   << (uxs::cli::option({"-I"}) &
-                       uxs::cli::basic_value_wrapper<char>("<dir>",
-                                                           [&include_paths](std::string_view path) {
-                                                               include_paths.emplace_back(path);
-                                                               return true;
-                                                           })) %
+                   << uxs::cli::overview("the Daisy compiler")
+                   << uxs::cli::values("filename...", input_file_paths, string_to_path)
+                   << (uxs::cli::option({"-I"}) & uxs::cli::values("<dir>", include_dirs, string_to_path)) %
                           "Add directory <dir> to the end of the list of include search paths."
-                   << (uxs::cli::option({"-D"}) &
-                       uxs::cli::basic_value_wrapper<char>("<macro>={<value>}", add_definition)) %
+                   << (uxs::cli::option({"-D"}) & uxs::cli::values("<macro>={<value>}", macro_defs, add_definition)) %
                           "Define <macro> to <value> (or 1 if <value> omitted)."
                    << (uxs::cli::option({"-d", "--debug-level="}) & uxs::cli::value("<n>", logger::g_debug_level)) %
                           "Debug verbosity level."
@@ -74,7 +74,7 @@ int main(int argc, char** argv) {
                     }
                 } break;
                 case uxs::cli::parsing_status::unspecified_value: {
-                    if (input_file_names.empty()) { logger::fatal().println("no input files specified"); }
+                    if (input_file_paths.empty()) { logger::fatal().println("no input files specified"); }
                 } break;
                 default: break;
             }
@@ -83,16 +83,17 @@ int main(int argc, char** argv) {
 
         PassManager::getInstance().configure();
 
-        for (const auto& file_name : input_file_names) {
-            auto ctx = std::make_unique<CompilationContext>(file_name);
-            ctx->include_paths = include_paths;
+        for (const auto& file_path : input_file_paths) {
+            auto ctx = std::make_unique<CompilationContext>(file_path);
+            ctx->include_dirs = include_dirs;
             for (const auto& [id, value] : macro_defs) {
                 auto macro_def = std::make_unique<MacroDefinition>(MacroDefinition::Type::kUserDefined, id);
                 macro_def->text = TextRange{value.data(), value.data() + value.size()};
                 ctx->macro_defs[id] = std::move(macro_def);
             }
             PassResult result = PassManager::getInstance().run(*ctx);
-            logger::info(file_name).println("warnings {}, errors {}", ctx->warning_count, ctx->error_count);
+            logger::info(uxs::utf_string_adapter<char>{}(file_path.native()))
+                .println("warnings {}, errors {}", ctx->warning_count, ctx->error_count);
             if (result != PassResult::kSuccess) { return -1; }
         }
 

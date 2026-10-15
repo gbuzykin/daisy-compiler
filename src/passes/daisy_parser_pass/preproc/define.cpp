@@ -115,7 +115,7 @@ bool builtinMacroLine(DaisyParserPass* pass, const MacroExpansion& macro_exp) {
 
 bool builtinMacroFile(DaisyParserPass* pass, const MacroExpansion& macro_exp) {
     const auto* loc = findMacroExpansionOrigin(&macro_exp.loc);
-    pass->pushStringInputContext(uxs::format("{:?}", loc->loc_ctx->file ? loc->loc_ctx->file->file_name : ""),
+    pass->pushStringInputContext(uxs::format("{:?}", loc->loc_ctx->file ? loc->loc_ctx->file->file_path : ""),
                                  macro_exp);
     return true;
 }

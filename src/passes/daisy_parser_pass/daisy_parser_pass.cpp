@@ -7,7 +7,6 @@
 #include <uxs/io/iobuf.h>
 #include <uxs/io/iostate.h>
 
-#include <filesystem>
 #include <span>
 
 namespace lex_detail {
@@ -72,9 +71,9 @@ PassResult DaisyParserPass::run(CompilationContext& ctx) {
     defineBuiltinMacros();
 
     // Create main source file input context
-    const auto* src_file = pushInputFile(ctx.file_name, {});
+    const auto* src_file = pushInputFile(ctx.file_path, {});
     if (!src_file) {
-        logger::fatal().println("could not open input file `{}`", ctx.file_name);
+        logger::fatal().println("could not open input file `{}`", ctx.file_path);
         return PassResult::kFatalError;
     }
 
@@ -370,16 +369,16 @@ int DaisyParserPass::lex(SymbolInfo& tkn, bool* leading_ws) {
     return parser_detail::parse(tt, sptr0, p_sptr, rise_error);
 }
 
-const InputFileInfo* DaisyParserPass::pushInputFile(std::string_view file_path, const SymbolLoc& expansion_loc) {
-    std::filesystem::path path(file_path);
-    if (path.is_relative()) { path = (std::filesystem::current_path() / path).lexically_normal(); }
+const InputFileInfo* DaisyParserPass::pushInputFile(const std::filesystem::path& file_path,
+                                                    const SymbolLoc& expansion_loc) {
+    std::filesystem::path normal_path(file_path);
+    if (normal_path.is_relative()) { normal_path = (std::filesystem::current_path() / normal_path).lexically_normal(); }
 
-    std::string normal_path = path.generic_string();
     auto it = ctx_->input_files.find(normal_path);
     InputFileInfo* file_info = it != ctx_->input_files.end() ? it->second.get() : nullptr;
 
     if (!file_info) {
-        if (!std::filesystem::exists(path)) { return nullptr; }
+        if (!std::filesystem::exists(normal_path)) { return nullptr; }
 
         uxs::filebuf ifile(normal_path.c_str(), "r");
         if (!ifile) { return nullptr; }
@@ -387,8 +386,7 @@ const InputFileInfo* DaisyParserPass::pushInputFile(std::string_view file_path, 
         auto pos = ifile.seek(0, uxs::seekdir::end);
         if (pos == uxs::iobuf::traits_type::npos()) { return nullptr; }
 
-        file_info = ctx_->input_files
-                        .emplace(std::move(normal_path), std::make_unique<InputFileInfo>(ctx_, std::string(file_path)))
+        file_info = ctx_->input_files.emplace(std::move(normal_path), std::make_unique<InputFileInfo>(ctx_, file_path))
                         .first->second.get();
 
         std::size_t file_sz = static_cast<std::size_t>(pos);

@@ -2,8 +2,6 @@
 
 #include "../daisy_parser_pass.h"
 
-#include <filesystem>
-
 using namespace daisy;
 
 namespace {
@@ -15,24 +13,27 @@ void parseIncludeDirective(DaisyParserPass* pass, SymbolInfo& tkn) {
         return;
     }
 
-    auto file_name = std::move(std::get<std::string>(tkn.val));
-    const auto& include_paths = pass->getCompilationContext().include_paths;
+    const std::filesystem::path file_path(uxs::utf_native_path_adapter{}(std::get<std::string>(tkn.val)));
+    const auto& include_dirs = pass->getCompilationContext().include_dirs;
 
-    std::filesystem::path path(tkn.loc.loc_ctx->file->file_name);
-    auto include_path_it = include_paths.begin();
+    const std::filesystem::path& current_file_path = tkn.loc.loc_ctx->file->file_path;
+    const auto parent_path = current_file_path.has_parent_path() ? current_file_path.parent_path() :
+                                                                   std::filesystem::path("./");
+
+    const auto* origin_path = &parent_path;
+
     SymbolLoc expansion_loc = tkn.loc;
 
     pass->ensureEndOfInput(tkn);
-    path = path.has_parent_path() ? path.parent_path() : "./";
 
+    auto include_dir_it = include_dirs.begin();
     while (true) {
-        path /= file_name;
-        if (pass->pushInputFile(path.generic_string(), expansion_loc)) { return; }
-        if (include_path_it == include_paths.end()) { break; }
-        path = *include_path_it++;
+        if (pass->pushInputFile(*origin_path / file_path, expansion_loc)) { return; }
+        if (include_dir_it == include_dirs.end()) { break; }
+        origin_path = &*include_dir_it++;
     }
 
-    logger::error(expansion_loc).println("could not open input file `{}`", file_name);
+    logger::error(expansion_loc).println("could not open input file `{}`", file_path);
 }
 
 }  // namespace

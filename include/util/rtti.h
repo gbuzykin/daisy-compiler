@@ -31,14 +31,14 @@ struct type_info_desc {
 };
 
 namespace detail {
-constexpr const char* trim_file_path(const char* file_name) {
-    for (const char* p = file_name; *p; ++p) {
-        if (*p == '/' || *p == '\\') { file_name = p + 1; }
+constexpr const char* trim_file_path(const char* file_path) {
+    for (const char* p = file_path; *p; ++p) {
+        if (*p == '/' || *p == '\\') { file_path = p + 1; }
     }
-    return file_name;
+    return file_path;
 }
-constexpr std::uint64_t compose_type_id(const char* type_name, const char* file_name, std::uint32_t n_line) {
-    return (static_cast<std::uint64_t>(uxs::crc32_calc{}(trim_file_path(file_name)) ^ n_line) << 32) |
+constexpr std::uint64_t compose_type_id(const char* type_name, const char* file_path, std::uint32_t n_line) {
+    return (static_cast<std::uint64_t>(uxs::crc32_calc{}(trim_file_path(file_path)) ^ n_line) << 32) |
            uxs::crc32_calc{}(type_name);
 }
 template<typename Ty, typename = std::void_t<typename Ty::super_class_t>>

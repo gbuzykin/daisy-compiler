@@ -82,7 +82,7 @@ void printMessageImpl(MsgType type, const SymbolLoc& loc, std::string_view msg) 
     assert(file);
 
     std::string n_line = uxs::to_string(loc.first.ln);
-    uxs::println(uxs::stdbuf::log(), "\033[1;37m{}:{}:{}{}{}", file->file_name, n_line, loc.first.col, typeString(type),
+    uxs::println(uxs::stdbuf::log(), "\033[1;37m{}:{}:{}{}{}", file->file_path, n_line, loc.first.col, typeString(type),
                  msg);
 
     std::string left_padding(n_line.size(), ' ');
@@ -129,7 +129,7 @@ LoggerExtended& LoggerExtended::show() {
     while (it != loc_stack.rend() - 1 && !(*(it + 1))->loc_ctx->expansion.macro_def) {
         assert((*it)->loc_ctx->file);
         if (print_ext_loc_info_) {
-            uxs::println(uxs::stdbuf::log(), "In file included from {}:{}", (*it)->loc_ctx->file->file_name,
+            uxs::println(uxs::stdbuf::log(), "In file included from {}:{}", (*it)->loc_ctx->file->file_path,
                          (*it)->first.ln);
         }
         ++it;

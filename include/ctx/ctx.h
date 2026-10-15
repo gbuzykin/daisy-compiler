@@ -4,6 +4,7 @@
 
 #include <uxs/utility.h>
 
+#include <filesystem>
 #include <forward_list>
 #include <string>
 #include <vector>
@@ -14,10 +15,11 @@ struct CompilationContext;
 
 struct InputFileInfo {
     enum class Flags : unsigned { kNone = 0, kOnce = 1 };
-    InputFileInfo(CompilationContext* ctx, std::string fname) : compilation_ctx(ctx), file_name(std::move(fname)) {}
+    InputFileInfo(CompilationContext* ctx, std::filesystem::path file_path)
+        : compilation_ctx(ctx), file_path(std::move(file_path)) {}
     TextRange getText() const { return TextRange{text.get(), text.get() + text_size, TextPos{1, 1}}; }
     const CompilationContext* compilation_ctx;
-    std::string file_name;
+    std::filesystem::path file_path;
     std::size_t text_size = 0;
     std::vector<std::string_view> text_lines;
     std::unique_ptr<char[]> text;
@@ -43,11 +45,11 @@ constexpr unsigned operator-(MacroDefinition::Type lhs, MacroDefinition::Type rh
 }
 
 struct CompilationContext {
-    explicit CompilationContext(std::string fname) : file_name(std::move(fname)) {}
-    std::string file_name;
+    explicit CompilationContext(std::filesystem::path file_path) : file_path(std::move(file_path)) {}
+    std::filesystem::path file_path;
     std::unique_ptr<ir::RootNode> ir_root;
-    std::unordered_map<std::string, std::unique_ptr<InputFileInfo>> input_files;
-    std::vector<std::string_view> include_paths;
+    std::unordered_map<std::filesystem::path, std::unique_ptr<InputFileInfo>> input_files;
+    std::vector<std::filesystem::path> include_dirs;
     std::unordered_map<std::string_view, std::unique_ptr<MacroDefinition>> macro_defs;
     std::forward_list<std::string> input_strings;
     std::forward_list<LocationContext> loc_ctx_list;
