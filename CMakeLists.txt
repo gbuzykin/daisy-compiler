@@ -87,6 +87,7 @@ target_link_libraries(daisy-compiler PRIVATE UXS::UXS-static)
 
 install(TARGETS daisy-compiler RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
                                        COMPONENT binaries)
+install_win32_pdb(daisy-compiler)
 
 # ##############################################################################
 # Add `run_tests` build target
@@ -97,6 +98,7 @@ add_executable(run_tests ${test_sources})
 
 install(TARGETS run_tests RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
                                   COMPONENT binaries)
+install_win32_pdb(run_tests)
 
 # ##############################################################################
 # Auxiliary

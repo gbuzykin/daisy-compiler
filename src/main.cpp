@@ -14,7 +14,8 @@ using namespace daisy;
 
 int main(int argc, char** argv) {
     try {
-        bool show_help = false, show_version = false;
+        bool show_help = false;
+        bool show_version = false;
         std::vector<std::filesystem::path> input_file_paths;
         std::vector<std::filesystem::path> include_dirs;
         std::vector<std::pair<std::string_view, std::string_view>> macro_defs;
@@ -98,6 +99,9 @@ int main(int argc, char** argv) {
         }
 
         return 0;
-    } catch (const std::exception& e) { logger::fatal().println("exception caught: {}", e.what()); }
-    return -1;
+
+    } catch (const std::exception& e) {
+        logger::fatal().println("exception caught: {}", e.what());
+        return -1;
+    }
 }
