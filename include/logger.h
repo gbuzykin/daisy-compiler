@@ -3,7 +3,7 @@
 #include "common/symbol_loc.h"
 
 #include <uxs/format.h>
-#include <uxs/format_fs.h>  // NOLINT
+#include <uxs/format_fs.h>  // IWYU pragma: keep
 #include <uxs/membuffer.h>
 
 #include <string_view>

@@ -3,6 +3,10 @@
 #include "../daisy_parser_pass.h"
 #include "../text_utils.h"
 
+#include <uxs/string_conv.h>
+
+#include <tuple>
+
 using namespace daisy;
 
 constexpr std::string_view kVaArgsId = "__va_args__";

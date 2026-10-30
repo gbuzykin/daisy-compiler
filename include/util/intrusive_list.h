@@ -1,6 +1,6 @@
 #pragma once
 
-#include <uxs/config.h>
+#include <uxs/common.h>
 #include <uxs/dllist.h>
 #include <uxs/iterator.h>
 

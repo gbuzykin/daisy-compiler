@@ -2,8 +2,6 @@
 
 #include "ir/nodes/type_def_node.h"
 
-#include <uxs/common.h>
-
 using namespace daisy;
 
 std::string ir::TypeDescriptor::getTypeString() const {
