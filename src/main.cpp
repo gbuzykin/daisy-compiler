@@ -3,8 +3,12 @@
 
 #include "ctx/ctx.h"
 
+#include <uxs/chars.h>
 #include <uxs/cli/parser.h>
+#include <uxs/io/iobuf.h>
+#include <uxs/string_utf.h>
 
+#include <algorithm>
 #include <exception>
 
 #define XSTR(s) STR(s)

@@ -2,6 +2,12 @@
 
 #include "ctx/ctx.h"
 
+#include <uxs/io/iobuf.h>
+#include <uxs/string_conv_common.h>
+#include <uxs/utf.h>
+
+#include <algorithm>
+
 unsigned daisy::logger::g_debug_level = 1;
 
 using namespace daisy;
